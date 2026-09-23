@@ -185,3 +185,98 @@ v0.3.7-R3, (C)2005-2019 SA-MP Team
 [21:54:32] [connection] incoming connection: 127.0.0.1:57471 id: 0
 [21:54:32] [join] enjery has joined the server (0:127.0.0.1)
 [21:57:09] [part] enjery has left the server (0:1)
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R3, (C)2005-2019 SA-MP Team
+
+[22:51:57] 
+[22:51:57] Server Plugins
+[22:51:57] --------------
+[22:51:57]  Loading plugin: crashdetect
+[22:51:57]   CrashDetect plugin 4.21
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: streamer
+[22:51:57] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: sscanf
+[22:51:57] 
+[22:51:57]  ===============================
+[22:51:57] 
+[22:51:57]       sscanf plugin loaded.     
+[22:51:57] 
+[22:51:57]          Version: 2.13.8
+[22:51:57] 
+[22:51:57]    (c) 2022 Alex "Y_Less" Cole  
+[22:51:57] 
+[22:51:57]  ===============================
+[22:51:57] 
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: mysql
+[22:51:57]  >> plugin.mysql: R41-4 successfully loaded.
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: TOTP
+[22:51:57] TOTP plugin v1.0.1 by Games loaded.
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: pawncmd
+[22:51:57] [Pawn.CMD] plugin v3.3.6 loading...
+[22:51:57] [Pawn.CMD] 
+
+    | Pawn.CMD 3.3.6 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 11:55:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.CMD
+
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: pawnregex
+[22:51:57] Pawn.Regex plugin v1.1 by urShadow loaded
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: pawnraknet
+[22:51:57] [Pawn.RakNet] plugin v1.5.1 loading...
+[22:51:57] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[22:51:57]   Loaded.
+[22:51:57]  Loading plugin: cef
+[22:51:57]   Loaded.
+[22:51:57]  Loaded 9 plugins.
+
+[22:51:57] 
+[22:51:57] Filterscripts
+[22:51:57] ---------------
+[22:51:57]   Loading filterscript 'flymode.amx'...
+[22:51:57]   Loaded 1 filterscripts.
+
+[22:51:57] ** Successful connection to the database! **
+[22:51:57] ** Successful launch of the Russian Role Play server! **
+
+[22:51:57] ** >>> Загрузка содержимого:
+
+[22:51:57] Number of vehicle models: 2
+[22:51:57] Домов загружено: 0 за 0 мс
+[22:51:57] Подъездов загружено: 0 за 0 мс
+[22:51:57] Квартир загружено: 0 за 0 мс
+[22:52:52] [connection] incoming connection: 127.0.0.1:55139 id: 0
+[22:52:52] [join] enjery has joined the server (0:127.0.0.1)
+[22:54:15] [part] enjery has left the server (0:1)
