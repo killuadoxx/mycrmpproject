@@ -3,10 +3,10 @@ CMD:need(playerid)
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	new string[500];
-	format(string, sizeof(string), "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\t\t\t\tпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\n\
-	1. пїЅпїЅпїЅпїЅпїЅ\t\t\t\t%d пїЅпїЅ 100\n\
-	2. пїЅпїЅпїЅпїЅпїЅ\t\t\t\t%d пїЅпїЅ 100", player_info[playerid][eat], player_info[playerid][thirst]);
-	SPD(playerid, DLG_NEED, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅ", "");
+	format(string, sizeof(string), "{EDD682}Потребность:\t\t\t\tЗначение:\n\
+	1. Голод\t\t\t\t%d из 100\n\
+	2. Жажда\t\t\t\t%d из 100", player_info[playerid][eat], player_info[playerid][thirst]);
+	SPD(playerid, DLG_NEED, DSL, "{EDD682}Потребности персонажа", string, "Назад", "");
 	return 1;
 }
 
@@ -22,7 +22,7 @@ CMD:time(playerid)
 		text[11],
 		string[144];
 
-	format(string, sizeof(string), "%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅ) пїЅпїЅ пїЅпїЅпїЅпїЅ", player_info[playerid][name]);
+	format(string, sizeof(string), "%s вглянул(а) на часы", player_info[playerid][name]);
 	SetPlayerChatBubble(playerid, string, COLOR_BUDDLE, 10.0, 5000);
 
 	getdate(year, month, day);
@@ -52,24 +52,24 @@ CMD:time(playerid)
 CMD:menu(playerid)
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
-	SPD(playerid, DLG_MENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-	"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[3]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[4]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[5]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[6]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[7]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[8]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-	{EDD682}[9]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-	"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+	SPD(playerid, DLG_MENU, DSL, "{EDD682}Меню персонажа", 
+	"{EDD682}[1]{FFFFFF} - Статистика персонажа\n\
+	{EDD682}[2]{FFFFFF} - Команды сервера\n\
+	{EDD682}[3]{FFFFFF} - Настройки интерфейса\n\
+	{EDD682}[4]{FFFFFF} - Настройки безопасности\n\
+	{EDD682}[5]{FFFFFF} - Связь с администрацией\n\
+	{EDD682}[6]{FFFFFF} - Потребности персонажа\n\
+	{EDD682}[7]{FFFFFF} - Квестовые задания\n\
+	{EDD682}[8]{FFFFFF} - Правила проекта\n\
+	{EDD682}[9]{FFFFFF} - Донат услуги", 
+	"Выбрать", "Закрыть");
 	return 1;
 }
 
 CMD:me(playerid, params[])
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
-	if(sscanf(params, "s[168]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /me [пїЅпїЅпїЅпїЅпїЅ]");
+	if(sscanf(params, "s[168]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Подсказка] {FFFFFF}Используйте: /me [текст]");
 	new string[144];
 	format(string, 144, "%s %s", player_info[playerid][name], params[0]);
 	ProxDetector(20.0, playerid, string, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF);
@@ -80,7 +80,7 @@ CMD:me(playerid, params[])
 CMD:do(playerid, params[])
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
-	if(sscanf(params, "s[168]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /do [пїЅпїЅпїЅпїЅпїЅ]");
+	if(sscanf(params, "s[168]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Подсказка] {FFFFFF}Используйте: /do [текст]");
 	new string[144];
 	format(string, sizeof(string), "%s (%s)",params[0], player_info[playerid][name]);
 	ProxDetector(20.0, playerid, string, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF);
@@ -91,11 +91,11 @@ CMD:do(playerid, params[])
 CMD:try(playerid, params[])
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
-	if(sscanf(params, "s[168]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /try [пїЅпїЅпїЅпїЅпїЅ]");
+	if(sscanf(params, "s[168]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Подсказка] {FFFFFF}Используйте: /try [текст]");
 	new temptryrand = random(2);
 	new string[144];
-	if(temptryrand == 1) format(string, sizeof(string), "%s %s | {32CD32}пїЅпїЅпїЅпїЅпїЅпїЅ", player_info[playerid][name], params[0]);
-	else format(string, sizeof(string), "%s %s | {FF0000}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", player_info[playerid][name], params[0]);
+	if(temptryrand == 1) format(string, sizeof(string), "%s %s | {32CD32}Удачно", player_info[playerid][name], params[0]);
+	else format(string, sizeof(string), "%s %s | {FF0000}Неудачно", player_info[playerid][name], params[0]);
 	ProxDetector(20.0, playerid, string, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF, 0xDE92FFFF);
 	return 1;
 }
@@ -104,8 +104,8 @@ CMD:todo(playerid, params[])
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	new text[168], make[168], string[144];
-	if(sscanf(params, "p<*>s[168]s[168]", text, make)) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /todo [пїЅпїЅпїЅпїЅпїЅ*пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]");
-	format(string, sizeof(string), "%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s - {C2A2DA}%s", player_info[playerid][name], text, make);
+	if(sscanf(params, "p<*>s[168]s[168]", text, make)) return SCM(playerid, COLOR_WHITE, "{EDD682}[Подсказка] {FFFFFF}Используйте: /todo [текст*действие]");
+	format(string, sizeof(string), "%s говорит: %s - {C2A2DA}%s", player_info[playerid][name], text, make);
 	ProxDetector(20.0, playerid, string, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE);
 	return true;
 }
@@ -113,7 +113,7 @@ CMD:todo(playerid, params[])
 CMD:n(playerid, params[])
 {
     if(temp_info[playerid][pLoginStatus] != true) return true;
-    if(sscanf(params, "s[107]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /n [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]");
+    if(sscanf(params, "s[107]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Подсказка] {FFFFFF}Используйте: /n [сообщение]");
     new string[144];
     format(string, sizeof(string), "(( %s[%d]: %s ))", player_info[playerid][name], playerid, params[0]);
     ProxDetector(20.0, playerid, string, 0xCCCC99FF, 0xCCCC99FF, 0xCCCC99FF, 0xCCCC99FF, 0xCCCC99FF);
@@ -123,9 +123,9 @@ CMD:n(playerid, params[])
 CMD:s(playerid, params[])
 {
     if(temp_info[playerid][pLoginStatus] != true) return true;
-    if(sscanf(params, "s[105]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /s [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]");
+    if(sscanf(params, "s[105]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Подсказка] {FFFFFF}Используйте: /s [сообщение]");
     new string[144];
-    format(string, sizeof(string), "%s[%d] пїЅпїЅпїЅпїЅпїЅпїЅ: %s", player_info[playerid][name], playerid, params[0]);
+    format(string, sizeof(string), "%s[%d] кричит: %s", player_info[playerid][name], playerid, params[0]);
     ProxDetector(30.0, playerid, string, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE);
     if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) ApplyAnimation(playerid, "ON_LOOKERS", "shout_01", 4.1, 0, 0, 0, 0, 0);
 	SetPlayerChatBubble(playerid, params[0], COLOR_WHITE, 25, 7500);
@@ -137,30 +137,30 @@ CMD:pay(playerid, params[])
 	new string[144];
 	new Float:x, Float:y, Float:z;
     if(temp_info[playerid][pLoginStatus] != true) return true;
-	if(sscanf(params, "dd", params[0], params[1])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ /pay - [id] - [money]");
-	if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
-	if(params[0] == playerid) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+	if(sscanf(params, "dd", params[0], params[1])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Введите /pay - [id] - [money]");
+	if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок не в сети!");
+	if(params[0] == playerid) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Нельзя передавать деньги самому себе!");
 	if(temp_info[params[0]][pLoginStatus] != true) return true;
-	if(params[1] > 50000) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
-	if(params[1] < 1 || params[1] > 50000) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ 50.000 пїЅпїЅпїЅпїЅпїЅ!");
+	if(params[1] > 50000) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Чтобы передать сумму больше, воспользуйтесь банком!");
+	if(params[1] < 1 || params[1] > 50000) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Вы можете передавать от 1 рубля и до 50.000 тысяч!");
 	GetPlayerPos(params[0], x, y, z);
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
-	if(params[1] > player_info[playerid][money]) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
+    if(!IsPlayerInRangeOfPoint(playerid, 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок находится слишком далеко!");
+	if(params[1] > player_info[playerid][money]) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}У вас нет столько денег!");
 
 	_giveMoney(playerid, -params[1]);
 	_giveMoney(params[0], params[1]);
 
-	format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ", player_info[playerid][name], playerid, params[1]);
+	format(string, sizeof(string), "{FFFFFF}Игрок %s[%d] передал вам {EDD682}%d {FFFFFF}рублей", player_info[playerid][name], playerid, params[1]);
 	SCM(params[0], COLOR_WHITE, string);
 
-	format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~g~+%d PYпїЅ", params[1]);
+	format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~g~+%d PYЂ", params[1]);
 	PlayerPlaySound(params[0], 1083, 0.0, 0.0, 0.0);
 	GameTextForPlayer(params[0], string, 1000, 3);	
 
-	format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %s[%d] {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ", player_info[params[0]][name], params[0], params[1]);
+	format(string, sizeof(string), "{FFFFFF}Вы передали игроку %s[%d] {EDD682}%d {FFFFFF}рублей", player_info[params[0]][name], params[0], params[1]);
 	SCM(playerid, COLOR_WHITE, string);	
 
-	format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~r~-%d PYпїЅ", params[1]);
+	format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~r~-%d PYЂ", params[1]);
 	PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
 	GameTextForPlayer(playerid, string, 1000, 3);
 	return 1;
@@ -197,20 +197,20 @@ CMD:engine(playerid)
 	new vehicleid = GetPlayerVehicleID(playerid);
 	GetVehicleHealth(vehicleid, vehicle_info[vehicleid][v_health]);
 	if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return 0;
-	if(StartEngine[playerid] != false) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+	if(StartEngine[playerid] != false) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Подождите, двигатель заводится!");
 	if(!IsABMX(vehicleid))	
 	{
 		if(vehicle_info[vehicleid][v_engine] == true)
 		{
-			callcmd::me(playerid, !"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			callcmd::me(playerid, !"заглушил двигатель");
 			SetVehicleEngine(vehicleid, 0);
 		}
 		else
 		{
-			if(vehicle_info[vehicleid][v_health] <= 350) return SCM(playerid, COLOR_WHITE, !"{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			if(vehicle_info[vehicleid][v_fuel] <= 0.1) return SCM(playerid, COLOR_WHITE, !"{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+			if(vehicle_info[vehicleid][v_health] <= 350) return SCM(playerid, COLOR_WHITE, !"{EDD682}[Ошибка] {FFFFFF}Ваш транспорт повреждён, вызовите механика, либо попробуйте решить проблему самостоятельно!");
+			if(vehicle_info[vehicleid][v_fuel] <= 0.1) return SCM(playerid, COLOR_WHITE, !"{EDD682}[Ошибка] {FFFFFF}В транспорте закончилось топливо!");
 			StartEngine[playerid] = true;
-			callcmd::me(playerid, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
+			callcmd::me(playerid, "пытается завести машину");
 			SetTimerEx("VehicleEngineTimer", (random(2) + 1) * 1000, false, "dd", playerid, vehicleid);
 		}
 	}
@@ -220,14 +220,14 @@ CMD:engine(playerid)
 
 CMD:fixcar(playerid)
 {
-    if(player_info[playerid][p_model] <= 0) return SendClientMessage(playerid, COLOR_WHITE, !"пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
-	if(player_info[playerid][money] < 300) return SendClientMessage(playerid, COLOR_WHITE, !"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 350$");
+    if(player_info[playerid][p_model] <= 0) return SendClientMessage(playerid, COLOR_WHITE, !"Вы не владеете машиной");
+	if(player_info[playerid][money] < 300) return SendClientMessage(playerid, COLOR_WHITE, !"Недостаточно денег. Требуется 350$");
 	DestroyVehicle(pCarID[playerid]);
 	pCarID[playerid] = CreateVehicle(player_info[playerid][p_model], player_info[playerid][p_posx], player_info[playerid][p_posy], player_info[playerid][p_posz], player_info[playerid][p_posfa], player_info[playerid][p_color1], player_info[playerid][p_color2], -1);
 	//VehSpwn(p_info[playerid][veh_id]);
 	PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 	_giveMoney(playerid, -350);
-	return SendClientMessage(playerid, COLOR_WHITE, !"пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ");
+	return SendClientMessage(playerid, COLOR_WHITE, !"Ваш транспорт доставлен к дому");
 }
 
 CMD:light(playerid)
@@ -257,12 +257,12 @@ CMD:hmenu(playerid, params[])
 	{
 		if(IsPlayerInRangeOfPoint(playerid,5.0,house_info[i][h_exit][0], house_info[i][h_exit][1], house_info[i][h_exit][2]) && GetPlayerVirtualWorld(playerid) == i+50)
 		{		
-			SPD(playerid, DLG_HOMEMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", 
-			"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ\n\
-			{EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			{EDD682}[3]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			SPD(playerid, DLG_HOMEMENU, DSL, "{EDD682}Управление домом", 
+			"{EDD682}[1]{FFFFFF} - Информация о доме\n\
+			{EDD682}[2]{FFFFFF} - Продать дом государству\n\
+			{EDD682}[3]{FFFFFF} - Продать дом игроку", "Далее", "Закрыть");
 		}
-		else SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");	
+		else SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Необходимо находиться в своём доме!");	
 	}						
 	return 1;
 }
@@ -280,7 +280,7 @@ CMD:hlock(playerid, params[])
 				case 0:
 				{
 					house_info[i][h_lock] = 1;
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Вы успешно закрыли двери своего дома!");
 
 					query[0] = EOS;
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_lock` = '1' WHERE `hid` = '%d'", i);
@@ -289,7 +289,7 @@ CMD:hlock(playerid, params[])
 				case 1:
 				{
 					house_info[i][h_lock] = 0;
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Вы успешно открыли двери своего дома!");
 
 					query[0] = EOS;
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_lock` = '0' WHERE `hid` = '%d'", i);
@@ -297,7 +297,7 @@ CMD:hlock(playerid, params[])
 				}
 			}
 		}
-		else SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ!");	
+		else SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Необходимо находиться в доме, либо рядом с ним!");	
 	}						
 	return 1;
 }
@@ -313,12 +313,12 @@ CMD:amenu(playerid, params[])
 	{
 		if(IsPlayerInRangeOfPoint(playerid, 5.0, apart_info[i][a_exit][0], apart_info[i][a_exit][1], apart_info[i][a_exit][2]) && GetPlayerVirtualWorld(playerid) == i+50)
 		{		
-			SPD(playerid, DLG_APARTMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-			"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			{EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			{EDD682}[3]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			SPD(playerid, DLG_APARTMENU, DSL, "{EDD682}Управление квартирой", 
+			"{EDD682}[1]{FFFFFF} - Информация о квартире\n\
+			{EDD682}[2]{FFFFFF} - Продать квартиру государству\n\
+			{EDD682}[3]{FFFFFF} - Продать квартиру игроку", "Далее", "Закрыть");
 		}
-		else SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
+		else SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Необходимо находиться в своей квартире!");	
 	}						
 	return 1;
 }
@@ -336,7 +336,7 @@ CMD:alock(playerid, params[])
 				case 0:
 				{
 					apart_info[i][a_lock] = 1;
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Вы успешно закрыли двери своей квартиры!");
 
 					query[0] = EOS;
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_lock` = '1' WHERE `aid` = '%d'", i);
@@ -345,7 +345,7 @@ CMD:alock(playerid, params[])
 				case 1:
 				{
 					apart_info[i][a_lock] = 0;
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Вы успешно открыли двери своей квартиры!");
 
 					query[0] = EOS;
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_lock` = '0' WHERE `aid` = '%d'", i);
@@ -353,7 +353,7 @@ CMD:alock(playerid, params[])
 				}
 			}
 		}
-		else SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ!");	
+		else SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Необходимо находиться в квартире, либо рядом с ней!");	
 	}						
 	return 1;
 }
@@ -364,13 +364,13 @@ CMD:r(playerid, params[])
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	if(!_gosFrac(playerid)) return true;
-	if(sscanf(params, "s[144]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /r - [пїЅпїЅпїЅпїЅпїЅ]");
-	if(strlen(params[0]) > 144) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
+	if(sscanf(params, "s[144]", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Используйте: /r - [текст]");
+	if(strlen(params[0]) > 144) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Слишком длинное предложение.");
 	new string[144];
 	format(string, sizeof(string), "{607f61}[R]: %s - %s[%d]: {FFFFFF}%s", 
 	FractionName[player_info[playerid][member]][player_info[playerid][rang]], player_info[playerid][name], playerid, params[0]);
 	SFM(player_info[playerid][member], COLOR_WHITE, string);
-	SetPlayerChatBubble(playerid,"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ", 0xDE92FFFF, 30.0, 10000);
+	SetPlayerChatBubble(playerid,"сообщает в рацию", 0xDE92FFFF, 30.0, 10000);
 	return 1;
 }
 
@@ -382,10 +382,10 @@ CMD:changeskin(playerid, params[])
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	if(player_info[playerid][leader] > 0 || player_info[playerid][rang] == p_rang)
 	{
-		if(sscanf(params, "d", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ /changeskin - [id]");
-		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
+		if(sscanf(params, "d", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите /changeskin - [id]");
+		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок не в сети!");
 		if(player_info[params[0]][member] != player_info[playerid][member]) return true;
-		if(!IsPlayerInRangeOfPoint(params[0], 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
+		if(!IsPlayerInRangeOfPoint(params[0], 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок находится слишком далеко!");
 
 		SetPVarInt(playerid, "actplayerid", params[0]);
 		new fractionid = player_info[playerid][member];
@@ -394,10 +394,10 @@ CMD:changeskin(playerid, params[])
 		{
 			new skinid = FractionSkin[fractionid][i];
 			if(!skinid) break;
-			if(!i) format(mes, sizeof(mes), "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d [%d]", i+1, skinid);
-			else format(mes, sizeof(mes), "%s\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d [%d]", mes, i+1, skinid);
+			if(!i) format(mes, sizeof(mes), "Внешность %d [%d]", i+1, skinid);
+			else format(mes, sizeof(mes), "%s\nВнешность %d [%d]", mes, i+1, skinid);
 		}
-		ShowPlayerDialog(playerid, DLG_CHANGESKIN, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", mes, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "");	
+		ShowPlayerDialog(playerid, DLG_CHANGESKIN, DSL, "{EDD682}Выбор внешности", mes, "Принять", "");	
 	}
 	return 1;
 }
@@ -411,15 +411,15 @@ CMD:invite(playerid, params[])
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	if(player_info[playerid][leader] > 0 || player_info[playerid][rang] == p_rang)
 	{
-		if(sscanf(params, "d", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ /invite - [id]");
-		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
+		if(sscanf(params, "d", params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите /invite - [id]");
+		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок не в сети!");
 		if(params[0] == playerid) return true;
-		if(!IsPlayerInRangeOfPoint(params[0], 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
-		if(player_info[params[0]][lvl] < 2) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ 2-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");	
-		if(player_info[params[0]][member] != 0) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-		if(GetPVarInt(params[0], "_inviteGo") == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
-		format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ {EDD682}%s", player_info[playerid][name], playerid, _fracName(playerid));
-		SPD(params[0], DLG_INVITE, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+		if(!IsPlayerInRangeOfPoint(params[0], 5.0, x, y, z)) return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок находится слишком далеко!");
+		if(player_info[params[0]][lvl] < 2) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Выбранный игрок, ниже 2-го уровня!");	
+		if(player_info[params[0]][member] != 0) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Игрок уже состоит в организации!");
+		if(GetPVarInt(params[0], "_inviteGo") == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Дождитесь решения игрока!");
+		format(string, sizeof(string), "{FFFFFF}Руководитель организации {EDD682}%s[%d] {FFFFFF}приглашает Вас вступить в {EDD682}%s", player_info[playerid][name], playerid, _fracName(playerid));
+		SPD(params[0], DLG_INVITE, DSM, "{EDD682}Приглашение", string, "Принять", "Отказаться");
 
 		SetPVarInt(params[0], "_invitePlayer", playerid);
 		SetPVarInt(params[0], "_inviteGo", 1);
@@ -434,9 +434,9 @@ CMD:uninvite(playerid, params[])
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	if(player_info[playerid][leader] > 0 || player_info[playerid][rang] == p_rang)
 	{
-		if(sscanf(params, "ds[32]", params[0], params[1])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ /uninvite - [id] - [reason]");
+		if(sscanf(params, "ds[32]", params[0], params[1])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите /uninvite - [id] - [reason]");
 		if(player_info[params[0]][rang] > player_info[playerid][rang]) return true;
-		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
+		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок не в сети!");
 		if(player_info[params[0]][member] != player_info[playerid][member]) return true;
 
 		player_info[params[0]][rang] = 0;
@@ -444,10 +444,10 @@ CMD:uninvite(playerid, params[])
 		player_info[params[0]][fskin] = 0;
 		SetPlayerSkin(params[0], player_info[params[0]][skin]);
 
-		format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {EDD682}%s", player_info[playerid][name], playerid, params[1]);
+		format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Игрок {EDD682}%s[%d] {FFFFFF}уволил вас из организации. Причина: {EDD682}%s", player_info[playerid][name], playerid, params[1]);
 		SCM(params[0], COLOR_WHITE, string);
 
-		format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s", player_info[playerid][name], playerid, 
+		format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Игрок {EDD682}%s[%d] {FFFFFF}уволил {EDD682}%s[%d] {FFFFFF}из организации. Причина {EDD682}%s", player_info[playerid][name], playerid, 
 		player_info[params[0]][name], params[0], params[1]);
 		SFM(player_info[playerid][member], COLOR_WHITE, string);
 	}
@@ -461,19 +461,19 @@ CMD:giverang(playerid, params[])
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	if(player_info[playerid][leader] > 0 || player_info[playerid][rang] == p_rang)
 	{
-		if(sscanf(params, "dd", params[0], params[1])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ /giverang - [id] - [rang]");
+		if(sscanf(params, "dd", params[0], params[1])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите /giverang - [id] - [rang]");
 		if(player_info[params[0]][rang] > player_info[playerid][rang]) return true;
-		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
+		if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка] {FFFFFF}Игрок не в сети!");
 		if(player_info[params[0]][member] != player_info[playerid][member]) return true;
 		if(IsSpecificConditionMet(playerid, params[1])) return true;
 		if(params[1] <= 0 || params[1] >= FactionMaxRanks[player_info[params[0]][member]]) return true;
 
 		player_info[params[0]][rang] = params[1];
-		format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {EDD682}%s{FFFFFF}!", player_info[playerid][name], playerid, 
+		format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Игрок {EDD682}%s[%d] {FFFFFF}повысил вас в должности до {EDD682}%s{FFFFFF}!", player_info[playerid][name], playerid, 
 		FractionName[player_info[params[0]][member]][player_info[params[0]][rang]]);
 		SCM(params[0], COLOR_WHITE, string);
 		
-		format(string, sizeof(string), "пїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅ %s[%d]!", player_info[playerid][name], playerid, 
+		format(string, sizeof(string), "Игрок %s[%d] изменил должность %s[%d] на %s[%d]!", player_info[playerid][name], playerid, 
 		player_info[params[0]][name], params[0], FractionName[player_info[params[0]][member]][player_info[params[0]][rang]], player_info[params[0]][rang]);
 		SFM(player_info[playerid][member], COLOR_WHITE, string);		
 	}
@@ -486,9 +486,9 @@ CMD:lpanel(playerid)
 	if(temp_info[playerid][pLoginStatus] != true) return true;
 	if(player_info[playerid][leader] > 0 || player_info[playerid][rang] == p_rang)
 	{
-		SPD(playerid, DLG_LPANEL, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-		"{EDD682}--{FFFFFF} пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-		{EDD682}[1]{FFFFFF} пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");		
+		SPD(playerid, DLG_LPANEL, DSL, "{EDD682}Управление организацией",
+		"{EDD682}--{FFFFFF} Список сотрудников\n\
+		{EDD682}[1]{FFFFFF} Информация об организации", "Далее", "Закрыть");		
 	}
 	return true;
 }
