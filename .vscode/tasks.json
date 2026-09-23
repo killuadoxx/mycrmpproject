@@ -6,13 +6,13 @@
             "type": "shell",
             "command": "${workspaceFolder}/pawno/pawncc.exe",
             "args": [
-                "${file}",
-                "-Dgamemodes",
-                "-;+",
-                "-(+",
+                "new.pwn",
+                "-i../pawno/include",
+                "-onew.amx",
                 "-d3"
             ],
             "options": {
+                "cwd": "${workspaceFolder}/gamemodes",
                 "shell": {
                     "executable": "cmd.exe",
                     "args": ["/d", "/c"]

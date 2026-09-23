@@ -28,22 +28,6 @@
 new gLegacyDialog[MAX_PLAYERS];
 
 forward MDialog_OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]);
-
-stock MDialog_LegacyShowPlayerDialog(playerid, dialogid, style, const caption[], const info[], const button1[], const button2[])
-{
-	if(dialogid == -1)
-	{
-		return Dialog_Close(playerid);
-	}
-	gLegacyDialog[playerid] = dialogid;
-	return Dialog_Open(playerid, "Legacy", style, caption, info, button1, button2);
-}
-
-DialogResponse:Legacy(playerid, response, listitem, inputtext[])
-{
-	return MDialog_OnDialogResponse(playerid, gLegacyDialog[playerid], response, listitem, inputtext);
-}
-
 #define        TIMEARENDA          600
 
 #define        PLAYER_PARAM_MONEY      0

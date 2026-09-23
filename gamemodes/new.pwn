@@ -14,24 +14,23 @@
 #include <Pawn_RakNet>
 #include <cef>
 #include <fixobject>
-#include <mdialog>
 
-#include "../library/a_define.inc"			// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ]       
-#include "../library/a_array.inc"			// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]
-#include "../library/a_publics.inc"			// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]
-#include "../library/a_stocks.inc"			// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ]
-#include "../library/a_admincmd.inc"		// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]
-#include "../library/a_playercmd.inc"		// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ]
+#include "../library/a_define.inc"			// --------- [Подгружаемые макросы]       
+#include "../library/a_array.inc"			// --------- [Глобальные переменные]
+#include "../library/a_publics.inc"			// --------- [Загрузка пабликов]
+#include "../library/a_stocks.inc"			// --------- [Загрузка стоков]
+#include "../library/a_admincmd.inc"		// --------- [Команды администратора]
+#include "../library/a_playercmd.inc"		// --------- [Команды игрока]
 
 
 main()	{	print("** Successful launch of the Russian Role Play server! **\n");	
-			print("** >>> пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\n");
+			print("** >>> Загрузка содержимого:\n");
 		}
 
 
 public OnGameModeInit()
 {
-	#include "../library/objects/a_allobject.inc"		// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]
+	#include "../library/objects/a_allobject.inc"		// --------- [Загрузка добавочных объектов]
 	for(new i = 0; i < MAX_VEHICLES; i++)
 	{
 		VehicleDriverID[i] = -1;
@@ -49,7 +48,7 @@ public OnGameModeInit()
 	SetNameTagDrawDistance(25.0);
 	ManualVehicleEngineAndLights();
 
-	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	//Таймеры
 	SetTimer("MinuteUpdate", 60000, true);
 	SetTimer("OneSecondUpdate", 1000, true);
 
@@ -64,7 +63,6 @@ public OnGameModeInit()
 	_loadCars();
 	_load3Dtext();
 	_loadActor();
-	_vorotafrac();
 	return 1;
 }
 
@@ -96,29 +94,30 @@ public OnPlayerConnect(playerid)
 	_globalTextDraws();
 
 	SetPlayerColor(playerid, COLOR_CLEAR);
+
 	temp_info[playerid][pLoginStatus] = false;
 	temp_info[playerid][pAdminStatus] = false;
 	temp_info[playerid][AFK] = 0;
 	LoadAdminData(playerid);
 
 
-	static animlibs[131][] = // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	static animlibs[131][] = // Прогружаем заранее для игрока все анимации, для пресечения дальнейших багов с анимациями
 	{
-		"AIRPORT", "Attractors", "BAR", "BASEBALL", "BD_FIRE", "BEACH", "benchpress", "BF_injection", "BIKED", "BIKEH", "BIKELEAP",
-		"BIKES", "BIKES", "BIKEV", "BIKE_DBZ", "BLOWJOBZ", "BMX", "BOMBER", "BOX", "BSKTBALL", "BUDDY", "BUS", "CAMERA", "CAR", "CARRY",
-		"CAR_CHAT", "CASINO", "CHAINSAW", "CHOPPA", "CLOTHES", "COACH", "COLT45", "COP_AMBIENT", "COP_DVBYZ", "CRACK", "CRIB", "DAM_JUMP",
-		"DANCING", "DEALER", "DILDO", "DODGE", "DOZER", "DRIVEBYS", "FAT", "FIGHT_B", "FIGHT_C", "FIGHT_D", "FIGHT_E", "FINALE", "FINALE2",
-		"FLAME", "Flowers", "FOOD", "Freeweights", "GANGS", "GHANDS", "GHETTO_DB", "goggles", "GRAFFITI", "GRAVEYARD", "GRENADE", "GYMNASIUM",
-		"HAIRCUTS", "HEIST9", "INT_HOUSE", "INT_OFFICE", "INT_SHOP", "JST_BUISNESS", "KART", "KISSING", "KNIFE", "LAPDAN1", "LAPDAN2",
-		"LAPDAN3", "LOWRIDER", "MD_CHASE", "MD_END", "MEDIC", "MISC", "MTB", "MUSCULAR", "NEVADA", "ON_LOOKERS", "OTB", "PARACHUTE",
-		"PARK", "PAULNMAC", "PED", "PLAYER_DVBYS", "PLAYIDLES", "POLICE", "POOL", "POOR", "PYTHON", "QUAD", "QUAD_DBZ", "RAPPING",
-		"RIFLE", "RIOT", "ROB_BANK", "ROCKET", "RUSTLER", "RYDER", "SCRATCHING", "SEX", "SHAMAL", "SHOP", "SHOTGUN", "SILENCED", "SKATE",
-		"SMOKING", "SNIPER", "SPRAYCAN", "STRIP", "SUNBATHE", "SWAT", "SWEET", "SWIM", "SWORD", "TANK", "TATTOOS", "TEC", "TRAIN", "TRUCK",
-		"UZI", "VAN", "VENDING", "VORTEX", "WAYFARER", "WEAPONS", "WUZI"
+	"AIRPORT", "Attractors", "BAR", "BASEBALL", "BD_FIRE", "BEACH", "benchpress", "BF_injection", "BIKED", "BIKEH", "BIKELEAP",
+	"BIKES", "BIKES", "BIKEV", "BIKE_DBZ", "BLOWJOBZ", "BMX", "BOMBER", "BOX", "BSKTBALL", "BUDDY", "BUS", "CAMERA", "CAR", "CARRY",
+	"CAR_CHAT", "CASINO", "CHAINSAW", "CHOPPA", "CLOTHES", "COACH", "COLT45", "COP_AMBIENT", "COP_DVBYZ", "CRACK", "CRIB", "DAM_JUMP",
+	"DANCING", "DEALER", "DILDO", "DODGE", "DOZER", "DRIVEBYS", "FAT", "FIGHT_B", "FIGHT_C", "FIGHT_D", "FIGHT_E", "FINALE", "FINALE2",
+	"FLAME", "Flowers", "FOOD", "Freeweights", "GANGS", "GHANDS", "GHETTO_DB", "goggles", "GRAFFITI", "GRAVEYARD", "GRENADE", "GYMNASIUM",
+	"HAIRCUTS", "HEIST9", "INT_HOUSE", "INT_OFFICE", "INT_SHOP", "JST_BUISNESS", "KART", "KISSING", "KNIFE", "LAPDAN1", "LAPDAN2",
+	"LAPDAN3", "LOWRIDER", "MD_CHASE", "MD_END", "MEDIC", "MISC", "MTB", "MUSCULAR", "NEVADA", "ON_LOOKERS", "OTB", "PARACHUTE",
+	"PARK", "PAULNMAC", "PED", "PLAYER_DVBYS", "PLAYIDLES", "POLICE", "POOL", "POOR", "PYTHON", "QUAD", "QUAD_DBZ", "RAPPING",
+	"RIFLE", "RIOT", "ROB_BANK", "ROCKET", "RUSTLER", "RYDER", "SCRATCHING", "SEX", "SHAMAL", "SHOP", "SHOTGUN", "SILENCED", "SKATE",
+ 	"SMOKING", "SNIPER", "SPRAYCAN", "STRIP", "SUNBATHE", "SWAT", "SWEET", "SWIM", "SWORD", "TANK", "TATTOOS", "TEC", "TRAIN", "TRUCK",
+  	"UZI", "VAN", "VENDING", "VORTEX", "WAYFARER", "WEAPONS", "WUZI"
   	};
 	for(new i = 0; i < 131; i++) ApplyAnimation(playerid, animlibs[i][0], "null", 0.0, 0, 0, 0, 0, 0);
 
-	#include "../library/objects/a_remove-objects.inc"		// --------- [пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]
+	#include "../library/objects/a_remove-objects.inc"		// --------- [Загрузка удаленных объектов]
 	return 1;
 }
 
@@ -129,17 +128,14 @@ public OnPlayerDisconnect(playerid, reason)
 		DestroyVehicle(pCarID[playerid]);
 		pCarID[playerid] = INVALID_VEHICLE_ID;
 	}
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-    if(_carRented[playerid])
+    // Проверяем, арендовал ли игрок велосипед
+    if(_playerBikeID[playerid] != 0)
     {
-		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-		SetVehicleToRespawn(_rentedCarID[playerid]);
-		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-        _carRented[playerid] = false;
-        _rentedCarID[playerid] = -1; // -1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-		KillTimer(_arendaTimer[playerid]);
-		timeLeft[playerid] = TIMEARENDA;
-    }	
+        // Удаляем велосипед
+        DestroyVehicle(_playerBikeID[playerid]);
+        // Обнуляем значение в массиве, так как велосипед удален
+        _playerBikeID[playerid] = 0;
+    }		
 	GetPlayerArmour(playerid, player_info[playerid][armor]);
 	GetPlayerHealth(playerid, player_info[playerid][health]);
 	GetPlayerPos(playerid, player_info[playerid][exitx], player_info[playerid][exity], player_info[playerid][exitz]);
@@ -155,17 +151,17 @@ public OnPlayerSpawn(playerid)
 {
 	if(temp_info[playerid][pLoginStatus] != true)
 	{
-        SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
+        SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Для игры на сервере необходимо авторизоваться.");
         return 0;
 	}
    	if(GetPVarInt(playerid, "@skin_reg") == 1)
     {
- 		SetPlayerPos(playerid, 201.97289, -128.07918, 1003.51062);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-    	SetPlayerFacingAngle(playerid, 180.00000);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ 		SetPlayerPos(playerid, 201.97289, -128.07918, 1003.51062);//позиция игрока
+    	SetPlayerFacingAngle(playerid, 180.00000);//поворот
 		SetPlayerVirtualWorld(playerid, 0);
 		SetPlayerInterior(playerid, 3);
-    	SetPlayerCameraPos(playerid, 201.6538, -133.1275, 1004.1354);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-    	SetPlayerCameraLookAt(playerid, 201.6471, -132.1290, 1003.9761);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    	SetPlayerCameraPos(playerid, 201.6538, -133.1275, 1004.1354);//позиция камеры
+    	SetPlayerCameraLookAt(playerid, 201.6471, -132.1290, 1003.9761);//позиция камеры
 		if(player_info[playerid][sex] == 1) 
 		{		
 			SetPlayerSkin(playerid, skinRegister[0][0]);
@@ -197,12 +193,10 @@ public OnPlayerSpawn(playerid)
 	}
 	temp_info[playerid][AFK] = 0;
 
-	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-
+	// Информация игрока
 	SetPlayerSkin(playerid, player_info[playerid][skin]);
 	SetPlayerScore(playerid, player_info[playerid][lvl]);	
 	PlayerTextDrawShow(playerid, logo[playerid]);
-
 	for(new i = 0; i < 6; i++) PlayerTextDrawShow(playerid, _tdSatiety[i][playerid]);
 	_updateTDSatietyEat(playerid);
 	_updateTDSatietyWater(playerid);
@@ -230,14 +224,14 @@ public OnPlayerText(playerid, text[])
 {
 	if(temp_info[playerid][pLoginStatus] != true)
 	{
-        SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.");
+        SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Авторизируйтесь, чтобы использовать чат.");
         return 0;
 	}
 	if(IsPlayerMuted(playerid)) return 0;
 	new string[144];
 	if(strlen(text) < 113)
 	{
-		format(string, sizeof(string), "%s[%d] пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s", player_info[playerid][name], playerid, text);
+		format(string, sizeof(string), "%s[%d] говорит: %s", player_info[playerid][name], playerid, text);
 		ProxDetector(20.0, playerid, string, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE);
 		SetPlayerChatBubble(playerid, text, COLOR_WHITE, 20, 7000);
 		if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
@@ -248,7 +242,7 @@ public OnPlayerText(playerid, text[])
 	}
 	else
 	{
-	    SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+	    SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Сообщение слишком длинное!");
 	    return 0;
 	}
 	return 0;
@@ -260,33 +254,14 @@ public OnPlayerCommandText(playerid, cmdtext[])
 }
 
 public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
-{
-	if(vehicleid >= _carArenda[0] && vehicleid <= _carArenda[1])
-	{	
-		for(new i = 0; i < MAX_PLAYERS; i++)
-		{
-			if(_rentedCarID[i] == vehicleid && i != playerid && ispassenger == 0)
-			{
-				SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-				ClearAnimations(playerid, true);
-				return 0;
-			}
-		}
-	}	
+{	
+	if(_playerBikeID[playerid] != vehicleid) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Этот велосипед пренадлежит не Вам!");	
 	return 1;
 }
 
 public OnPlayerExitVehicle(playerid, vehicleid)
 {
-	if(vehicleid >= _carArenda[0] && vehicleid <= _carArenda[1])
-	{
-		if(_carRented[playerid])
-		{
-			_arendaTimer[playerid] = SetTimerEx("_arendaPlayerTimer", 1000, true, "i", playerid);
-			SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 10 пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			return 1;
-		}
-	}
+	if(vehicleid == _playerBikeID[playerid]) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}У вас есть 15 минут, чтобы вернуться в транспорт!");
 	return 1;
 }
 
@@ -301,7 +276,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			if(vehicle_info[vehicleid][v_health] <= 350) SetVehicleEngine(vehicleid, 0);
 			if(!IsABMX(vehicleid))
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅcпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {EDD682}\"LCTRL\"{FFFFFF}, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ {EDD682}\"LALT\".");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Подcказка]: {FFFFFF}Чтобы завести двигатель нажмите на {EDD682}\"LCTRL\"{FFFFFF}, включить фары {EDD682}\"LALT\".");
 				TextDrawShowForPlayer(playerid, SPEEDTD);
 				for(new i; i < 6; i++) PlayerTextDrawShow(playerid, SPEEDPTD[i][playerid]);
 				speedtimer[playerid] = SetTimerEx("TransportUpdate", 300, true, "i", playerid);
@@ -309,58 +284,30 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				VehicleDriverID[vehicleid] = playerid;
 				PlayerVehicleID[playerid] = vehicleid;		
 			}
-			if(vehicleid >= lead_one[0] && vehicleid <= lead_one[1])
+			if(vehicleid >= lead_one[0] && vehicleid <= lead_one[4])
 			{
 				if(player_info[playerid][leader] != 1 || player_info[playerid][member] != 1)
 				{
-				    SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+				    SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет ключей от этого транспорта!");
 					RemovePlayerFromVehicle(playerid);
 				}
 				return true;
-			}
-			if(vehicleid >= _ppsCar[0] && vehicleid <= _ppsCar[1])
-			{
-				if(player_info[playerid][leader] != 1 || player_info[playerid][member] != 2)
-				{
-				    SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-					RemovePlayerFromVehicle(playerid);
-				}
-				return true;
-			}						
+			}			
 			/*if(GetPlayerVehicleID(playerid) >= _carsBuyEconomy[0] && GetPlayerVehicleID(playerid) <= _carsBuyEconomy[1])
 			{
 				new string[174];
-				format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %d", VehicleNames[GetVehicleModel(GetPlayerVehicleID(playerid))-400], _priceCar(GetPlayerVehicleID(playerid)));
-				SPD(playerid, DLG_BUYCAR, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
+				format(string, sizeof(string), "{FFFFFF}Марка автомобиля: %s\nСтоимость автомобиля: %d", VehicleNames[GetVehicleModel(GetPlayerVehicleID(playerid))-400], _priceCar(GetPlayerVehicleID(playerid)));
+				SPD(playerid, DLG_BUYCAR, DSM, "{EDD682}Автосолон эконом класса", string, "Приобрести", "Выйти");
 			}	*/	
 			if(_heliCar(GetPlayerVehicleID(playerid)) && player_info[playerid][lic][1] < 1)
-				return SendClientMessage(playerid, COLOR_WHITEOR, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!"), RemovePlayerFromVehicle(playerid);
+				return SendClientMessage(playerid, COLOR_WHITEOR, "{EDD682}[Ошибка]: {FFFFFF}Ваш персонаж не умеет управлять самолетом/вертолетом!"), RemovePlayerFromVehicle(playerid);
 			else if(_shipCar(GetPlayerVehicleID(playerid)) && player_info[playerid][lic][2] < 1)
-				return SCM(playerid, COLOR_WHITEOR, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!"), RemovePlayerFromVehicle(playerid);
+				return SCM(playerid, COLOR_WHITEOR, "{EDD682}[Ошибка]: {FFFFFF}Ваш персонаж не умеет управлять лодкой!"), RemovePlayerFromVehicle(playerid);
 			else
 			{
 				if(player_info[playerid][lic][0] < 1)
-					return SCM(playerid, COLOR_WHITEOR, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!"), RemovePlayerFromVehicle(playerid);
-			}
-			if(vehicleid >= _carArenda[0] && vehicleid <= _carArenda[1])
-			{
-				if(_carRented[playerid] && _rentedCarID[playerid] != vehicleid)
-				{
-					SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-					RemovePlayerFromVehicle(playerid);
-					return 0;
-				}			
-				else if(!_carRented[playerid])
-				{
-					// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-					new text[190];
-					format(text, sizeof(text), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\nпїЅпїЅпїЅпїЅпїЅ: {EDD682}%s\n{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: {EDD682}5000 пїЅпїЅпїЅ.пїЅпїЅпїЅпїЅпїЅпїЅ\n{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: {EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", VehicleNames[GetVehicleModel(vehicleid) - 400]);
-					SPD(playerid, DLG_ARENDACAR, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", text, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-					return 1;
-				}
-				KillTimer(_arendaTimer[playerid]);
-				timeLeft[playerid] = TIMEARENDA;	
-			}		
+					return SCM(playerid, COLOR_WHITEOR, "{EDD682}[Ошибка]: {FFFFFF}Вам необходимо посетить автошколу, чтобы ездить на этом транспорте!"), RemovePlayerFromVehicle(playerid);
+			}													
 		}
 		case PLAYER_STATE_PASSENGER:{}
 	}
@@ -422,7 +369,7 @@ public OnPlayerObjectMoved(playerid, objectid)
 
 public OnPlayerPickUpPickup(playerid, pickupid)
 {
-	if(pickupid == bank[0]) // - пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
+	if(pickupid == bank[0]) // - Вход в банк
 	{
 		SetPlayerPos(playerid, 2375.7273, -1907.8339, 1126.9100);
 		SetPlayerFacingAngle(playerid, 356.9003);
@@ -430,9 +377,9 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 		SetPlayerInterior(playerid, 0);
 		_freezePlayerPickup(playerid);
 		SetCameraBehindPlayer(playerid);
-		SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ.пїЅпїЅпїЅпїЅпїЅ.");		
+		SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы посетили центральный банк г.Южный.");		
 	}
-	if(pickupid == bank[1]) // - пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
+	if(pickupid == bank[1]) // - Выход с банка
 	{
 		SetPlayerPos(playerid, 2376.4312, -2142.4109, 21.9582);
 		SetPlayerFacingAngle(playerid, 175.1358);
@@ -441,7 +388,7 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 		SetCameraBehindPlayer(playerid);
 		_freezePlayerPickup(playerid);
 	}
-	if(pickupid == hospital[0]) // пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ.пїЅпїЅпїЅпїЅпїЅ
+	if(pickupid == hospital[0]) // Вход в больницу г.Южный
 	{
 		SetPlayerPos(playerid, 367.2120, 127.5249, 1003.8500);
 		SetPlayerFacingAngle(playerid, 4.7312);
@@ -450,9 +397,9 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 		_freezePlayerPickup(playerid);
 		SetCameraBehindPlayer(playerid);
 	}
-	if(pickupid == hospital[1]) // пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ.пїЅпїЅпїЅпїЅпїЅ
+	if(pickupid == hospital[1]) // Выход с больницу г.Южный
 	{
-		if(player_info[playerid][hospitaltime] > 0) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅ!");
+		if(player_info[playerid][hospitaltime] > 0) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Ваше лечение не закончилось! Ждите!");
 		SetPlayerPos(playerid, 2113.8765, -2389.9683, 22.6821);
 		SetPlayerFacingAngle(playerid, 358.3461);
 		SetPlayerVirtualWorld(playerid, 0);
@@ -462,86 +409,59 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 	}	
 	if(pickupid >= eda[0] && pickupid <= eda[1])
 	{
-		if(player_info[playerid][lvl] > 2) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-		SPD(playerid, DLG_EDA, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-		"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-		 {EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+		if(player_info[playerid][lvl] > 2) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы не можете воспользоваться этой услугой!");
+		SPD(playerid, DLG_EDA, DSL, "{EDD682}Государство - {FFFFFF}Помощь нуждающимся", 
+		"{EDD682}[1]{FFFFFF} - Съесть кусок пиццы\n\
+		 {EDD682}[2]{FFFFFF} - Выпить стакан воды", "Выбрать", "Закрыть");
 	}
-	if(pickupid == _pickupm[0]) // пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	if(pickupid == _pickupm[0]) // Вход в правительство Лос-Сантос
 	{
-		SetPlayerPos(playerid, 1581.9480, -773.9850, 1114.7073);
-		SetPlayerFacingAngle(playerid, 91.3615);
+		SetPlayerPos(playerid, 388.0343, 173.5585, 1008.3828);
+		SetPlayerFacingAngle(playerid, 87.8041);
 		SetPlayerVirtualWorld(playerid, 1);
 		SetPlayerInterior(playerid, 3);
 		SetCameraBehindPlayer(playerid);
 		_freezePlayerPickup(playerid);
 	}
-	if(pickupid == _pickupm[1]) // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	if(pickupid == _arendBike[0]) // Аренда велосипеда
 	{
-		SetPlayerPos(playerid, 1819.6837, 2095.8936, 16.1631);
-		SetPlayerFacingAngle(playerid, 268.4799);
+		new Float:x, Float:y, Float:z;		
+		if(player_info[playerid][lvl] > 1) return true;
+		GetPlayerPos(playerid, x, y, z);
+		new vehicleid = CreateVehicle(509, x, y, z, 0.0, 1, 1, -1);
+		_playerBikeID[playerid] = vehicleid;
+		PutPlayerInVehicle(playerid, vehicleid, 0);	
+	}
+	if(pickupid == _pickupm[1]) // Выход с правительства Лос-Сантос
+	{
+		SetPlayerPos(playerid, 1481.8853, -1769.0585, 18.7958);
+		SetPlayerFacingAngle(playerid, 357.5189);
 		SetPlayerVirtualWorld(playerid, 0);
 		SetPlayerInterior(playerid, 0);
 		SetCameraBehindPlayer(playerid);
 		_freezePlayerPickup(playerid);
-	}
-	if(pickupid == _pickupp[0]) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ
-	{
-		SetPlayerPos(playerid, 589.9663, 0.7244, 1022.9027);
-		SetPlayerFacingAngle(playerid, 269.9388);
-		SetPlayerVirtualWorld(playerid, 2);
-		SetPlayerInterior(playerid, 2);
-		SetCameraBehindPlayer(playerid);
-		_freezePlayerPickup(playerid);
-	}
-	if(pickupid == _pickupp[1]) // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-	{
-		SetPlayerPos(playerid, 1916.6981, 2183.4639, 15.7060);
-		SetPlayerFacingAngle(playerid, 90.2773);
-		SetPlayerVirtualWorld(playerid, 0);
-		SetPlayerInterior(playerid, 0);
-		SetCameraBehindPlayer(playerid);
-		_freezePlayerPickup(playerid);
-	}
-	if(pickupid == _pickupp[2]) // пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-	{
-		SetPlayerPos(playerid, 593.1398, -20.2226, 1022.9027);
-		SetPlayerFacingAngle(playerid, 356.0204);
-		SetPlayerVirtualWorld(playerid, 2);
-		SetPlayerInterior(playerid, 2);
-		SetCameraBehindPlayer(playerid);
-		_freezePlayerPickup(playerid);
-	}
-	if(pickupid == _pickupp[3]) // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
-	{
-		SetPlayerPos(playerid, 1939.0422, 2160.8840, 15.6982);
-		SetPlayerFacingAngle(playerid, 266.9760);
-		SetPlayerVirtualWorld(playerid, 0);
-		SetPlayerInterior(playerid, 0);
-		SetCameraBehindPlayer(playerid);
-		_freezePlayerPickup(playerid);
-	}		
+	}	
 	return 1;
 }
 
 public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 {
-	if(pickupid == bank[2]) // - пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
+	if(pickupid == bank[2]) // - Вход в банк
 	{
 		if(player_info[playerid][bank_pin][0] == 0)
 		{
-			SPD(playerid, DLG_CREATEBANKPIN, DSP, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", 
-			"{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
+			SPD(playerid, DLG_CREATEBANKPIN, DSP, "{EDD682}Банк - {FFFFFF}Оформление счёта", 
+			"{FFFFFF}Рады видеть вас в нашем банке!\n\
+			Оформите банковский счёт, чтобы воспользоваться нашими услугами.\n\
+			Придумайте будущий PIN-код и запишите его в поле ниже:\n\
 			\n\
-			{EDD682}(PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0! пїЅпїЅпїЅпїЅпїЅпїЅ: 1111)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");	
+			{EDD682}(PIN-код должен состять из 4 символов и начинаться с 0! Пример: 1111)", "Оформить", "Закрыть");	
 		}
 		else if(player_info[playerid][bank_pin][0] == 1)
 		{
-			SPD(playerid, DLG_LOGINBANK, DSP, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-			"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
-			{EDD682}(пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");			
+			SPD(playerid, DLG_LOGINBANK, DSP, "{EDD682}Банк - {FFFFFF}Идентификация", 
+			"{FFFFFF}Введите ваш PIN-код от банковского счёта в поле ниже:\n\
+			{EDD682}(Если вы забыли свой PIN-код, обратитесь к администрации проекта)", "Войти", "Закрыть");			
 		}		
 	}
 	return 1;
@@ -591,19 +511,19 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 		    	if(house_info[h][h_owned] == 1)
 				{
-					format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s\nпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ: %d", house_info[h][h_owner], h);
-					SPD(playerid, DLG_HOME, DSM, "пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+					format(string, sizeof(string), "{FFFFFF}Владелец: %s\nНомер дома: %d", house_info[h][h_owner], h);
+					SPD(playerid, DLG_HOME, DSM, "Дом не продаётся", string, "Далее", "Отмена");
 				}
 				else
 				{
 					switch(house_info[h][h_class])
 					{
-						case 1: text = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
-						case 2: text = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
-						case 3: text = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
+						case 1: text = "Эконом класс";
+						case 2: text = "Средний класс";
+						case 3: text = "Высокий класс";
 					}
-					format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\t%s\nпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\t%d\n\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\t%d", text, h, house_info[h][h_money]);
-					SPD(playerid, DLG_HOMEBUY, DSM, "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅ"," пїЅпїЅпїЅпїЅпїЅпїЅ");
+					format(string, sizeof(string), "{FFFFFF}Класс дома:\t%s\nНомер дома:\t%d\n\nСтоимость:\t%d", text, h, house_info[h][h_money]);
+					SPD(playerid, DLG_HOMEBUY, DSM, "Дом свободен", string, "Купить"," Отмена");
 				}
 			}
    			if(IsPlayerInRangeOfPoint(playerid, 1.0, house_info[h][h_exit][0], house_info[h][h_exit][1], house_info[h][h_exit][2]))
@@ -623,19 +543,19 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 		    	if(apart_info[a][a_owned] == 1)
 				{
-					format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s\nпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %d", apart_info[a][a_owner], a);
-					SPD(playerid, DLG_APART, DSM, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+					format(string, sizeof(string), "{FFFFFF}Владелец: %s\nНомер квартиры: %d", apart_info[a][a_owner], a);
+					SPD(playerid, DLG_APART, DSM, "Квартира не продаётся", string, "Далее", "Отмена");
 				}
 				else
 				{
 					switch(apart_info[a][a_class])
 					{
-						case 1: text = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
-						case 2: text = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
-						case 3: text = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
+						case 1: text = "Эконом класс";
+						case 2: text = "Средний класс";
+						case 3: text = "Высокий класс";
 					}
-					format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\t%s\nпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\t%d\n\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\t%d", text, a, apart_info[a][a_money]);
-					SPD(playerid, DLG_APARTBUY, DSM, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅ"," пїЅпїЅпїЅпїЅпїЅпїЅ");
+					format(string, sizeof(string), "{FFFFFF}Класс квартиры:\t%s\nНомер квартиры:\t%d\n\nСтоимость:\t%d", text, a, apart_info[a][a_money]);
+					SPD(playerid, DLG_APARTBUY, DSM, "Квартира свободна", string, "Купить"," Отмена");
 				}
 			}
    			if(IsPlayerInRangeOfPoint(playerid, 1.0, apart_info[a][a_exit][0], apart_info[a][a_exit][1], apart_info[a][a_exit][2]))
@@ -684,18 +604,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			}
 		}
 		if(IsPlayerInRangeOfPoint(playerid, 1.0,  1797.1179, 2509.8589, 16.2770)) _questPlayer(playerid);
-		if(IsPlayerInRangeOfPoint(playerid, 1.0,  1808.1010, 2506.8914, 15.8725)) _rulesPlayer(playerid);					
+		if(IsPlayerInRangeOfPoint(playerid, 1.0,  1808.1010, 2506.8914, 15.8725)) _rulesPlayer(playerid);							
 	}
-	if(newkeys == 2 && IsPlayerInAnyVehicle(playerid) || newkeys == KEY_WALK && !IsPlayerInAnyVehicle(playerid))
-	{
-		if(!IsPlayerInRangeOfPoint(playerid, 5.0, 1819.0574, 2129.1787, 15.8471)) return true;
-		if(player_info[playerid][member] != 1) return true;
-		if(GetPVarInt(playerid, "_gateopen") == 1) return true;
-		SetPVarInt(playerid, "_gateopen", 1);
-		MoveDynamicObject(_admopen, 1818.65, 2125.52, 15.63+0.004, 0.01, 0.00, 0.00, 90.00);
-		SendClientMessage(playerid, COLOR_WHITE,"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 7 пїЅпїЅпїЅпїЅпїЅпїЅ!");
-		SetTimerEx("_adMclose", 7000, false, "d", playerid);	
-	}	
 	return 1;
 }
 
@@ -711,9 +621,9 @@ public OnPlayerUpdate(playerid)
 		if(temp_info[playerid][PlayerAFK] > 3)  
 		{  
 			new string[120];
-			format(string,sizeof(string),"{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: {EDD682}%s", ConvertSeconds(temp_info[playerid][PlayerAFK]));  
+			format(string,sizeof(string),"{FFFFFF}Время вашего АФК: {EDD682}%s", ConvertSeconds(temp_info[playerid][PlayerAFK]));  
 			SendClientMessage(playerid, COLOR_WHITE, string);  
-			SetPlayerChatBubble(playerid, "пїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", COLOR_WHITE, 10.0, 1); 
+			SetPlayerChatBubble(playerid, "АФК: завершено", COLOR_WHITE, 10.0, 1); 
 		}    		
 	}
 	temp_info[playerid][AFK] = 0;
@@ -757,12 +667,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(!strlen(inputtext))
 				{
 					_showRegistration(playerid);
-					return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\".");
+					return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите пароль в поле ниже и нажмите \"Далее\".");
 				}
-				if(strlen(inputtext) < 8 || strlen(inputtext) > 32)
+				if(!( 8 <= strlen(inputtext) <= 32))
 				{
 					_showRegistration(playerid);
-					return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ 8-пїЅпїЅ пїЅпїЅ 32-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
+					return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Длина пароля должна быть от 8-ми до 32-ух символов.");
 				}
 				new regex:rg_passwordcheck = regex_new("^[a-zA-Z0-9]{1,}$");
 				if(regex_check(inputtext, rg_passwordcheck))
@@ -775,21 +685,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					buffer[10] = 0;
 					SHA256_PassHash(inputtext, buffer, player_info[playerid][pass], 65);
 					strmid(player_info[playerid][salt], buffer, 0, 11, 11);
-					regex_delete(rg_passwordcheck);
-					SPD(playerid, DLG_REGEMAIL, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅ Email",
-					"{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Email\n\
-					пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Email, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\"", "пїЅпїЅпїЅпїЅпїЅ", "");
+					SPD(playerid, DLG_REGEMAIL, DSI, "{EDD682}Регистрация {FFFFFF}| Ввод Email",
+					"{FFFFFF}Если вы потеряете доступ к аккаунту, то сможете восстановить его через Email\n\
+					Введите ваш настоящий Email, после нажмите на кнопку \"Далее\"", "Далее", "");
 				}
 				else
 				{
 					_showRegistration(playerid);
 					regex_delete(rg_passwordcheck);
-					return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
+					return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Пароль должен состоять только из цифр и латинских символов.");
 				}
 			}
 			else
 			{
-				SCM(playerid, COLOR_ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"/q\", пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
+				SCM(playerid, COLOR_ERROR, "Используйте \"/q\", чтобы покинуть сервер.");
 				return Kick(playerid);
 			}
 		}
@@ -797,27 +706,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(!strlen(inputtext))
 			{
-				SPD(playerid, DLG_REGEMAIL, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅ Email",
-				"{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Email\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Email, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\"", "пїЅпїЅпїЅпїЅпїЅ", "");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Email пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\".");
+				SPD(playerid, DLG_REGEMAIL, DSI, "{EDD682}Регистрация {FFFFFF}| Ввод Email",
+				"{FFFFFF}Если вы потеряете доступ к аккаунту, то сможете восстановить его через Email\n\
+				Введите ваш настоящий Email, после нажмите на кнопку \"Далее\"", "Далее", "");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите Email в поле ниже и нажмите \"Далее\".");
 			}
 			new regex:rg_emailcheck = regex_new("^([-A-Za-z0-9_]+\\.)*[-A-Za-z0-9_]+@([A-Za-z0-9][-A-Za-z0-9]*\\.)+[A-Za-z]{2,6}$");
 			if(regex_check(inputtext, rg_emailcheck))
 			{
 				strmid(player_info[playerid][email], inputtext, 0, strlen(inputtext), 64);
-				SPD(playerid, DLG_REGREF, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-				"{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\"",
-				"пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SPD(playerid, DLG_REGREF, DSI, "{EDD682}Регистрация {FFFFFF}| Ввод пригласившего",
+				"{FFFFFF}Ты можешь указать имя пригласившего тебя человека\n\
+				Для этого просто запиши имя в поле ниже, либо нажми на кнопку \"Пропустить\"",
+				"Далее", "Пропустить");
 			}
 			else
 			{
-				SPD(playerid, DLG_REGEMAIL, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅ Email",
-				"{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Email\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Email, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\"", "пїЅпїЅпїЅпїЅпїЅ", "");
+				SPD(playerid, DLG_REGEMAIL, DSI, "{EDD682}Регистрация {FFFFFF}| Ввод Email",
+				"{FFFFFF}Если вы потеряете доступ к аккаунту, то сможете восстановить его через Email\n\
+				Введите ваш настоящий Email, после нажмите на кнопку \"Далее\"", "Далее", "");
 				regex_delete(rg_emailcheck);
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ Email пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\".");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Пожалуйста, корректно введите ваш Email и нажмите \"Далее\".");
 			}
 		}
 		case DLG_REGREF:
@@ -829,40 +738,40 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
-				SPD(playerid, DLG_REGSEX, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-				"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SPD(playerid, DLG_REGSEX, DSM, "{EDD682}Регистрация {FFFFFF}| Выбор пола",
+				"{FFFFFF}Выберите пол вашего будущего персонажа",
+				"Мужской", "Женский");
 			}
 		}
 		case DLG_REGSEX:
 		{
 			if(response) player_info[playerid][sex] = 1;
 			else player_info[playerid][sex] = 2;
-			SPD(playerid, DLG_REGAGE, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-			"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\n\
-			{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\n\
-			1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ 18-пїЅпїЅ пїЅпїЅ 30-пїЅпїЅ пїЅпїЅпїЅ",
-			"пїЅпїЅпїЅпїЅпїЅ", "");
+			SPD(playerid, DLG_REGAGE, DSI, "{EDD682}Регистрация {FFFFFF}| Выбор возраста персонажа",
+			"{FFFFFF}Введите возраст вашего будущего персонажа\n\n\
+			{EDD682}Примечание:\n\
+			1. Возраст персонажа должен быть от 18-ти до 30-ти лет",
+			"Далее", "");
 		}
 		case DLG_REGAGE:
 		{
 			if(!strlen(inputtext))
 			{
-				SPD(playerid, DLG_REGAGE, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\n\
-				{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\n\
-				1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ 18-пїЅпїЅ пїЅпїЅ 30-пїЅпїЅ пїЅпїЅпїЅ",
-				"пїЅпїЅпїЅпїЅпїЅ", "");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"пїЅпїЅпїЅпїЅпїЅ\".");
+				SPD(playerid, DLG_REGAGE, DSI, "{EDD682}Регистрация {FFFFFF}| Выбор возраста персонажа",
+				"{FFFFFF}Введите возраст вашего будущего персонажа\n\n\
+				{EDD682}Примечание:\n\
+				1. Возраст персонажа должен быть от 18-ти до 30-ти лет",
+				"Далее", "");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите возраст вашего будущего персонажа и нажмите \"Далее\".");
 			}
-			if(strval(inputtext) < 18 || strval(inputtext) > 30)
+			if(!( strval(inputtext) >= 18 && strval(inputtext) <= 30))
 			{
-				SPD(playerid, DLG_REGAGE, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\n\
-				{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\n\
-				1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ 18-пїЅпїЅ пїЅпїЅ 30-пїЅпїЅ пїЅпїЅпїЅ",
-				"пїЅпїЅпїЅпїЅпїЅ", "");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ 18-пїЅпїЅ пїЅпїЅ 30-пїЅпїЅ пїЅпїЅпїЅ.");
+				SPD(playerid, DLG_REGAGE, DSI, "{EDD682}Регистрация {FFFFFF}| Выбор возраста персонажа",
+				"{FFFFFF}Введите возраст вашего будущего персонажа\n\n\
+				{EDD682}Примечание:\n\
+				1. Возраст персонажа должен быть от 18-ти до 30-ти лет",
+				"Далее", "");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Возраст персонажа должен быть от 18-ти до 30-ти лет.");
 			}
 			player_info[playerid][age] = strval(inputtext);
 			SetPVarInt(playerid, "@skin_reg",1);
@@ -899,9 +808,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					
 						if(player_info[playerid][member] == 0)
 						{
-							SPD(playerid, DLG_SPAWN, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| Spawn", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n3. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-							4. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n5. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n6. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");	
-							return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");			
+							SPD(playerid, DLG_SPAWN, DSL, "{EDD682}Авторизация {FFFFFF}| Spawn", "{FFFFFF}1. Спавн на автовокзале\n2. Спавн в организации\n3. Спавн в собственном доме\n\
+							4. Спавн в собственной квартире\n5. Спавн в гостинице\n6. Спавн на месте выхода", "Выбрать", "Отмена");	
+							return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Вы не состоите в организации!");			
 						}
 
 						SetSpawnInfo(playerid, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -919,9 +828,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new i = player_info[playerid][keyh];
 						if(player_info[playerid][keyh] == -1) 
 						{	
-							SPD(playerid, DLG_SPAWN, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| Spawn", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n3. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-							4. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n5. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n6. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");							
-							return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+							SPD(playerid, DLG_SPAWN, DSL, "{EDD682}Авторизация {FFFFFF}| Spawn", "{FFFFFF}1. Спавн на автовокзале\n2. Спавн в организации\n3. Спавн в собственном доме\n\
+							4. Спавн в собственной квартире\n5. Спавн в гостинице\n6. Спавн на месте выхода", "Выбрать", "Отмена");							
+							return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет дома!");
 						}
 
 						SetSpawnInfo(playerid, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -943,9 +852,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new i = player_info[playerid][keya];
 						if(player_info[playerid][keya] == -1) 
 						{	
-							SPD(playerid, DLG_SPAWN, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| Spawn", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n3. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-							4. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n5. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n6. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");							
-							return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+							SPD(playerid, DLG_SPAWN, DSL, "{EDD682}Авторизация {FFFFFF}| Spawn", "{FFFFFF}1. Спавн на автовокзале\n2. Спавн в организации\n3. Спавн в собственном доме\n\
+							4. Спавн в собственной квартире\n5. Спавн в гостинице\n6. Спавн на месте выхода", "Выбрать", "Отмена");							
+							return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет квартиры!");
 						}
 
 						SetSpawnInfo(playerid, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -964,13 +873,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 					case 4:
 					{
-						SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-						SPD(playerid, DLG_SPAWN, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| Spawn", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n3. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-						4. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n5. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n6. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");	
+						SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Этот пункт в разработке!");
+						SPD(playerid, DLG_SPAWN, DSL, "{EDD682}Авторизация {FFFFFF}| Spawn", "{FFFFFF}1. Спавн на автовокзале\n2. Спавн в организации\n3. Спавн в собственном доме\n\
+						4. Спавн в собственной квартире\n5. Спавн в гостинице\n6. Спавн на месте выхода", "Выбрать", "Отмена");	
 						return 1;	
 					}
 					case 5:
-					{	
+					{
+
 						SetSpawnInfo(playerid, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 						SpawnPlayer(playerid);
 						_infoPlayer(playerid);
@@ -990,7 +900,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
-      			SCM(playerid, COLOR_ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"/q\", пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
+      			SCM(playerid, COLOR_ERROR, "Используйте \"/q\", чтобы покинуть сервер.");
 				return Kick(playerid);				
 			}
 		}
@@ -1001,14 +911,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        if(!strlen(inputtext))
 				{
 				    _showLogin(playerid);
-					return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
+					return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Пожалуйста, введите ваш пароль в поле!");
 		        }
 		        new checkpass[65];
 		        SHA256_PassHash(inputtext, player_info[playerid][salt], checkpass, 65);
 				if(strcmp(player_info[playerid][pass], checkpass, false, 64) == 0)
 				{
-					SPD(playerid, DLG_SPAWN, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}| Spawn", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n3. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-					4. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n5. пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n6. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");		
+					SPD(playerid, DLG_SPAWN, DSL, "{EDD682}Авторизация {FFFFFF}| Spawn", "{FFFFFF}1. Спавн на автовокзале\n2. Спавн в организации\n3. Спавн в собственном доме\n\
+					4. Спавн в собственной квартире\n5. Спавн в гостинице\n6. Спавн на месте выхода", "Выбрать", "Отмена");		
 				}
 				else
 				{
@@ -1016,12 +926,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SetPVarInt(playerid, "ErrorPassword", GetPVarInt(playerid, "ErrorPassword")-1);
 				    if(GetPVarInt(playerid, "ErrorPassword") > 0)
 				    {
-						format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %d.", GetPVarInt(playerid, "ErrorPassword"));
+						format(string, sizeof(string), "{EDD682}[Ошибка]: {FFFFFF}Введённый вами пароль, неверен. Попыток входа осталось: %d.", GetPVarInt(playerid, "ErrorPassword"));
 						SCM(playerid, COLOR_WHITE, string);
 					}
 					if(GetPVarInt(playerid, "ErrorPassword") == 0)
 					{
-					    SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
+					    SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Вы исчерпали лимит попыток входа и были отключены от сервера.");
 					    return Kick(playerid);
 					}
 					_showLogin(playerid);
@@ -1029,7 +939,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    }
 		    else
 		    {
-      			SCM(playerid, COLOR_ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"/q\", пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
+      			SCM(playerid, COLOR_ERROR, "Используйте \"/q\", чтобы покинуть сервер.");
 				return Kick(playerid);
 		    }			
 		}
@@ -1038,17 +948,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response) return true;
 			if(strlen(inputtext) < 6 || strlen(inputtext) > 15)
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 6 пїЅпїЅ 15 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_ALOGIN_REG, DSP, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Пароль должен быть длиной от 6 до 15 символов!");
+				return SPD(playerid, DLG_ALOGIN_REG, DSP, "{EDD682}AP - Регистрация", "{FFFFFF}Для входа в центр администрирования, пожалуйста, зарегистрируйтесь:", "Ввод", "Отмена");
 			}
 			for(new i = 0; i < strlen(inputtext); i++)
 			{
 				switch(inputtext[i])
 				{
-					case 'пїЅ'..'пїЅ', 'пїЅ'..'пїЅ', ' ':
+					case 'А'..'Я', 'а'..'я', ' ':
 					{
-						SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-						return SPD(playerid, DLG_ALOGIN_REG, DSP, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+						SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Пароль содержит недопустимые символы!");
+						return SPD(playerid, DLG_ALOGIN_REG, DSP, "{EDD682}AP - Регистрация", "{FFFFFF}Для входа в центр администрирования, пожалуйста, зарегистрируйтесь:", "Ввод", "Отмена");
 					}
 				}
 			}
@@ -1058,21 +968,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `admins` SET `password` = '%s' WHERE `name` = '%s'", admin_info[playerid][apassword], player_info[playerid][name]);
 			mysql_query(ConnectMysql, query);
 
-			SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}/alogin{FFFFFF}, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+			SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы успешно зарегистрировались в панели администрирования!");
+			SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Введите {EDD682}/alogin{FFFFFF}, чтобы пройти авторизацию!");
 		}
 		case DLG_ALOGIN:
 		{
 			if(!response) return true;
 			if(strcmp(admin_info[playerid][apassword], inputtext) == 0)
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы успешно авторизовались в панели администрирования!");
 				temp_info[playerid][pAdminStatus] = true;
 			}
 			else 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-				SPD(playerid, DLG_ALOGIN, DSP, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введённый вам пароль, неверен!");
+				SPD(playerid, DLG_ALOGIN, DSP, "{EDD682}AP - Авторизация", "{FFFFFF}Для входа в центр администрирования, пожалуйста, авторизируйтесь:", "Ввод", "Отмена");
 			}
 		}
 		case DLG_CREATEBANKPIN:
@@ -1080,12 +990,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response) return true;
 			if(!strlen(inputtext))
 			{
-				SPD(playerid, DLG_CREATEBANKPIN, DSP, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", 
-				"{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
+				SPD(playerid, DLG_CREATEBANKPIN, DSP, "{EDD682}Банк - {FFFFFF}Оформление счёта", 
+				"{FFFFFF}Рады видеть вас в нашем банке!\n\
+				Оформите банковский счёт, чтобы воспользоваться нашими услугами.\n\
+				Придумайте будущий PIN-код и запишите его в поле ниже:\n\
 				\n\
-				{EDD682}(PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0! пїЅпїЅпїЅпїЅпїЅпїЅ: 1111)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");	
+				{EDD682}(PIN-код должен состять из 4 символов и начинаться с 0! Пример: 1111)", "Оформить", "Закрыть");	
 			}
 			new regex:rg_secretbankpincheck = regex_new("^[1-9]{1}[0-9]{3}$");
 			if(regex_check(inputtext, rg_secretbankpincheck))
@@ -1099,20 +1009,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				mysql_query(ConnectMysql, query);
 
 				new string[70+(-2+4)];
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ PIN-пїЅпїЅпїЅ: {EDD682}%s", inputtext);
+				format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Ваш PIN-код: {EDD682}%s", inputtext);
 				SCM(playerid, COLOR_WHITE, string);
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}F8 {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ PIN-пїЅпїЅпїЅ.");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Сделайте скриншот клавишей {EDD682}F8 {FFFFFF}или запишите ваш PIN-код.");
 			}
 			else
 			{
-				SPD(playerid, DLG_CREATEBANKPIN, DSP, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", 
-				"{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
+				SPD(playerid, DLG_CREATEBANKPIN, DSP, "{EDD682}Банк - {FFFFFF}Оформление счёта", 
+				"{FFFFFF}Рады видеть вас в нашем банке!\n\
+				Оформите банковский счёт, чтобы воспользоваться нашими услугами.\n\
+				Придумайте будущий PIN-код и запишите его в поле ниже:\n\
 				\n\
-				{EDD682}(PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0! пїЅпїЅпїЅпїЅпїЅпїЅ: 1111)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");	
+				{EDD682}(PIN-код должен состять из 4 символов и начинаться с 0! Пример: 1111)", "Оформить", "Закрыть");	
 				regex_delete(rg_secretbankpincheck);
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ.");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите корректно PIN-код.");
 			}			
 		}
 		case DLG_LOGINBANK:
@@ -1120,28 +1030,28 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response) return true;
 			if(!strlen(inputtext))
 			{
-				SPD(playerid, DLG_LOGINBANK, DSP, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
-				{EDD682}(пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");			
+				SPD(playerid, DLG_LOGINBANK, DSP, "{EDD682}Банк - {FFFFFF}Идентификация", 
+				"{FFFFFF}Введите ваш PIN-код от банковского счёта в поле ниже:\n\
+				{EDD682}(Если вы забыли свой PIN-код, обратитесь к администрации проекта)", "Войти", "Закрыть");			
 			}
 			if(strval(inputtext) == player_info[playerid][bank_pin][1])
 			{
 				new string[270];
 				format(string, sizeof(string), 
-				"{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				2. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-				3. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				4. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				5. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
+				"{FFFFFF}1. Положить деньги на счёт\n\
+				2. Снять деньги со счёта\n\
+				3. Перевести на другой счёт\n\
+				4. Оплата налогов\n\
+				5. Настройка счёта\n\
 				\n\
-				- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ:\n\
-				1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - {EDD682}(пїЅ%d){FFFFFF}\n\
-				2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - {EDD682}(%d пїЅпїЅпїЅ.)", player_info[playerid][bank_check], player_info[playerid][bank_money]);
-				SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");	
+				- Информация по счёту:\n\
+				1. Номер счёта - {EDD682}(№%d){FFFFFF}\n\
+				2. Состояние счёта - {EDD682}(%d руб.)", player_info[playerid][bank_check], player_info[playerid][bank_money]);
+				SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}Банк - {FFFFFF}Основное меню", string, "Выбрать", "Закрыть");	
 			}
 			else
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ.");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите корректно PIN-код.");
 			}	
 		}
 		case DLG_BANKMENU:
@@ -1150,11 +1060,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    {			
 				switch(listitem)
 				{
-					case 0: SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-					case 1: SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-					case 2: SPD(playerid, DLG_TMONEY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-					case 3: SPD(playerid, DLG_NALOGBANK, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
-					case 4: SPD(playerid, DLG_SBANK, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");	
+					case 0: SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Положить на банковский счёт", "{FFFFFF}Введите сумму, которую хотите положить на счёт в поле ниже:", "Положить", "Отмена");
+					case 1: SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Снять с банковского счёта", "{FFFFFF}Введите сумму, которую хотите снять со счёта в поле ниже:", "Снять", "Отмена");
+					case 2: SPD(playerid, DLG_TMONEY, DSI, "{EDD682}Банк - {FFFFFF}Перевод на другой счёт", "{FFFFFF}Введите номер счёта, на который хотите перевести сумму в поле ниже:", "Перевести", "Отмена");
+					case 3: SPD(playerid, DLG_NALOGBANK, DSL, "{EDD682}Банк - {FFFFFF}Оплата налогов", "{FFFFFF}1. Оплатить кварплату дома\n2. Оплатить кварплату квартиры", "Выбрать", "Назад");
+					case 4: SPD(playerid, DLG_SBANK, DSL, "{EDD682}Банк - {FFFFFF}Настройка счёта", "{FFFFFF}1. Изменить PIN-код счёта", "Выбрать", "Назад");	
 				}
 			}	
 		}
@@ -1166,13 +1076,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					case 0:	
 					{
-						if(player_info[playerid][keyh] == -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
-						SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+						if(player_info[playerid][keyh] == -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет дома!");
+						SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 					}	
 					case 1:
 					{
-						if(player_info[playerid][keya] == -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-						SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+						if(player_info[playerid][keya] == -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет квартиры!");
+						SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 					}
 				}
 			}
@@ -1180,16 +1090,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				new string[270];
 				format(string, sizeof(string), 
-				"{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				2. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-				3. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				4. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				5. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
+				"{FFFFFF}1. Положить деньги на счёт\n\
+				2. Снять деньги со счёта\n\
+				3. Перевести на другой счёт\n\
+				4. Оплата налогов\n\
+				5. Настройка счёта\n\
 				\n\
-				- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ:\n\
-				1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - {EDD682}(пїЅ%d){FFFFFF}\n\
-				2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - {EDD682}(%d пїЅпїЅпїЅ.)", player_info[playerid][bank_check], player_info[playerid][bank_money]);
-				SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");					
+				- Информация по счёту:\n\
+				1. Номер счёта - {EDD682}(№%d){FFFFFF}\n\
+				2. Состояние счёта - {EDD682}(%d руб.)", player_info[playerid][bank_check], player_info[playerid][bank_money]);
+				SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}Банк - {FFFFFF}Основное меню", string, "Выбрать", "Закрыть");					
 			}
 		}
 		case DLG_APARTPAY:
@@ -1200,17 +1110,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new dayh = strval(inputtext);
 				new p = dayh + apart_info[i][a_rent];
 				new string[110];
-				if(!strlen(inputtext)) return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-				if(!( 1 <= dayh <= 30)) return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+				if(!strlen(inputtext)) return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
+				if(!( 1 <= dayh <= 30)) return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 				if(apart_info[i][a_rent] == 30)
 				{
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 30 пїЅпїЅпїЅпїЅ!");
-					return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Кварплата дома уже проплачена на 30 дней!");
+					return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 				}				
 				if(p == 31)
 				{
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅ 30 пїЅпїЅпїЅпїЅ!");
-					return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Нельзя оплатить более, чем на 30 дней!");
+					return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 				}
 				switch(apart_info[i][a_class])
 				{
@@ -1219,17 +1129,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new total = 2000 * dayh;
 						if(total > player_info[playerid][bank_money])
 						{
-							SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-							return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+							SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}На вашем счету в банке не хватает средств!");	
+							return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 						}
 
 						apart_info[i][a_rent] += dayh;
 						player_info[playerid][bank_money] -= total;
 
-						format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d", dayh, player_info[playerid][bank_money]);
+						format(string, sizeof(string), "{FFFFFF}Вы успешно оплатили вашу квартиру на {EDD682}%d {FFFFFF}дней. Остаток на счету: {EDD682}%d", dayh, player_info[playerid][bank_money]);
 						SCM(playerid, COLOR_WHITE, string);	
 
-						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						// Сохранение
 						query[0] = EOS;
 						mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'",player_info[playerid][bank_money], player_info[playerid][id]);
 						mysql_query(ConnectMysql, query);
@@ -1244,17 +1154,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new total = 3000 * dayh;
 						if(total > player_info[playerid][bank_money])
 						{
-							SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-							return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+							SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}На вашем счету в банке не хватает средств!");	
+							return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 						}
 
 						apart_info[i][a_rent] += dayh;
 						player_info[playerid][bank_money] -= total;
 
-						format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d", dayh, player_info[playerid][bank_money]);
+						format(string, sizeof(string), "{FFFFFF}Вы успешно оплатили вашу квартиру на {EDD682}%d {FFFFFF}дней. Остаток на счету: {EDD682}%d", dayh, player_info[playerid][bank_money]);
 						SCM(playerid, COLOR_WHITE, string);	
 
-						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						// Сохранение
 						query[0] = EOS;
 						mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'",player_info[playerid][bank_money], player_info[playerid][id]);
 						mysql_query(ConnectMysql, query);
@@ -1268,17 +1178,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new total = 4000 * dayh;
 						if(total > player_info[playerid][bank_money])
 						{
-							SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-							return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+							SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}На вашем счету в банке не хватает средств!");	
+							return SPD(playerid, DLG_APARTPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты квартиры", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 						}
 
 						apart_info[i][a_rent] += dayh;
 						player_info[playerid][bank_money] -= total;
 
-						format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d", dayh, player_info[playerid][bank_money]);
+						format(string, sizeof(string), "{FFFFFF}Вы успешно оплатили вашу квартиру на {EDD682}%d {FFFFFF}дней. Остаток на счету: {EDD682}%d", dayh, player_info[playerid][bank_money]);
 						SCM(playerid, COLOR_WHITE, string);	
 
-						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						// Сохранение
 						query[0] = EOS;
 						mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'",player_info[playerid][bank_money], player_info[playerid][id]);
 						mysql_query(ConnectMysql, query);
@@ -1289,7 +1199,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 				}
 			}
-			else SPD(playerid, DLG_NALOGBANK, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
+			else SPD(playerid, DLG_NALOGBANK, DSL, "{EDD682}Банк - {FFFFFF}Оплата налогов", "{FFFFFF}1. Оплатить кварплату дома\n2. Оплатить кварплату квартиры", "Выбрать", "Назад");
 		}		
 		case DLG_HOMEPAY:
 		{
@@ -1299,17 +1209,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new dayh = strval(inputtext);
 				new p = dayh + house_info[i][h_rent];
 				new string[110];
-				if(!strlen(inputtext)) return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-				if(!( 1 <= dayh <= 30)) return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+				if(!strlen(inputtext)) return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
+				if(!( 1 <= dayh <= 30)) return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 				if(house_info[i][h_rent] == 30)
 				{
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 30 пїЅпїЅпїЅпїЅ!");
-					return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Кварплата дома уже проплачена на 30 дней!");
+					return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 				}				
 				if(p == 31)
 				{
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅ 30 пїЅпїЅпїЅпїЅ!");
-					return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Нельзя оплатить более, чем на 30 дней!");
+					return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 				}
 				switch(house_info[i][h_class])
 				{
@@ -1318,17 +1228,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new total = 2000 * dayh;
 						if(total > player_info[playerid][bank_money])
 						{
-							SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-							return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+							SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}На вашем счету в банке не хватает средств!");	
+							return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 						}
 
 						house_info[i][h_rent] += dayh;
 						player_info[playerid][bank_money] -= total;
 
-						format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d", dayh, player_info[playerid][bank_money]);
+						format(string, sizeof(string), "{FFFFFF}Вы успешно оплатили ваш дом на {EDD682}%d {FFFFFF}дней. Остаток на счету: {EDD682}%d", dayh, player_info[playerid][bank_money]);
 						SCM(playerid, COLOR_WHITE, string);	
 
-						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						// Сохранение
 						query[0] = EOS;
 						mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'",player_info[playerid][bank_money], player_info[playerid][id]);
 						mysql_query(ConnectMysql, query);
@@ -1343,17 +1253,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new total = 3000 * dayh;
 						if(total > player_info[playerid][bank_money])
 						{
-							SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-							return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+							SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}На вашем счету в банке не хватает средств!");	
+							return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 						}
 
 						house_info[i][h_rent] += dayh;
 						player_info[playerid][bank_money] -= total;
 
-						format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d", dayh, player_info[playerid][bank_money]);
+						format(string, sizeof(string), "{FFFFFF}Вы успешно оплатили ваш дом на {EDD682}%d {FFFFFF}дней. Остаток на счету: {EDD682}%d", dayh, player_info[playerid][bank_money]);
 						SCM(playerid, COLOR_WHITE, string);	
 
-						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						// Сохранение
 						query[0] = EOS;
 						mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'",player_info[playerid][bank_money], player_info[playerid][id]);
 						mysql_query(ConnectMysql, query);
@@ -1367,17 +1277,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						new total = 4000 * dayh;
 						if(total > player_info[playerid][bank_money])
 						{
-							SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-							return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ 1 пїЅпїЅ 30)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+							SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}На вашем счету в банке не хватает средств!");	
+							return SPD(playerid, DLG_HOMEPAY, DSI, "{EDD682}Банк - {FFFFFF}Оплата кварплаты дома", "{FFFFFF}Введите количество дней, на сколько хотите внести платёж (от 1 до 30)", "Оплатить", "Отмена");
 						}
 
 						house_info[i][h_rent] += dayh;
 						player_info[playerid][bank_money] -= total;
 
-						format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d", dayh, player_info[playerid][bank_money]);
+						format(string, sizeof(string), "{FFFFFF}Вы успешно оплатили ваш дом на {EDD682}%d {FFFFFF}дней. Остаток на счету: {EDD682}%d", dayh, player_info[playerid][bank_money]);
 						SCM(playerid, COLOR_WHITE, string);	
 
-						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						// Сохранение
 						query[0] = EOS;
 						mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'",player_info[playerid][bank_money], player_info[playerid][id]);
 						mysql_query(ConnectMysql, query);
@@ -1388,7 +1298,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 				}
 			}
-			else SPD(playerid, DLG_NALOGBANK, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
+			else SPD(playerid, DLG_NALOGBANK, DSL, "{EDD682}Банк - {FFFFFF}Оплата налогов", "{FFFFFF}1. Оплатить кварплату дома\n2. Оплатить кварплату квартиры", "Выбрать", "Назад");
 		}
 		case DLG_BANKNEWPIN:
 		{
@@ -1396,8 +1306,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				if(!strlen(inputtext)) 
 				{
-					SPD(playerid, DLG_BANKNEWPIN, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ`пїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
-					{EDD682}(PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0! пїЅпїЅпїЅпїЅпїЅпїЅ: 1111)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
+					SPD(playerid, DLG_BANKNEWPIN, DSI, "{EDD682}Банк - {FFFFFF}Изменение PIN-код`а", "{FFFFFF}Введите новый PIN-код в поле ниже:\n\
+					{EDD682}(PIN-код должен состять из 4 символов и начинаться с 0! Пример: 1111)", "Изменить", "Назад");
 					return 1;
 				}	
 				new regex:rg_secretbankpincheck = regex_new("^[1-9]{1}[0-9]{3}$");
@@ -1410,19 +1320,19 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					mysql_query(ConnectMysql, query);
 
 					new string[70+(-2+4)];
-					format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ PIN-пїЅпїЅпїЅ: {EDD682}%s", inputtext);
+					format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Ваш PIN-код: {EDD682}%s", inputtext);
 					SCM(playerid, COLOR_WHITE, string);
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}F8 {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ PIN-пїЅпїЅпїЅ.");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Сделайте скриншот клавишей {EDD682}F8 {FFFFFF}или запишите ваш PIN-код.");
 				}
 				else
 				{
-					SPD(playerid, DLG_BANKNEWPIN, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ`пїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
-					{EDD682}(PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0! пїЅпїЅпїЅпїЅпїЅпїЅ: 1111)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
+					SPD(playerid, DLG_BANKNEWPIN, DSI, "{EDD682}Банк - {FFFFFF}Изменение PIN-код`а", "{FFFFFF}Введите новый PIN-код в поле ниже:\n\
+					{EDD682}(PIN-код должен состять из 4 символов и начинаться с 0! Пример: 1111)", "Изменить", "Назад");
 					regex_delete(rg_secretbankpincheck);
-					return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ.");
+					return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите корректно PIN-код.");
 				}	
 			}
-			else SPD(playerid, DLG_SBANK, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");	
+			else SPD(playerid, DLG_SBANK, DSL, "{EDD682}Банк - {FFFFFF}Настройка счёта", "{FFFFFF}1. Изменить PIN-код счёта", "Выбрать", "Назад");	
 		}
 		case DLG_SBANK:
 		{
@@ -1432,8 +1342,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					case 0: 
 					{
-						SPD(playerid, DLG_BANKNEWPIN, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ`пїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ PIN-пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:\n\
-						{EDD682}(PIN-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 4 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0! пїЅпїЅпїЅпїЅпїЅпїЅ: 1111)", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");
+						SPD(playerid, DLG_BANKNEWPIN, DSI, "{EDD682}Банк - {FFFFFF}Изменение PIN-код`а", "{FFFFFF}Введите новый PIN-код в поле ниже:\n\
+						{EDD682}(PIN-код должен состять из 4 символов и начинаться с 0! Пример: 1111)", "Изменить", "Назад");
 					}	
 				}
 			}
@@ -1441,16 +1351,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				new string[270];
 				format(string, sizeof(string), 
-				"{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				2. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-				3. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				4. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				5. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
+				"{FFFFFF}1. Положить деньги на счёт\n\
+				2. Снять деньги со счёта\n\
+				3. Перевести на другой счёт\n\
+				4. Оплата налогов\n\
+				5. Настройка счёта\n\
 				\n\
-				- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ:\n\
-				1. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - {EDD682}(пїЅ%d){FFFFFF}\n\
-				2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - {EDD682}(%d пїЅпїЅпїЅ.)", player_info[playerid][bank_check], player_info[playerid][bank_money]);
-				SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");					
+				- Информация по счёту:\n\
+				1. Номер счёта - {EDD682}(№%d){FFFFFF}\n\
+				2. Состояние счёта - {EDD682}(%d руб.)", player_info[playerid][bank_check], player_info[playerid][bank_money]);
+				SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}Банк - {FFFFFF}Основное меню", string, "Выбрать", "Закрыть");					
 			}
 
 		}
@@ -1458,20 +1368,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(!response) return true;
 			new string[140];
-			if(!strlen(inputtext)) return SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(!strlen(inputtext)) return SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Снять с банковского счёта", "{FFFFFF}Введите сумму, которую хотите снять со счёта в поле ниже:", "Снять", "Отмена");
 			if(strval(inputtext) < 1 || strval(inputtext) > 10000000)
 			{
-				SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 10.000.000 пїЅпїЅпїЅпїЅпїЅпїЅ.");				
+				SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Снять с банковского счёта", "{FFFFFF}Введите сумму, которую хотите снять со счёта в поле ниже:", "Снять", "Отмена");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Нельзя снять менее 1 рубля или более 10.000.000 рублей.");				
 			}
 			if(player_info[playerid][bank_money] < strval(inputtext))
 			{
-				SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.");
+				SPD(playerid, DLG_TMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Снять с банковского счёта", "{FFFFFF}Введите сумму, которую хотите снять со счёта в поле ниже:", "Снять", "Отмена");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет столько денег.");
 			}
 			_giveMoney(playerid, strval(inputtext));
 			player_info[playerid][bank_money] -= strval(inputtext);
-			format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ: {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ.", strval(inputtext), player_info[playerid][bank_money]);
+			format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы сняли {EDD682}%d рублей {FFFFFF}со своего счёта. Баланс: {EDD682}%d рублей.", strval(inputtext), player_info[playerid][bank_money]);
 			SCM(playerid, COLOR_WHITE, string);
 
 			query[0] = EOS;
@@ -1482,36 +1392,36 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(!response) return true;
 			new string[140];
-			if(!strlen(inputtext)) return SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(!strlen(inputtext)) return SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Положить на банковский счёт", "{FFFFFF}Введите сумму, которую хотите положить на счёт в поле ниже:", "Положить", "Отмена");
 			if(strval(inputtext) < 1 || strval(inputtext) > 10000000)
 			{
-				SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 10.000.000 пїЅпїЅпїЅпїЅпїЅпїЅ.");				
+				SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Положить на банковский счёт", "{FFFFFF}Введите сумму, которую хотите положить на счёт в поле ниже:", "Положить", "Отмена");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Нельзя положить менее 1 рубля или более 10.000.000 рублей.");				
 			}
 			if(player_info[playerid][money] < strval(inputtext))
 			{
-				SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
-				return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.");
+				SPD(playerid, DLG_GMONEYBANK, DSI, "{EDD682}Банк - {FFFFFF}Положить на банковский счёт", "{FFFFFF}Введите сумму, которую хотите положить на счёт в поле ниже:", "Положить", "Отмена");
+				return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет столько денег.");
 			}
 			_giveMoney(playerid, -strval(inputtext));
 			player_info[playerid][bank_money] += strval(inputtext);
-			format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ: {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ.", strval(inputtext), player_info[playerid][bank_money]);
+			format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы положили {EDD682}%d рублей {FFFFFF}на свой счёт. Баланс: {EDD682}%d рублей.", strval(inputtext), player_info[playerid][bank_money]);
 			SCM(playerid, COLOR_WHITE, string);
 
 			query[0] = EOS;
 			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = '%d' WHERE `id` = '%d'", player_info[playerid][bank_money], player_info[playerid][id]);
 			mysql_query(ConnectMysql, query);			
 		}
-		case DLG_BANKINFO: SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.\n2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.\n3. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n4. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+		case DLG_BANKINFO: SPD(playerid, DLG_BANKMENU, DSL, "{EDD682}Банк - {FFFFFF}Основное меню", "1. Информация по счёту.\n2. Перевести на другой счёт.\n3. Оплата налогов.\n4. Настройка счёта.", "Выбрать", "Закрыть");
 		case DLG_TMONEY:
 		{
 			if(!response) return true;
 			new transfer;
-			if(sscanf(inputtext, "i", transfer)) return SPD(playerid, DLG_TMONEY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(sscanf(inputtext, "i", transfer)) return SPD(playerid, DLG_TMONEY, DSI, "{EDD682}Банк - {FFFFFF}Перевод на другой счёт", "{FFFFFF}Введите номер счёта, на который хотите перевести сумму в поле ниже:", "Перевести", "Отмена");
 			if(transfer == player_info[playerid][bank_check]) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_TMONEY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");	
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Введите корректный номер счёта!");
+				return SPD(playerid, DLG_TMONEY, DSI, "{EDD682}Банк - {FFFFFF}Перевод на другой счёт", "{FFFFFF}Введите номер счёта, на который хотите перевести сумму в поле ниже:", "Перевести", "Отмена");	
 			}		
 
 			query[0] = EOS;
@@ -1523,7 +1433,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response)
 			{
 				DeletePVar(playerid, "moddedtransfer");
-				return SPD(playerid, DLG_TMONEY, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+				return SPD(playerid, DLG_TMONEY, DSI, "{EDD682}Банк - {FFFFFF}Перевод на другой счёт", "{FFFFFF}Введите номер счёта, на который хотите перевести сумму в поле ниже:", "Перевести", "Отмена");
 			}
 			new moneybank;
 			new string[200];
@@ -1531,17 +1441,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			sscanf(inputtext, "d", moneybank);
 			if(moneybank < 1000 || moneybank > 10000000)
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1000 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 10.000.000 пїЅпїЅпїЅпїЅпїЅпїЅ.");	
-				format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ {EDD682}(пїЅ%d)\n\n{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:",
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Нельзя перевести менее 1000 рубля или более 10.000.000 рублей.");	
+				format(string, sizeof(string), "{FFFFFF}Вы выполняете перевод на счёт {EDD682}(№%d)\n\n{FFFFFF}Если данные правильные, введите сумму, которую Вы хотите перевести на этот банковский счёт в поле ниже:",
 				transfer, player_info[playerid][bank_check]);
-				return SPD(playerid, DLG_TRANSFERBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");				
+				return ShowPlayerDialog(playerid, DLG_TRANSFERBANK, DSI, "{EDD682}Банк - {FFFFFF}Перевод на другой счёт", string, "Перевести", "Назад");				
 			}
 			if(player_info[playerid][bank_money] < moneybank)
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.");
-				format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ {EDD682}(пїЅ%d)\n\n{FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:",
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет столько денег.");
+				format(string, sizeof(string), "{FFFFFF}Вы выполняете перевод на счёт {EDD682}(№%d)\n\n{FFFFFF}Если данные правильные, введите сумму, которую Вы хотите перевести на этот банковский счётв поле ниже:",
 				transfer, player_info[playerid][bank_check]);
-				return SPD(playerid, DLG_TRANSFERBANK, DSI, "{EDD682}пїЅпїЅпїЅпїЅ - {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");			
+				return ShowPlayerDialog(playerid, DLG_TRANSFERBANK, DSI, "{EDD682}Банк - {FFFFFF}Перевод на другой счёт", string, "Перевести", "Назад");			
 			}	
 			player_info[playerid][bank_money] -= moneybank;
 
@@ -1553,9 +1463,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `bank_money` = `bank_money` + '%d' WHERE `bank_check` = '%d'", moneybank, transfer);
 			mysql_query(ConnectMysql, query);		
 
-			format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅ {EDD682}(пїЅ%d).", moneybank, transfer);
+			format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы перевели {EDD682}%d рублей {FFFFFF}на счёт {EDD682}(№%d).", moneybank, transfer);
 			SCM(playerid, COLOR_WHITE, string);
-			format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ.", player_info[playerid][bank_money]);
+			format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Баланс вашего счёта: {EDD682}%d рублей.", player_info[playerid][bank_money]);
 			SCM(playerid, COLOR_WHITE, string);
 
 			foreach(new i:Player)
@@ -1565,9 +1475,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					new mes[220];
 					player_info[i][bank_money] += moneybank;
-					format(mes, sizeof(mes), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ {EDD682}%s {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ {EDD682}(пїЅ%d).", player_info[playerid][name] ,player_info[i][bank_check]);
+					format(mes, sizeof(mes), "{EDD682}[Уведомление]: {FFFFFF}Игрок {EDD682}%s {FFFFFF}перевёл деньги на ваш банковский счёт {EDD682}(№%d).", player_info[playerid][name] ,player_info[i][bank_check]);
 					SCM(i, COLOR_WHITE, mes);
-					format(mes, sizeof(mes), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%d пїЅпїЅпїЅпїЅпїЅпїЅ.", player_info[i][bank_money]);
+					format(mes, sizeof(mes), "{EDD682}[Уведомление]: {FFFFFF}Баланс вышего счёта: {EDD682}%d рублей.", player_info[i][bank_money]);
 					SCM(i, COLOR_WHITE, mes);
 				}
 
@@ -1600,9 +1510,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new actplayerid = GetPVarInt(playerid, "_isLeader");
 			if(listitem == 0)
 			{
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%s {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d].", _fracName(actplayerid), player_info[actplayerid][name], actplayerid);
+				format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы сняли с поста: {EDD682}%s {FFFFFF}игрока {EDD682}%s[%d].", _fracName(actplayerid), player_info[actplayerid][name], actplayerid);
 				SendClientMessage(playerid, COLOR_WHITE, string);
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: {EDD682}%s.", player_info[playerid][name], playerid, _fracName(actplayerid));
+				format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Администратор {EDD682}%s[%d] {FFFFFF}снял вас с поста: {EDD682}%s.", player_info[playerid][name], playerid, _fracName(actplayerid));
 				SendClientMessage(actplayerid, COLOR_WHITE, string);
 				player_info[actplayerid][leader] = 0;
 				player_info[actplayerid][member] = 0;
@@ -1627,13 +1537,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			player_info[actplayerid][member] = listitem;
 			player_info[actplayerid][rang] = FactionMaxRanks[listitem];
 
-			format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s[%d] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ: {EDD682}%s.", player_info[playerid][name], playerid, _fracName(actplayerid));
+			format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Администратор {EDD682}%s[%d] {FFFFFF}назначил Вас лидером на пост: {EDD682}%s.", player_info[playerid][name], playerid, _fracName(actplayerid));
 			SendClientMessage(actplayerid, COLOR_WHITE, string);
-			SendClientMessage(actplayerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}'/changeskin'{FFFFFF}, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: %s.", player_info[actplayerid][name], actplayerid, _fracName(actplayerid));
+			SendClientMessage(actplayerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Используйте {EDD682}'/changeskin'{FFFFFF}, чтобы сменить внешность персонажа!");
+			format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы назначили %s[%d] на пост лидера: %s.", player_info[actplayerid][name], actplayerid, _fracName(actplayerid));
 			SendClientMessage(playerid, COLOR_WHITE, string);
 
-			format(string, sizeof(string), "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ: %s.", 
+			format(string, sizeof(string), "Администратор %s[%d] назначил %s[%d] лидером на пост: %s.", 
 			player_info[playerid][name], playerid, player_info[actplayerid][name], actplayerid, _fracName(actplayerid));
 			SAM(COLOR_SRED, string, 1);
 
@@ -1643,8 +1553,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			mysql_tquery(ConnectMysql, query);			
 
 			_fracSkin(actplayerid);	
-            _fracSpawn(actplayerid);
-			_freezePlayerPickup(actplayerid);			
+            _fracSpawn(actplayerid);			
 		}
 		case DLG_CHANGESKIN:
 		{
@@ -1653,9 +1562,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        new fractionid = player_info[playerid][member];
 	        new skinid = FractionSkin[fractionid][listitem];
 	        new mes[128];
-			format(mes,sizeof(mes), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {EDD682}%s {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.", player_info[playerid][name]);
+			format(mes,sizeof(mes), "{EDD682}[Уведомление]: {EDD682}%s {FFFFFF}выдал Вам новую фракционную одежду.", player_info[playerid][name]);
 			SendClientMessage(actplayerid, COLOR_WHITE, mes);
-			format(mes,sizeof(mes), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {EDD682}%s {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.", player_info[actplayerid][name]);
+			format(mes,sizeof(mes), "{EDD682}[Уведомление]: {EDD682}%s {FFFFFF}получил новую фракционную одежду.", player_info[actplayerid][name]);
 			SendClientMessage(playerid, COLOR_WHITE, mes);
 	        player_info[actplayerid][fskin] = skinid;
 	        SetPlayerSkin(actplayerid, skinid);
@@ -1668,18 +1577,18 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				case 0:
 				{
-					if(player_info[playerid][eat] == 100) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					if(player_info[playerid][eat] == 100) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Ваш персонаж не голоден!");
 					player_info[playerid][eat] += 30;
 					ApplyAnimation(playerid, "FOOD", "EAT_PIZZA", 4.0, 0, 0, 0, 0, 0,1);
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 30 пїЅпїЅпїЅпїЅпїЅпїЅ");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы съели кусок пиццы, потребности еды восполнились на 30 единиц");
 					if(player_info[playerid][eat] > 100) return player_info[playerid][eat] = 100;
 				}
 				case 1:
 				{
-					if(player_info[playerid][thirst] == 100) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+					if(player_info[playerid][thirst] == 100) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Ваш персонаж не хочет пить!");
 					player_info[playerid][thirst] += 30;
 					ApplyAnimation(playerid, "VENDING", "VEND_DRINK_P", 4.0, 0, 0, 0, 0, 0,1);
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 30 пїЅпїЅпїЅпїЅпїЅпїЅ");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы выпили стакан воды, потребности жажды восполнились на 30 единиц");
 					if(player_info[playerid][thirst] > 100) return player_info[playerid][thirst] = 100;					
 				}				
 			}
@@ -1689,7 +1598,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response) return true;
 			for(new h = 1; h <= totalhouse; h++)
 			{
-				if(house_info[h][h_lock] == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
+				if(house_info[h][h_lock] == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Двери этого дома закрыты!");	
 				if(IsPlayerInRangeOfPoint(playerid, 1.0, house_info[h][h_enter][0], house_info[h][h_enter][1], house_info[h][h_enter][2]))
 				{
 					SetPlayerPos(playerid,house_info[h][h_exit][0],house_info[h][h_exit][1],house_info[h][h_exit][2]);
@@ -1706,7 +1615,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				if(IsPlayerInRangeOfPoint(playerid, 1.0, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2]) && GetPlayerVirtualWorld(playerid) == apart_info[a][a_world])
 				{
-					if(apart_info[a][a_lock] == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					if(apart_info[a][a_lock] == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Двери этой квартиры закрыты!");
 					SetPlayerPos(playerid, apart_info[a][a_exit][0], apart_info[a][a_exit][1], apart_info[a][a_exit][2]);
 					SetPlayerVirtualWorld(playerid, a+50);
 					SetCameraBehindPlayer(playerid);
@@ -1722,8 +1631,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				if(IsPlayerInRangeOfPoint(playerid, 1.0, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2]) && GetPlayerVirtualWorld(playerid) == apart_info[a][a_world])
 				{
-					if(player_info[playerid][keya] != -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-					if(player_info[playerid][money] < apart_info[a][a_money]) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					if(player_info[playerid][keya] != -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы не можете купить вторую квартиру!");
+					if(player_info[playerid][money] < apart_info[a][a_money]) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}У вас недостаточно средств, чтобы приобрести эту квартиру!");
 					player_info[playerid][keya] = a;
 					apart_info[a][a_owned] = 1;
 					apart_info[a][a_rent] = 3;
@@ -1741,11 +1650,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SetCameraBehindPlayer(playerid);
 					_freezePlayerPickup(playerid);
 
-					format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ%d) пїЅпїЅ %d пїЅпїЅпїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ: %d.", a, apart_info[a][a_money], apart_info[a][a_rent]);
+					format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы приобрели квартиру (№%d) за %d рублей! Оплачено дней: %d.", a, apart_info[a][a_money], apart_info[a][a_rent]);
 					SCM(playerid, COLOR_WHITE, string);
 
 					Delete3DTextLabel(apart_info[a][a_text]);
-					apart_info[a][a_text] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2], 20.0, apart_info[a][a_world], 1);												
+					apart_info[a][a_text] = Create3DTextLabel("{FFFFFF}Квартира не продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2], 20.0, apart_info[a][a_world], 1);												
 				}	
 			}
 		}				
@@ -1757,8 +1666,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				if(IsPlayerInRangeOfPoint(playerid, 1.0, house_info[h][h_enter][0], house_info[h][h_enter][1], house_info[h][h_enter][2]))
 				{
-					if(player_info[playerid][keyh] != -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ!");
-					if(player_info[playerid][money] < house_info[h][h_money]) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ!");
+					if(player_info[playerid][keyh] != -1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы не можете купить второй дом!");
+					if(player_info[playerid][money] < house_info[h][h_money]) return SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}У вас недостаточно средств, чтобы приобрести этот дом!");
 					player_info[playerid][keyh] = h;
 					house_info[h][h_owned] = 1;
 					house_info[h][h_rent] = 3;
@@ -1776,7 +1685,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SetCameraBehindPlayer(playerid);
 					_freezePlayerPickup(playerid);
 
-					format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ (пїЅ%d) пїЅпїЅ %d пїЅпїЅпїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ: %d.", h, house_info[h][h_money], house_info[h][h_rent]);
+					format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Вы приобрели дом (№%d) за %d рублей! Оплачено дней: %d.", h, house_info[h][h_money], house_info[h][h_rent]);
 					SCM(playerid, COLOR_WHITE, string);
 
 					_updatehouse(h);												
@@ -1789,8 +1698,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			switch(listitem)
 			{
 				case 0: _infoHome(playerid);
-				case 1: SPD(playerid, DLG_SELLHOMEG, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?", "пїЅпїЅ", "пїЅпїЅпїЅ");
-				case 2: SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				case 1: SPD(playerid, DLG_SELLHOMEG, DSM, "{EDD682}Продажа дома государству", "{FFFFFF}Вы действительно желаете продать дом государству?", "Да", "Нет");
+				case 2: SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");
 			}
 		}
 		case DLG_APARTMENU:
@@ -1799,23 +1708,23 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			switch(listitem)
 			{
 				case 0: _infoApart(playerid);
-				case 1: SPD(playerid, DLG_SELLAPARTG, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?", "пїЅпїЅ", "пїЅпїЅпїЅ");
-				case 2: SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				case 1: SPD(playerid, DLG_SELLAPARTG, DSM, "{EDD682}Продажа квартиры государству", "{FFFFFF}Вы действительно желаете продать квартиру государству?", "Да", "Нет");
+				case 2: SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");
 			}
 		}
 		case DLG_INFOAPART: 
 		{
-			SPD(playerid, DLG_APARTMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-			"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			{EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			{EDD682}[3]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");		
+			SPD(playerid, DLG_APARTMENU, DSL, "{EDD682}Управление квартирой", 
+			"{EDD682}[1]{FFFFFF} - Информация о квартире\n\
+			{EDD682}[2]{FFFFFF} - Продать квартиру государству\n\
+			{EDD682}[3]{FFFFFF} - Продать квартиру игроку", "Далее", "Закрыть");		
 		}			
 		case DLG_INFOHOME: 
 		{
-			SPD(playerid, DLG_HOMEMENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", 
-			"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ\n\
-			{EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			{EDD682}[3]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");			
+			SPD(playerid, DLG_HOMEMENU, DSL, "{EDD682}Управление домом", 
+			"{EDD682}[1]{FFFFFF} - Информация о доме\n\
+			{EDD682}[2]{FFFFFF} - Продать дом государству\n\
+			{EDD682}[3]{FFFFFF} - Продать дом игроку", "Далее", "Закрыть");			
 		}
 		case DLG_SELLAPARTG:
 		{
@@ -1823,7 +1732,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new i = player_info[playerid][keya], string[60];
 			apart_info[i][a_owned] = 0;
 			_giveMoney(playerid, apart_info[i][a_money]);
-			strmid(apart_info[i][a_owner], "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 0, strlen("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"), 255);
+			strmid(apart_info[i][a_owner], "Государство", 0, strlen("Государство"), 255);
 
 			SetPlayerPos(playerid, apart_info[i][a_enter][0], apart_info[i][a_enter][1], apart_info[i][a_enter][2]);
 			SetPlayerVirtualWorld(playerid, apart_info[i][a_world]);		
@@ -1835,13 +1744,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keya` = '-1' WHERE `id` = '%d'", player_info[playerid][id]);
 			mysql_query(ConnectMysql, query);
 
-			SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~g~+%d PYпїЅ", apart_info[i][a_money]);
+			SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы успешно продали квартиру государству!");
+			format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~g~+%d PYЂ", apart_info[i][a_money]);
 			PlayerPlaySound(playerid, 1083, 0.0, 0.0, 0.0);
 			GameTextForPlayer(playerid, string, 1000, 3);
 
 			Delete3DTextLabel(apart_info[i][a_text]);
-			apart_info[i][a_text] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[i][a_enter][0], apart_info[i][a_enter][1], apart_info[i][a_enter][2], 20.0, apart_info[i][a_world], 1);
+			apart_info[i][a_text] = Create3DTextLabel("{FFFFFF}Квартира продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[i][a_enter][0], apart_info[i][a_enter][1], apart_info[i][a_enter][2], 20.0, apart_info[i][a_world], 1);
 			player_info[playerid][keya] = -1;							
 		}			
 		case DLG_SELLHOMEG:
@@ -1850,7 +1759,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new i = player_info[playerid][keyh], string[60];
 			house_info[i][h_owned] = 0;
 			_giveMoney(playerid, house_info[i][h_money]);
-			strmid(house_info[i][h_owner], "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 0, strlen("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"), 255);
+			strmid(house_info[i][h_owner], "Государство", 0, strlen("Государство"), 255);
 
 			SetPlayerPos(playerid, house_info[i][h_enter][0], house_info[i][h_enter][1], house_info[i][h_enter][2]);
 			SetPlayerVirtualWorld(playerid, 0);		
@@ -1862,8 +1771,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keyh` = '-1' WHERE `id` = '%d'", player_info[playerid][id]);
 			mysql_query(ConnectMysql, query);
 
-			SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~g~+%d PYпїЅ", house_info[i][h_money]);
+			SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы успешно продали дом государству!");
+			format(string, sizeof(string), "~n~~n~~n~~n~~n~~n~~g~+%d PYЂ", house_info[i][h_money]);
 			PlayerPlaySound(playerid, 1083, 0.0, 0.0, 0.0);
 			GameTextForPlayer(playerid, string, 1000, 3);
 			_updatehouse(i);
@@ -1874,36 +1783,36 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response) return true;
 			new Float:x[3], params[2], string[250];
 			GetPlayerPos(playerid, x[0], x[1], x[2]);
-			if(sscanf(inputtext, "p<,>dd", params[0], params[1])) return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(sscanf(inputtext, "p<,>dd", params[0], params[1])) return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");
 			if(params[0] == playerid) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Нельзя продавать самому себе!");
+				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");
 			}
 			if(player_info[params[0]][keya] != -1) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У игрока уже есть квартира!");
+				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");
 			}			
-			if(GetPVarInt(playerid,"apartpokup") == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			if(!strlen(inputtext)) return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(GetPVarInt(playerid,"apartpokup") == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Вы уже сделали предложение!");
+			if(!strlen(inputtext)) return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");
 			
 			if(!IsPlayerConnected(params[0])) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Указанный вами игрок не в сети!");
+				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");
 			}
 			if(!IsPlayerInRangeOfPoint(params[0], 2.0, x[0], x[1], x[2])) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");			
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Указанный вами игрок должен находиться рядом с вами!");
+				return SPD(playerid, DLG_SELLAPARTP, DSI, "{EDD682}Продажа квартиры игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать квартиру:", "Далее", "Закрыть");			
 			}
 			SetPVarInt(params[0],"ApartOffer", playerid);
 			SetPVarInt(params[0],"ApartPrice", params[1]);
 			SetPVarInt(playerid,"apartpokup",1);
 
-			format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅ {EDD682}%s {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}(пїЅ%d) {FFFFFF}пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ", player_info[playerid][name], player_info[playerid][keya], params[1]);	
-			SPD(params[0], DLG_SELLAPARTP2, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+			format(string, sizeof(string), "{FFFFFF}Игрок {EDD682}%s {FFFFFF}предлагает вам купить квартиру {EDD682}(№%d) {FFFFFF}за {EDD682}%d {FFFFFF}рублей", player_info[playerid][name], player_info[playerid][keya], params[1]);	
+			SPD(params[0], DLG_SELLAPARTP2, DSM, "{EDD682}Покупка квартиры", string, "Купить", "Отмена");
 		}
 		case DLG_SELLAPARTP2:
 		{
@@ -1912,7 +1821,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(GetPVarInt(playerid, "ApartOffer") != 60635)
 				{
 					new h = player_info[GetPVarInt(playerid, "ApartOffer")][keya];
-					if(player_info[playerid][money] < GetPVarInt(playerid, "ApartPrice"))return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
+					if(player_info[playerid][money] < GetPVarInt(playerid, "ApartPrice"))return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет столько денег на руках!");
 					player_info[playerid][keya] = player_info[GetPVarInt(playerid, "ApartOffer")][keya];
 					player_info[GetPVarInt(playerid, "ApartOffer")][keya] = -1;
 					_giveMoney(playerid, -GetPVarInt(playerid, "ApartPrice"));
@@ -1928,8 +1837,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '%d', `a_owner` = '%s' WHERE `aid` = '%d'", apart_info[h][a_owned], player_info[playerid][name], apart_info[h][aid]);
 					mysql_query(ConnectMysql, query);
 
-					SCM(GetPVarInt(playerid, "ApartOffer"), COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(GetPVarInt(playerid, "ApartOffer"), COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы успешно продали квартиру!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Поздравляем с покупкой квартиры!");
 
 					SetPVarInt(GetPVarInt(playerid, "ApartOffer"),"apartpokup",0);
 					SetPVarInt(playerid,"ApartOffer", 60635);
@@ -1939,8 +1848,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
-					SCM(GetPVarInt(playerid, "ApartOffer"), COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(GetPVarInt(playerid, "ApartOffer"), COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Игрок отказался покупать квартиру!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы отменили покупку!");
 
 					SetPVarInt(playerid,"apartpokup",0);
 					SetPVarInt(GetPVarInt(playerid, "ApartOffer"),"apartpokup",0);				
@@ -1951,36 +1860,36 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response) return true;
 			new Float:x[3], params[2], string[250];
 			GetPlayerPos(playerid, x[0], x[1], x[2]);
-			if(sscanf(inputtext, "p<,>dd", params[0], params[1])) return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(sscanf(inputtext, "p<,>dd", params[0], params[1])) return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");
 			if(params[0] == playerid) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Нельзя продавать самому себе!");
+				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");
 			}
 			if(player_info[params[0]][keyh] != -1) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У игрока уже есть дом!");
+				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");
 			}		
-			if(GetPVarInt(playerid,"housepokup") == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-			if(!strlen(inputtext)) return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(GetPVarInt(playerid,"housepokup") == 1) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Вы уже сделали предложение!");
+			if(!strlen(inputtext)) return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");
 			
 			if(!IsPlayerConnected(params[0]) || params[0] == INVALID_PLAYER_ID) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Указанный вами игрок не в сети!");
+				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");
 			}
 			if(!IsPlayerInRangeOfPoint(params[0], 2.0, x[0], x[1], x[2])) 
 			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ!");
-				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (id пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ:", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");				
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Указанный вами игрок должен находиться рядом с вами!");
+				return SPD(playerid, DLG_SELLHOMEP, DSI, "{EDD682}Продажа дома игроку", "{FFFFFF}Введите (id игрока) и сумму за которую хотите продать дом:", "Далее", "Закрыть");				
 			}
 			SetPVarInt(params[0],"HouseOffer", playerid);
 			SetPVarInt(params[0],"HousePrice", params[1]);
 			SetPVarInt(playerid,"housepokup",1);
 
-			format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅ {EDD682}%s {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ {EDD682}(пїЅ%d) {FFFFFF}пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ", player_info[playerid][name], player_info[playerid][keyh], params[1]);	
-			SPD(params[0], DLG_SELLHOMEP2, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", string, "пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+			format(string, sizeof(string), "{FFFFFF}Игрок {EDD682}%s {FFFFFF}предлагает вам купить дом {EDD682}(№%d) {FFFFFF}за {EDD682}%d {FFFFFF}рублей", player_info[playerid][name], player_info[playerid][keyh], params[1]);	
+			SPD(params[0], DLG_SELLHOMEP2, DSM, "{EDD682}Покупка дома", string, "Купить", "Отмена");
 		}
 		case DLG_SELLHOMEP2:
 		{
@@ -1989,7 +1898,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(GetPVarInt(playerid, "HouseOffer") != 60635)
 				{
 					new h = player_info[GetPVarInt(playerid, "HouseOffer")][keyh];
-					if(player_info[playerid][money] < GetPVarInt(playerid, "HousePrice"))return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!");
+					if(player_info[playerid][money] < GetPVarInt(playerid, "HousePrice"))return SendClientMessage(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас нет столько денег на руках!");
 					player_info[playerid][keyh] = player_info[GetPVarInt(playerid, "HouseOffer")][keyh];
 					player_info[GetPVarInt(playerid, "HouseOffer")][keyh] = -1;
 					_giveMoney(playerid, -GetPVarInt(playerid, "HousePrice"));
@@ -2005,8 +1914,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '%d', `h_owner` = '%s' WHERE `hid` = '%d'", house_info[h][h_owned], player_info[playerid][name], house_info[h][hid]);
 					mysql_query(ConnectMysql, query);
 
-					SCM(GetPVarInt(playerid, "HouseOffer"), COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ!");
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+					SCM(GetPVarInt(playerid, "HouseOffer"), COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы успешно продали дом!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Поздравляем с покупкой дома!");
 
 
 					SetPVarInt(GetPVarInt(playerid, "HouseOffer"),"housepokup",0);
@@ -2017,8 +1926,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
-					SCM(GetPVarInt(playerid, "HouseOffer"), COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ!");
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(GetPVarInt(playerid, "HouseOffer"), COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Игрок отказался покупать дом!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы отменили покупку!");
 
 					SetPVarInt(playerid,"housepokup",0);
 					SetPVarInt(GetPVarInt(playerid, "HouseOffer"),"housepokup",0);				
@@ -2031,16 +1940,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				case 0: 
 				{
-					SPD(playerid, DLG_CREATEHOUSE, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-					1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 2 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 3 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");	
+					SPD(playerid, DLG_CREATEHOUSE, DSI, "{EDD682}Создание нового дома", 
+					"{FFFFFF}Введите через запятую цену будущего дома и его класс\n\
+					1 - Эконом класс, 2 - Средний класс, 3 - Высокий класс", "Создать", "Отмена");	
 				}
-				case 1: SPD(playerid, DLG_CREATEPORCH, DSM, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ?", "пїЅпїЅ", "пїЅпїЅпїЅ");
+				case 1: SPD(playerid, DLG_CREATEPORCH, DSM, "{EDD682}Создание нового подъезда", "{FFFFFF}Вы действительно хотите создать новый подъезд?", "Да", "Нет");
 				case 2: 
 				{
-					SPD(playerid, DLG_CREATEAPART, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-					1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 2 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 3 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");	
+					SPD(playerid, DLG_CREATEAPART, DSI, "{EDD682}Создание новоой квартиры", 
+					"{FFFFFF}Введите через запятую цену будущей квартиры и её класс\n\
+					1 - Эконом класс, 2 - Средний класс, 3 - Высокий класс", "Создать", "Отмена");	
 				}				
 			}				
 		}
@@ -2058,21 +1967,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			porch_info[totalporch][p_exit][1] = 2142.17;
 			porch_info[totalporch][p_exit][2] = 2002.42;
 
-			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			// Создание таблицы
 			query[0] = EOS;
 			mysql_format(ConnectMysql, query, sizeof(query), "INSERT INTO `porch` (`pid`, `p_enterx`, `p_entery`, `p_enterz`, `p_exitx`, `p_exity`, `p_exitz`) VALUES ('%d', '%f', '%f', '%f', '%f', '%f','%f')", 
 			totalporch, porch_info[totalporch][p_enter][0], porch_info[totalporch][p_enter][1], porch_info[totalporch][p_enter][2], porch_info[totalporch][p_exit][0], porch_info[totalporch][p_exit][1], porch_info[totalporch][p_exit][2]);
 			mysql_query(ConnectMysql, query);
 
-			format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅ%d)!", totalporch);
+			format(string, sizeof(string), "{FFFFFF}Вы успешно создали подъезд(№%d)!", totalporch);
 			SCM(playerid, COLOR_WHITE, string);	
 
-			format(string, sizeof(string), "{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ%d).\n пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", totalporch);
+			format(string, sizeof(string), "{FFFFFF}Подъезд (№%d).\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", totalporch);
 			porch_info[totalporch][p_pickup] = CreateDynamicPickup(19132, 23, porch_info[totalporch][p_enter][0], porch_info[totalporch][p_enter][1], porch_info[totalporch][p_enter][2],0, 0, -1);
 			porch_info[totalporch][p_text] = Create3DTextLabel(string, COLOR_WHITE, porch_info[totalporch][p_enter][0], porch_info[totalporch][p_enter][1], porch_info[totalporch][p_enter][2], 20.0, 0, 1);
-			porch_info[totalporch][p_texit] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, porch_info[totalporch][p_exit][0], porch_info[totalporch][p_exit][1], porch_info[totalporch][p_exit][2], 20.0, totalporch+50, 1);
-			porch_info[totalporch][p_floor1] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, 884.0126, 2125.7830, 2002.4259, 20.0, totalporch+50, 1);
-			porch_info[totalporch][p_floor2] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, 884.0977, 2125.9177, 2006.2959, 20.0, totalporch+50, 1);								
+			porch_info[totalporch][p_texit] = Create3DTextLabel("{FFFFFF}Чтобы выйти, нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, porch_info[totalporch][p_exit][0], porch_info[totalporch][p_exit][1], porch_info[totalporch][p_exit][2], 20.0, totalporch+50, 1);
+			porch_info[totalporch][p_floor1] = Create3DTextLabel("{FFFFFF}Чтобы подняться на этаж выше, нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, 884.0126, 2125.7830, 2002.4259, 20.0, totalporch+50, 1);
+			porch_info[totalporch][p_floor2] = Create3DTextLabel("{FFFFFF}Чтобы спуститься на этаж ниже, нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, 884.0977, 2125.9177, 2006.2959, 20.0, totalporch+50, 1);								
 
 		}
 		case DLG_CREATEAPART:
@@ -2081,9 +1990,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new string[110], Float:x, Float:y, Float:z, params[2];
 			if(sscanf(inputtext, "p<,>dd", params[0], params[1]))
 			{
-				SPD(playerid, DLG_CREATEAPART, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-				1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 2 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 3 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");	
+				SPD(playerid, DLG_CREATEAPART, DSI, "{EDD682}Создание новоой квартиры", 
+				"{FFFFFF}Введите через запятую цену будущей квартиры и её класс\n\
+				1 - Эконом класс, 2 - Средний класс, 3 - Высокий класс", "Создать", "Отмена");	
 				return true;					
 			}
 			totalapart++;
@@ -2105,10 +2014,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			params[0], params[1], apart_info[totalapart][a_world]);
 			mysql_query(ConnectMysql, query);
 
-			format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅ%d)!", totalapart);
+			format(string, sizeof(string), "{FFFFFF}Вы успешно создали квартиру(№%d)!", totalapart);
 			SCM(playerid, COLOR_WHITE, string);
-			apart_info[totalapart][a_text] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[totalapart][a_enter][0], apart_info[totalapart][a_enter][1], apart_info[totalapart][a_enter][2], 20.0, apart_info[totalapart][a_world], 1);
-			apart_info[totalapart][a_texit] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[totalapart][a_exit][0], apart_info[totalapart][a_exit][1], apart_info[totalapart][a_exit][2], 20.0, totalapart+50, 1);																
+			apart_info[totalapart][a_text] = Create3DTextLabel("{FFFFFF}Квартира продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[totalapart][a_enter][0], apart_info[totalapart][a_enter][1], apart_info[totalapart][a_enter][2], 20.0, apart_info[totalapart][a_world], 1);
+			apart_info[totalapart][a_texit] = Create3DTextLabel("{FFFFFF}Чтобы выйти, нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[totalapart][a_exit][0], apart_info[totalapart][a_exit][1], apart_info[totalapart][a_exit][2], 20.0, totalapart+50, 1);																
 		}
 		case DLG_CREATEHOUSE:
 		{
@@ -2116,9 +2025,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new string[110], Float:x, Float:y, Float:z, params[2];
 			if(sscanf(inputtext, "p<,>dd", params[0], params[1]))
 			{
-				SPD(playerid, DLG_CREATEHOUSE, DSI, "{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", 
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-				1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 2 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 3 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+				SPD(playerid, DLG_CREATEHOUSE, DSI, "{EDD682}Создание нового дома", 
+				"{FFFFFF}Введите через запятую цену будущего дома и его класс\n\
+				1 - Эконом класс, 2 - Средний класс, 3 - Высокий класс", "Создать", "Отмена");
 				return true;					
 			}
 			totalhouse++;
@@ -2139,13 +2048,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			params[0], params[1]);
 			mysql_query(ConnectMysql, query);
 
-			format(string, sizeof(string), "{FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ(пїЅ%d)!", totalhouse);
+			format(string, sizeof(string), "{FFFFFF}Вы успешно создали дом(№%d)!", totalhouse);
 			SCM(playerid, COLOR_WHITE, string);
 
 			house_info[totalhouse][h_icon] = CreateDynamicMapIcon(house_info[totalhouse][h_enter][0], house_info[totalhouse][h_enter][1], house_info[totalhouse][h_enter][2], 31, -1, 0, -1, -1, 400.0);
 			house_info[totalhouse][h_pickup] = CreateDynamicPickup(1273, 23, house_info[totalhouse][h_enter][0], house_info[totalhouse][h_enter][1], house_info[totalhouse][h_enter][2],0, 0, -1);
-			house_info[totalhouse][h_text] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\n пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[totalhouse][h_enter][0], house_info[totalhouse][h_enter][1], house_info[totalhouse][h_enter][2], 20.0, 0, 1);
-			house_info[totalhouse][h_texit] = Create3DTextLabel("{FFFFFF}пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[totalhouse][h_exit][0], house_info[totalhouse][h_exit][1], house_info[totalhouse][h_exit][2], 20.0, totalhouse+50, 1);																
+			house_info[totalhouse][h_text] = Create3DTextLabel("{FFFFFF}Дом продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[totalhouse][h_enter][0], house_info[totalhouse][h_enter][1], house_info[totalhouse][h_enter][2], 20.0, 0, 1);
+			house_info[totalhouse][h_texit] = Create3DTextLabel("{FFFFFF}Чтобы выйти, нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[totalhouse][h_exit][0], house_info[totalhouse][h_exit][1], house_info[totalhouse][h_exit][2], 20.0, totalhouse+50, 1);																
 		}
 		case DLG_APANEL:
 		{
@@ -2157,62 +2066,62 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case DLG_ACOMMAND:
 		{
-			if(!response) return SPD(playerid, DLG_APANEL, DSL, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "{FFFFFF}1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+			if(!response) return SPD(playerid, DLG_APANEL, DSL, "{EDD682}AP - Панель администратора", "{FFFFFF}1. Команды администратора", "Выбрать", "Отмена");
 			switch(listitem)
 			{
 				case 0: 
 				{
-					SPD(playerid, DLG_ACONE, DSL, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}/alogin - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ (AP)\n\
-					/apanel - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/a - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/world - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ)\n\
-					/sethp - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/setarm - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-					/seteat - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅ\n\
-					/setwater - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-					/tpcoord - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(x,y,z)\n\
-					/slap - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/for - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/freeze - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "");										
+					SPD(playerid, DLG_ACONE, DSL, "{EDD682}AP - Администратор 1-го уровня", 
+					"{FFFFFF}/alogin - Авторизация в (AP)\n\
+					/apanel - Панель администратора\n\
+					/a - Чат администраторов\n\
+					/world - Узнать виртуальный мир (свой)\n\
+					/sethp - Установить кол-во здоровья\n\
+					/setarm - Установить кол-во брони\n\
+					/seteat - Установить кол-во еды\n\
+					/setwater - Установить кол-во воды\n\
+					/tpcoord - Телепорт по координатам(x,y,z)\n\
+					/slap - Подкинуть игрока\n\
+					/for - Подвинуть игрока\n\
+					/freeze - Заморозить игрока", "Назад", "");										
 				}
 				case 1: 
 				{
-					SPD(playerid, DLG_ACTWO, DSL, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}/gethere - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ\n\
-					/goto - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/veh - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/hpcar - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/sefuel - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/dellveh - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/dellvehr - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/setskin - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/givegun - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/kick - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/skick - пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/mute - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/unmute - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "");									
+					SPD(playerid, DLG_ACTWO, DSL, "{EDD682}AP - Администратор 2-го уровня", 
+					"{FFFFFF}/gethere - Телепортировать игрока к себе\n\
+					/goto - Телепортироваться к игроку\n\
+					/veh - Создать автомобиль администратора\n\
+					/hpcar - Установить кол-во здоровья машине\n\
+					/sefuel - Установить кол-во топлива в машине\n\
+					/dellveh - Удалить созданную машину\n\
+					/dellvehr - Удалить созданные машины в радиусе\n\
+					/setskin - Установить временную внешность игроку\n\
+					/givegun - Выдать оружие игроку\n\
+					/kick - Кикнуть игрока с сервера\n\
+					/skick - Тихо кикнуть игрока с сервера\n\
+					/mute - Заблокировать чат игроку\n\
+					/unmute - Разблокировать чат игроку", "Назад", "");									
 				}
 				case 2: 
 				{
-					SPD(playerid, DLG_ACTHREE, DSL, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}/clearchat - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/setweather - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "");					
+					SPD(playerid, DLG_ACTHREE, DSL, "{EDD682}AP - Администратор 3-го уровня", 
+					"{FFFFFF}/clearchat - Очистить чат всем игрокам\n\
+					/setweather - Установить погоду на сервере", "Назад", "");					
 				}
 				case 3: 
 				{
-					SPD(playerid, DLG_ACFOUR, DSL, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 4-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}/set_lvl - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/set_leader - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "");						
+					SPD(playerid, DLG_ACFOUR, DSL, "{EDD682}AP - Администратор 4-го уровня", 
+					"{FFFFFF}/set_lvl - Изменить уровень игроку\n\
+					/set_leader - Выдать права лидерства игроку", "Назад", "");						
 				}
 				case 4: 
 				{
-					if(admin_info[playerid][alevel] < 5) return SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");	
-					SPD(playerid, DLG_ACFIVE, DSL, "{EDD682}AP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 5-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-					"{FFFFFF}/set_admin - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/set_money - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-					/create - пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ.пїЅ.)\n\
-					/payday - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PayDay пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "");						
+					if(admin_info[playerid][alevel] < 5) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Доступ запрещён!");	
+					SPD(playerid, DLG_ACFIVE, DSL, "{EDD682}AP - Администратор 5-го уровня", 
+					"{FFFFFF}/set_admin - Выдать права администратора игроку\n\
+					/set_money - Выдать деньги игроку\n\
+					/create - Меню создания (домов, квартир и т.д.)\n\
+					/payday - Вызвать PayDay всем игрокам", "Назад", "");						
 				}				
 			}
 		}
@@ -2224,12 +2133,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new string[144], color = random(127);
 				if(player_info[playerid][p_model] != 0) 
 				{
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас уже имеется автомобиль!");
 					return RemovePlayerFromVehicle(playerid);
 				}
 				if(player_info[playerid][money] < _priceCar(GetPlayerVehicleID(playerid)))
 				{
-					SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+					SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}У вас не хватате денег для покупки этого автомобиля!");
 					return RemovePlayerFromVehicle(playerid);
 				}
 				player_info[playerid][p_model] = GetVehicleModel(GetPlayerVehicleID(playerid));
@@ -2240,7 +2149,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				player_info[playerid][p_posz] = 11.6933;
 				player_info[playerid][p_posfa] = 266.0667;
 				_giveMoney(playerid, -_priceCar(GetPlayerVehicleID(playerid)));
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}%s {FFFFFF}пїЅпїЅ {EDD682}%d {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ.", VehicleNames[player_info[playerid][p_model]-400], _priceCar(GetPlayerVehicleID(playerid)));
+				format(string, sizeof(string), "{EDD682}[Уведомление]: {FFFFFF}Поздравляем, Вы приобрели автомобиль {EDD682}%s {FFFFFF}за {EDD682}%d {FFFFFF}рублей.", VehicleNames[player_info[playerid][p_model]-400], _priceCar(GetPlayerVehicleID(playerid)));
 				SCM(playerid, COLOR_WHITE, string);
 
 				mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `p_model` = '%d', `p_posx` = '%f', `p_posy` = '%f', `p_posz` = '%f', `p_posfa` = '%f', `p_color1` = '%d', `p_color1` = '%d' WHERE `id` = '%d'", 
@@ -2261,62 +2170,62 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(response)
 			{
 				SPD(playerid, DLG_PRULES_TWO, DSM, 
-				"{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-				"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				Slap (пїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				Kick (пїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				Mute (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				Voice Mute (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-				Warn (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				Ban (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-				пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-				"пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");									
+				"{EDD682}Правила игрока", 
+				"{FFFFFF}Администратор — должностное лицо на сервере, корректирующее и следящее за соблюдением правил от игроков\n\
+				Хелпер — должностное лицо на сервере, наделенное правом помощи в решении вопросов по игровому процессу\n\
+				Slap (пинок) — возможное наказание, используется в виде предупреждения\n\
+				Kick (кик) — наказание за нарушение правил от администрации сервера, которое единоразово прерывает текущую игровую сессию\n\
+				Mute (затычка/блокировка чата) — наказание за нарушение правил сервера, ограничивающее написание сообщений в чат и отправку некоторых команд на определенный срок\n\
+				Voice Mute (затычка голосового чата) — наказание за нарушение правил сервера, ограничивающее использование голосового чата\n\
+				Деморган — наказание за нарушение правил сервера от администрации; место, в котором определенное количество времени сидит нарушивший правила сервера игрок\n\
+				Warn (предупреждение) — наказание за нарушение правил сервера, которое ограничивает вступление во фракцию на определенный срок\n\
+				Ban (блокировка) — наказание за нарушение правил сервера, которое ограничивает вход в игру на определенный срок\n\
+				Деактивация аккаунта — наказание за грубое нарушение правил сервера, которое может быть выдано или аннулировано только специальной администрацией или разработчиками",
+				"Далее", "Назад");									
 			}
 			else
 			{
-				SPD(playerid, DLG_MENU, DSL, "{EDD682}пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 
-				"{EDD682}[1]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[2]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[3]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[4]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[5]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[6]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[7]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[8]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-				{EDD682}[9]{FFFFFF} - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-				"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");								
+				SPD(playerid, DLG_MENU, DSL, "{EDD682}Меню персонажа", 
+				"{EDD682}[1]{FFFFFF} - Статистика персонажа\n\
+				{EDD682}[2]{FFFFFF} - Команды сервера\n\
+				{EDD682}[3]{FFFFFF} - Настройки интерфейса\n\
+				{EDD682}[4]{FFFFFF} - Настройки безопасности\n\
+				{EDD682}[5]{FFFFFF} - Связь с администрацией\n\
+				{EDD682}[6]{FFFFFF} - Потребности персонажа\n\
+				{EDD682}[7]{FFFFFF} - Квестовые задания\n\
+				{EDD682}[8]{FFFFFF} - Правила проекта\n\
+				{EDD682}[9]{FFFFFF} - Донат услуги", 
+				"Выбрать", "Закрыть");								
 			}
 		}
 		case DLG_PRULES_TWO:
 		{
 			if(!response) return _rulesPlayer(playerid);
 			SPD(playerid, DLG_PRULES_THREE, DSM, 
-			"{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-			"{FFFFFF}Away From Keyboard (AFK) пїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-			Caps Lock пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅТ»\n\
-			Spawn пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ(пїЅ) пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
-			"пїЅпїЅпїЅпїЅпїЅ", "");				
+			"{EDD682}Правила игрока", 
+			"{FFFFFF}Away From Keyboard (AFK) — время, когда кто—либо уходит от своего игрового места и оставляет персонажа в бездействии\n\
+			Флуд — частая отправка одинакового, либо не отличающегося по смыслу текста\n\
+			Оффтоп — сообщения не по теме\n\
+			Caps Lock — сообщения, написанные с помощью верхнего регистра, например «ПРИВЕТ»\n\
+			Spawn — место появления игрового персонажа\n\
+			Провокация на нарушение — подстрекательство другого игрока к совершению нарушения правил(а) проекта или сервер",
+			"Назад", "");				
 		}
 		case DLG_PRULES_THREE:
 		{
 			SPD(playerid, DLG_PRULES_TWO, DSM, 
-			"{EDD682}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", 
-			"{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			Slap (пїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			Kick (пїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n\
-			Mute (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-			Voice Mute (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n\
-			Warn (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-			Ban (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n\
-			пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-			"пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ");				
+			"{EDD682}Правила игрока", 
+			"{FFFFFF}Администратор — должностное лицо на сервере, корректирующее и следящее за соблюдением правил от игроков\n\
+			Хелпер — должностное лицо на сервере, наделенное правом помощи в решении вопросов по игровому процессу\n\
+			Slap (пинок) — возможное наказание, используется в виде предупреждения\n\
+			Kick (кик) — наказание за нарушение правил от администрации сервера, которое единоразово прерывает текущую игровую сессию\n\
+			Mute (затычка/блокировка чата) — наказание за нарушение правил сервера, ограничивающее написание сообщений в чат и отправку некоторых команд на определенный срок\n\
+			Voice Mute (затычка голосового чата) — наказание за нарушение правил сервера, ограничивающее использование голосового чата\n\
+			Деморган — наказание за нарушение правил сервера от администрации; место, в котором определенное количество времени сидит нарушивший правила сервера игрок\n\
+			Warn (предупреждение) — наказание за нарушение правил сервера, которое ограничивает вступление во фракцию на определенный срок\n\
+			Ban (блокировка) — наказание за нарушение правил сервера, которое ограничивает вход в игру на определенный срок\n\
+			Деактивация аккаунта — наказание за грубое нарушение правил сервера, которое может быть выдано или аннулировано только специальной администрацией или разработчиками",
+			"Далее", "Назад");				
 		}	
 		case DLG_INVITE:
 		{
@@ -2327,22 +2236,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				player_info[playerid][member] = player_info[actplayerid][member];
 				player_info[playerid][rang] = 1;
 
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ %s", _fracName(playerid));
+				format(string, sizeof(string), "{EDD682}[Уведомление] {FFFFFF}Вы успешно присоединилсь к %s", _fracName(playerid));
 				SCM(playerid, COLOR_WHITE, string);
 
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", player_info[playerid][name], playerid);
+				format(string, sizeof(string), "{EDD682}[Уведомление] {FFFFFF}Игрок %s[%d] принял ваше пригашение!", player_info[playerid][name], playerid);
 				SCM(actplayerid, COLOR_WHITE, string);
-				SCM(actplayerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - {EDD682}'/changeskin'{FFFFFF}!");
+				SCM(actplayerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Не забудьте выдать одежду новому сотруднику - {EDD682}'/changeskin'{FFFFFF}!");
 				
 				DeletePVar(playerid, "_inviteGo");
 				DeletePVar(actplayerid, "_invitePlayer");
 			}
 			else
 			{
-				format(string, sizeof(string), "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅпїЅпїЅпїЅ %s[%d] пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!", player_info[playerid][name], playerid);
+				format(string, sizeof(string), "{EDD682}[Уведомление] {FFFFFF}Игрок %s[%d] отказался от вашего пригашение!", player_info[playerid][name], playerid);
 				SCM(actplayerid, COLOR_WHITE, string);	
 
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+				SCM(playerid, COLOR_WHITE, "{EDD682}[Уведомление] {FFFFFF}Вы отказались от приглашения!");
 
 				DeletePVar(playerid, "_inviteGo");
 				DeletePVar(actplayerid, "_invitePlayer");			
@@ -2361,31 +2270,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 1:
 				{
-					SCM(playerid, COLOR_WHITE, "пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");					
+					SCM(playerid, COLOR_WHITE, "В разработке");					
 				}				
 			}
-		}
-		case DLG_ARENDACAR:
-		{
-			if(!response) return RemovePlayerFromVehicle(playerid);
-			new vehicleid = GetPlayerVehicleID(playerid);
-			if(player_info[playerid][lvl] < 2)
-			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-				return RemovePlayerFromVehicle(playerid);
-			}
-			if(player_info[playerid][money] >= 5000)
-			{
-				_carRented[playerid] = true; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				_rentedCarID[playerid] = vehicleid; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				player_info[playerid][money] -= 5000;
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");	
-			}
-			else
-			{
-				SCM(playerid, COLOR_WHITE, "{EDD682}[пїЅпїЅпїЅпїЅпїЅпїЅ]: {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
-				return RemovePlayerFromVehicle(playerid);
-			}		
 		}
 	}		
 	return 1;
@@ -2420,7 +2307,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 		}
 		return 1;
 	}	
-    if(clickedid == skinTextDraw[4])//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
+    if(clickedid == skinTextDraw[4])//стрелка в право
 	{
 		if(player_info[playerid][sex] == 1)
 		{
@@ -2435,7 +2322,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			SetPlayerSkin(playerid, skinRegister[GetPVarInt(playerid, "@clothes")][0]);			
 		}
 	}
-    if(clickedid == skinTextDraw[3])//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    if(clickedid == skinTextDraw[3])//стрелка влево
 	{
 		if(player_info[playerid][sex] == 1)
 		{		
@@ -2450,7 +2337,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			SetPlayerSkin(playerid, skinRegister[GetPVarInt(playerid, "@clothes")][0]);			
 		}	
 	}
-	if(clickedid == skinTextDraw[2])//пїЅпїЅпїЅпїЅпїЅпїЅ
+	if(clickedid == skinTextDraw[2])//Играть
 	{
 		for(new i; i < 6 ; i ++) TextDrawHideForPlayer(playerid,skinTextDraw[i]);
 		CancelSelectTextDraw(playerid);
@@ -2477,7 +2364,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 		mysql_format(ConnectMysql, query, sizeof(query), "SELECT * FROM `accounts` WHERE `name` = '%s' AND `password` = '%s'", player_info[playerid][name], player_info[playerid][pass]);
 		mysql_tquery(ConnectMysql, query, "PlayerLogin", "i", playerid);
 
-		SCM(playerid, COLOR_WHITE, !"пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {EDD682}Russian History | CR Multiplayer! {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
+		SCM(playerid, COLOR_WHITE, !"Вы успешно зарегистрировались на проекте {EDD682}Russian History | CR Multiplayer! {FFFFFF}Удачной игры!");
 
 		SetSpawnInfo(playerid, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);	
 		SpawnPlayer(playerid);	

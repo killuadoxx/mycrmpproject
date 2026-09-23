@@ -1,4 +1,19 @@
 // Stock`s
+stock MDialog_LegacyShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[], button2[])
+{
+	if(dialogid == -1)
+	{
+		return ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, "", "", "", "");
+	}
+	gLegacyDialog[playerid] = dialogid;
+	return ShowPlayerDialog(playerid, dialogid, style, caption, info, button1, button2);
+}
+
+DialogResponse:Legacy(playerid, response, listitem, inputtext[])
+{
+	return MDialog_OnDialogResponse(playerid, gLegacyDialog[playerid], response, listitem, inputtext);
+}
+
 stock _connectMySQL()
 {
 	ConnectMysql = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_BASE);
@@ -19,11 +34,11 @@ stock _showLogin(playerid)
 
 	new string[190+(-2+MAX_PLAYER_NAME)];
 	format(string, sizeof(string),
-	"{FFFFFF}�� ���� ����� �������������� ���� �� ������� {EDD682}Russian History | CR Multiplayer{FFFFFF}!\n\
-	������� � ������ {EDD682}%s{FFFFFF} ���������������.\n\
+	"{FFFFFF}?? ???? ????? ?????????????? ???? ?? ??????? {EDD682}Russian History | CR Multiplayer{FFFFFF}!\n\
+	??????? ? ?????? {EDD682}%s{FFFFFF} ???????????????.\n\
 	\n\
-	������� ������ �� �������� � ���� ����:", player_info[playerid][name]);
-	SPD(playerid, DLG_LOG, DSP, "{EDD682}����������� {FFFFFF}| ���� ������", string, "�����", "�����");
+	??????? ?????? ?? ???????? ? ???? ????:", player_info[playerid][name]);
+	SPD(playerid, DLG_LOG, DSP, "{EDD682}??????????? {FFFFFF}| ???? ??????", string, "?????", "?????");
 	return 1;
 }
 
@@ -31,17 +46,17 @@ stock _showRegistration(playerid)
 {
 	new string[594+(-2+MAX_PLAYER_NAME)];
 	format(string, sizeof(string),
-	"{FFFFFF}������ {EDD682}Russian History | CR Multiplayer {FFFFFF}- ����������� ��� ������, � ������� �� �� �����������!\n\
-	������������� ������� ������ �� �����, ������������� � ��� � ������ � ����� ������!\n\
-	��� ���������� ����, ����������, ��������������� �������.\n\
+	"{FFFFFF}?????? {EDD682}Russian History | CR Multiplayer {FFFFFF}- ??????????? ??? ??????, ? ??????? ?? ?? ???????????!\n\
+	????????????? ??????? ?????? ?? ?????, ????????????? ? ??? ? ?????? ? ????? ??????!\n\
+	??? ?????????? ????, ??????????, ??????????????? ???????.\n\
 	\n\
-	������� � ������ {EDD682}%s {FFFFFF}�� ���������������\n\
-	���������� ������ � �������� ��� � ���� ����\n\
+	??????? ? ?????? {EDD682}%s {FFFFFF}?? ???????????????\n\
+	?????????? ?????? ? ???????? ??? ? ???? ????\n\
 	\n\
-	{EDD682}����������:\n\
-	1. ������ ������ ��������� �� 8-�� �� 32-�� ��������\n\
-	2. ������ ������ �������� ������ �� ���� � ��������� ��������", player_info[playerid][name]);
-	SPD(playerid, DLG_REG, DSI, "{EDD682}����������� {FFFFFF}| ���� ������", string, "�����", "�����");	
+	{EDD682}??????????:\n\
+	1. ?????? ?????? ????????? ?? 8-?? ?? 32-?? ????????\n\
+	2. ?????? ?????? ???????? ?????? ?? ???? ? ????????? ????????", player_info[playerid][name]);
+	SPD(playerid, DLG_REG, DSI, "{EDD682}??????????? {FFFFFF}| ???? ??????", string, "?????", "?????");	
 	return 1;
 }
 
@@ -117,7 +132,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(skinTextDraw[5], 0);
 	TextDrawFont(skinTextDraw[5], 4);
 
-	// ���������
+	// ?????????
 	SPEEDTD = TextDrawCreate(491.000061, 276.681518, "interface:speedometr");
 	TextDrawLetterSize(SPEEDTD, 0.000000, 0.000000);
 	TextDrawTextSize(SPEEDTD, 159.666671, 209.896377);
@@ -126,6 +141,354 @@ stock _globalTextDraws()
 	TextDrawSetShadow(SPEEDTD, 0);
 	TextDrawSetOutline(SPEEDTD, 0);
 	TextDrawFont(SPEEDTD, 4);
+
+	// register
+	_tdRegister[0] = TextDrawCreate(243.666641, 121.125900, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[0], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[0], 145.666656, 236.859268);
+	TextDrawAlignment(_tdRegister[0], 1);
+	TextDrawColor(_tdRegister[0], -304708865);
+	TextDrawSetShadow(_tdRegister[0], 0);
+	TextDrawSetOutline(_tdRegister[0], 0);
+	TextDrawFont(_tdRegister[0], 4);
+
+	_tdRegister[1] = TextDrawCreate(244.333328, 121.955558, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[1], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[1], 144.333312, 235.199996);
+	TextDrawAlignment(_tdRegister[1], 1);
+	TextDrawColor(_tdRegister[1], 303174399);
+	TextDrawSetShadow(_tdRegister[1], 0);
+	TextDrawSetOutline(_tdRegister[1], 0);
+	TextDrawFont(_tdRegister[1], 4);
+
+	_tdRegister[2] = TextDrawCreate(272.333648, 120.711059, "PE??C?PA???");
+	TextDrawLetterSize(_tdRegister[2], 0.304333, 1.637333);
+	TextDrawAlignment(_tdRegister[2], 1);
+	TextDrawColor(_tdRegister[2], -1);
+	TextDrawSetShadow(_tdRegister[2], 0);
+	TextDrawSetOutline(_tdRegister[2], 0);
+	TextDrawBackgroundColor(_tdRegister[2], 51);
+	TextDrawFont(_tdRegister[2], 2);
+	TextDrawSetProportional(_tdRegister[2], 1);
+
+	_tdRegister[3] = TextDrawCreate(262.666748, 137.059265, "MOUNT ROLE PLAY");
+	TextDrawLetterSize(_tdRegister[3], 0.304333, 1.637333);
+	TextDrawAlignment(_tdRegister[3], 1);
+	TextDrawColor(_tdRegister[3], -1);
+	TextDrawSetShadow(_tdRegister[3], 0);
+	TextDrawSetOutline(_tdRegister[3], 0);
+	TextDrawBackgroundColor(_tdRegister[3], 51);
+	TextDrawFont(_tdRegister[3], 2);
+	TextDrawSetProportional(_tdRegister[3], 1);
+
+	_tdRegister[4] = TextDrawCreate(295.333526, 128.348129, "-");
+	TextDrawLetterSize(_tdRegister[4], 2.963666, 1.637332);
+	TextDrawAlignment(_tdRegister[4], 1);
+	TextDrawColor(_tdRegister[4], -304708865);
+	TextDrawSetShadow(_tdRegister[4], 0);
+	TextDrawSetOutline(_tdRegister[4], 0);
+	TextDrawBackgroundColor(_tdRegister[4], 51);
+	TextDrawFont(_tdRegister[4], 2);
+	TextDrawSetProportional(_tdRegister[4], 1);
+
+	_tdRegister[5] = TextDrawCreate(252.333404, 163.363082, "??E???E ?A? ?APO??:");
+	TextDrawLetterSize(_tdRegister[5], 0.130332, 1.114668);
+	TextDrawAlignment(_tdRegister[5], 1);
+	TextDrawColor(_tdRegister[5], -1);
+	TextDrawSetShadow(_tdRegister[5], 0);
+	TextDrawSetOutline(_tdRegister[5], 0);
+	TextDrawBackgroundColor(_tdRegister[5], 51);
+	TextDrawFont(_tdRegister[5], 2);
+	TextDrawSetProportional(_tdRegister[5], 1);
+
+	_tdRegister[6] = TextDrawCreate(252.333312, 176.296386, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[6], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[6], 58.666656, 11.200012);
+	TextDrawAlignment(_tdRegister[6], 1);
+	TextDrawColor(_tdRegister[6], 1835888127);
+	TextDrawSetShadow(_tdRegister[6], 0);
+	TextDrawSetOutline(_tdRegister[6], 0);
+	TextDrawFont(_tdRegister[6], 4);
+
+	_tdRegister[7] = TextDrawCreate(255.000442, 175.563049, "HA?A??");
+	TextDrawLetterSize(_tdRegister[7], 0.153332, 1.106373);
+	TextDrawTextSize(_tdRegister[7], 279.666656, 13.688890);
+	TextDrawAlignment(_tdRegister[7], 1);
+	TextDrawColor(_tdRegister[7], -1);
+	TextDrawUseBox(_tdRegister[7], true);
+	TextDrawBoxColor(_tdRegister[7], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[7], 0);
+	TextDrawSetOutline(_tdRegister[7], 0);
+	TextDrawBackgroundColor(_tdRegister[7], 51);
+	TextDrawFont(_tdRegister[7], 2);
+	TextDrawSetProportional(_tdRegister[7], 1);
+	TextDrawSetSelectable(_tdRegister[7], true);
+
+	_tdRegister[8] = TextDrawCreate(252.666717, 191.740859, "??E???E ?A? EMAIL:");
+	TextDrawLetterSize(_tdRegister[8], 0.130332, 1.114668);
+	TextDrawAlignment(_tdRegister[8], 1);
+	TextDrawColor(_tdRegister[8], -1);
+	TextDrawSetShadow(_tdRegister[8], 0);
+	TextDrawSetOutline(_tdRegister[8], 0);
+	TextDrawBackgroundColor(_tdRegister[8], 51);
+	TextDrawFont(_tdRegister[8], 2);
+	TextDrawSetProportional(_tdRegister[8], 1);
+
+	_tdRegister[9] = TextDrawCreate(252.666687, 203.844223, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[9], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[9], 58.666656, 11.200012);
+	TextDrawAlignment(_tdRegister[9], 1);
+	TextDrawColor(_tdRegister[9], 1835888127);
+	TextDrawSetShadow(_tdRegister[9], 0);
+	TextDrawSetOutline(_tdRegister[9], 0);
+	TextDrawFont(_tdRegister[9], 4);
+
+	_tdRegister[10] = TextDrawCreate(255.333755, 203.526000, "HA?A??");
+	TextDrawLetterSize(_tdRegister[10], 0.153332, 1.106373);
+	TextDrawTextSize(_tdRegister[10], 280.999969, 14.933336);
+	TextDrawAlignment(_tdRegister[10], 1);
+	TextDrawColor(_tdRegister[10], -1);
+	TextDrawUseBox(_tdRegister[10], true);
+	TextDrawBoxColor(_tdRegister[10], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[10], 0);
+	TextDrawSetOutline(_tdRegister[10], 0);
+	TextDrawBackgroundColor(_tdRegister[10], 51);
+	TextDrawFont(_tdRegister[10], 2);
+	TextDrawSetProportional(_tdRegister[10], 1);
+	TextDrawSetSelectable(_tdRegister[10], true);
+
+	_tdRegister[11] = TextDrawCreate(252.666732, 219.289001, "??E???E ?P???AC???E?O:");
+	TextDrawLetterSize(_tdRegister[11], 0.130332, 1.114668);
+	TextDrawAlignment(_tdRegister[11], 1);
+	TextDrawColor(_tdRegister[11], -1);
+	TextDrawSetShadow(_tdRegister[11], 0);
+	TextDrawSetOutline(_tdRegister[11], 0);
+	TextDrawBackgroundColor(_tdRegister[11], 51);
+	TextDrawFont(_tdRegister[11], 2);
+	TextDrawSetProportional(_tdRegister[11], 1);
+
+	_tdRegister[12] = TextDrawCreate(252.666717, 232.222015, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[12], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[12], 58.666656, 11.200012);
+	TextDrawAlignment(_tdRegister[12], 1);
+	TextDrawColor(_tdRegister[12], 1835888127);
+	TextDrawSetShadow(_tdRegister[12], 0);
+	TextDrawSetOutline(_tdRegister[12], 0);
+	TextDrawFont(_tdRegister[12], 4);
+
+	_tdRegister[13] = TextDrawCreate(255.333770, 231.903823, "HA?A??");
+	TextDrawLetterSize(_tdRegister[13], 0.153332, 1.106373);
+	TextDrawTextSize(_tdRegister[13], 280.999969, 12.859261);
+	TextDrawAlignment(_tdRegister[13], 1);
+	TextDrawColor(_tdRegister[13], -1);
+	TextDrawUseBox(_tdRegister[13], true);
+	TextDrawBoxColor(_tdRegister[13], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[13], 0);
+	TextDrawSetOutline(_tdRegister[13], 0);
+	TextDrawBackgroundColor(_tdRegister[13], 51);
+	TextDrawFont(_tdRegister[13], 2);
+	TextDrawSetProportional(_tdRegister[13], 1);
+	TextDrawSetSelectable(_tdRegister[13], true);
+
+	_tdRegister[14] = TextDrawCreate(252.666748, 247.251983, "???EP??E ?O? ?EPCOHA?A:");
+	TextDrawLetterSize(_tdRegister[14], 0.130332, 1.114668);
+	TextDrawAlignment(_tdRegister[14], 1);
+	TextDrawColor(_tdRegister[14], -1);
+	TextDrawSetShadow(_tdRegister[14], 0);
+	TextDrawSetOutline(_tdRegister[14], 0);
+	TextDrawBackgroundColor(_tdRegister[14], 51);
+	TextDrawFont(_tdRegister[14], 2);
+	TextDrawSetProportional(_tdRegister[14], 1);
+
+	_tdRegister[15] = TextDrawCreate(252.666717, 259.769958, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[15], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[15], 58.666656, 11.200012);
+	TextDrawAlignment(_tdRegister[15], 1);
+	TextDrawColor(_tdRegister[15], 1835888127);
+	TextDrawSetShadow(_tdRegister[15], 0);
+	TextDrawSetOutline(_tdRegister[15], 0);
+	TextDrawFont(_tdRegister[15], 4);
+
+	_tdRegister[16] = TextDrawCreate(255.333770, 259.866760, "HA?A??");
+	TextDrawLetterSize(_tdRegister[16], 0.153332, 1.106373);
+	TextDrawTextSize(_tdRegister[16], 281.000152, 13.274075);
+	TextDrawAlignment(_tdRegister[16], 1);
+	TextDrawColor(_tdRegister[16], -1);
+	TextDrawUseBox(_tdRegister[16], true);
+	TextDrawBoxColor(_tdRegister[16], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[16], 0);
+	TextDrawSetOutline(_tdRegister[16], 0);
+	TextDrawBackgroundColor(_tdRegister[16], 51);
+	TextDrawFont(_tdRegister[16], 2);
+	TextDrawSetProportional(_tdRegister[16], 1);
+	TextDrawSetSelectable(_tdRegister[16], true);
+
+	_tdRegister[17] = TextDrawCreate(252.666748, 274.385253, "??E???E ?O3PAC? ?EPCOHA?A:");
+	TextDrawLetterSize(_tdRegister[17], 0.130332, 1.114668);
+	TextDrawAlignment(_tdRegister[17], 1);
+	TextDrawColor(_tdRegister[17], -1);
+	TextDrawSetShadow(_tdRegister[17], 0);
+	TextDrawSetOutline(_tdRegister[17], 0);
+	TextDrawBackgroundColor(_tdRegister[17], 51);
+	TextDrawFont(_tdRegister[17], 2);
+	TextDrawSetProportional(_tdRegister[17], 1);
+
+	_tdRegister[18] = TextDrawCreate(253.000076, 287.733062, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[18], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[18], 58.666656, 11.200012);
+	TextDrawAlignment(_tdRegister[18], 1);
+	TextDrawColor(_tdRegister[18], 1835888127);
+	TextDrawSetShadow(_tdRegister[18], 0);
+	TextDrawSetOutline(_tdRegister[18], 0);
+	TextDrawFont(_tdRegister[18], 4);
+
+	_tdRegister[19] = TextDrawCreate(256.333770, 287.414855, "HA?A??");
+	TextDrawLetterSize(_tdRegister[19], 0.153332, 1.106373);
+	TextDrawTextSize(_tdRegister[19], 282.333251, 12.859260);
+	TextDrawAlignment(_tdRegister[19], 1);
+	TextDrawColor(_tdRegister[19], -1);
+	TextDrawUseBox(_tdRegister[19], true);
+	TextDrawBoxColor(_tdRegister[19], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[19], 0);
+	TextDrawSetOutline(_tdRegister[19], 0);
+	TextDrawBackgroundColor(_tdRegister[19], 51);
+	TextDrawFont(_tdRegister[19], 2);
+	TextDrawSetProportional(_tdRegister[19], 1);
+	TextDrawSetSelectable(_tdRegister[19], true);
+
+	_tdRegister[20] = TextDrawCreate(252.666763, 301.518707, "???EP??E ?HE?HOC?? ?EPCOHA?A:");
+	TextDrawLetterSize(_tdRegister[20], 0.130332, 1.114668);
+	TextDrawAlignment(_tdRegister[20], 1);
+	TextDrawColor(_tdRegister[20], -1);
+	TextDrawSetShadow(_tdRegister[20], 0);
+	TextDrawSetOutline(_tdRegister[20], 0);
+	TextDrawBackgroundColor(_tdRegister[20], 51);
+	TextDrawFont(_tdRegister[20], 2);
+	TextDrawSetProportional(_tdRegister[20], 1);
+
+	_tdRegister[21] = TextDrawCreate(253.333419, 314.451507, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[21], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[21], 58.666656, 11.200012);
+	TextDrawAlignment(_tdRegister[21], 1);
+	TextDrawColor(_tdRegister[21], 1835888127);
+	TextDrawSetShadow(_tdRegister[21], 0);
+	TextDrawSetOutline(_tdRegister[21], 0);
+	TextDrawFont(_tdRegister[21], 4);
+
+	_tdRegister[22] = TextDrawCreate(256.333801, 314.133331, "HA?A??");
+	TextDrawLetterSize(_tdRegister[22], 0.153332, 1.106373);
+	TextDrawTextSize(_tdRegister[22], 281.666748, 13.274076);
+	TextDrawAlignment(_tdRegister[22], 1);
+	TextDrawColor(_tdRegister[22], -1);
+	TextDrawUseBox(_tdRegister[22], true);
+	TextDrawBoxColor(_tdRegister[22], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[22], 0);
+	TextDrawSetOutline(_tdRegister[22], 0);
+	TextDrawBackgroundColor(_tdRegister[22], 51);
+	TextDrawFont(_tdRegister[22], 2);
+	TextDrawSetProportional(_tdRegister[22], 1);
+	TextDrawSetSelectable(_tdRegister[22], true);
+
+	_tdRegister[23] = TextDrawCreate(271.333404, 336.192260, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[23], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[23], 42.333316, 13.688901);
+	TextDrawAlignment(_tdRegister[23], 1);
+	TextDrawColor(_tdRegister[23], 1835888127);
+	TextDrawSetShadow(_tdRegister[23], 0);
+	TextDrawSetOutline(_tdRegister[23], 0);
+	TextDrawFont(_tdRegister[23], 4);
+
+	_tdRegister[24] = TextDrawCreate(282.333587, 335.289154, "?O???");
+	TextDrawLetterSize(_tdRegister[24], 0.158332, 1.517038);
+	TextDrawTextSize(_tdRegister[24], 303.666687, 16.177780);
+	TextDrawAlignment(_tdRegister[24], 1);
+	TextDrawColor(_tdRegister[24], -1);
+	TextDrawUseBox(_tdRegister[24], true);
+	TextDrawBoxColor(_tdRegister[24], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[24], 0);
+	TextDrawSetOutline(_tdRegister[24], 0);
+	TextDrawBackgroundColor(_tdRegister[24], 51);
+	TextDrawFont(_tdRegister[24], 2);
+	TextDrawSetProportional(_tdRegister[24], 1);
+	TextDrawSetSelectable(_tdRegister[24], true);
+
+	_tdRegister[25] = TextDrawCreate(323.000427, 336.362640, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[25], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[25], 42.333316, 13.688901);
+	TextDrawAlignment(_tdRegister[25], 1);
+	TextDrawColor(_tdRegister[25], 1835888127);
+	TextDrawSetShadow(_tdRegister[25], 0);
+	TextDrawSetOutline(_tdRegister[25], 0);
+	TextDrawFont(_tdRegister[25], 4);
+
+	_tdRegister[26] = TextDrawCreate(333.333465, 335.044677, "?????");
+	TextDrawLetterSize(_tdRegister[26], 0.158332, 1.517038);
+	TextDrawTextSize(_tdRegister[26], 355.000091, 16.177782);
+	TextDrawAlignment(_tdRegister[26], 1);
+	TextDrawColor(_tdRegister[26], -1);
+	TextDrawUseBox(_tdRegister[26], true);
+	TextDrawBoxColor(_tdRegister[26], 0xFFFFFF00);
+	TextDrawSetShadow(_tdRegister[26], 0);
+	TextDrawSetOutline(_tdRegister[26], 0);
+	TextDrawBackgroundColor(_tdRegister[26], 51);
+	TextDrawFont(_tdRegister[26], 2);
+	TextDrawSetProportional(_tdRegister[26], 1);
+	TextDrawSetSelectable(_tdRegister[26], true);
+
+	_tdRegister[27] = TextDrawCreate(249.333297, 177.540740, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[27], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[27], 1.333353, 8.296292);
+	TextDrawAlignment(_tdRegister[27], 1);
+	TextDrawColor(_tdRegister[27], -1523963137);
+	TextDrawSetShadow(_tdRegister[27], 0);
+	TextDrawSetOutline(_tdRegister[27], 0);
+	TextDrawFont(_tdRegister[27], 4);
+
+	_tdRegister[28] = TextDrawCreate(249.666610, 205.503692, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[28], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[28], 1.333353, 8.296292);
+	TextDrawAlignment(_tdRegister[28], 1);
+	TextDrawColor(_tdRegister[28], -1523963137);
+	TextDrawSetShadow(_tdRegister[28], 0);
+	TextDrawSetOutline(_tdRegister[28], 0);
+	TextDrawFont(_tdRegister[28], 4);
+
+	_tdRegister[29] = TextDrawCreate(249.999954, 233.881469, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[29], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[29], 1.333353, 8.296292);
+	TextDrawAlignment(_tdRegister[29], 1);
+	TextDrawColor(_tdRegister[29], -1523963137);
+	TextDrawSetShadow(_tdRegister[29], 0);
+	TextDrawSetOutline(_tdRegister[29], 0);
+	TextDrawFont(_tdRegister[29], 4);
+
+	_tdRegister[30] = TextDrawCreate(249.999954, 261.429595, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[30], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[30], 1.333353, 8.296292);
+	TextDrawAlignment(_tdRegister[30], 1);
+	TextDrawColor(_tdRegister[30], -1523963137);
+	TextDrawSetShadow(_tdRegister[30], 0);
+	TextDrawSetOutline(_tdRegister[30], 0);
+	TextDrawFont(_tdRegister[30], 4);
+
+	_tdRegister[31] = TextDrawCreate(250.333297, 289.392669, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[31], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[31], 1.333353, 8.296292);
+	TextDrawAlignment(_tdRegister[31], 1);
+	TextDrawColor(_tdRegister[31], -1523963137);
+	TextDrawSetShadow(_tdRegister[31], 0);
+	TextDrawSetOutline(_tdRegister[31], 0);
+	TextDrawFont(_tdRegister[31], 4);
+
+	_tdRegister[32] = TextDrawCreate(250.000000, 315.696350, "LD_SPAC:white");
+	TextDrawLetterSize(_tdRegister[32], 0.000000, 0.000000);
+	TextDrawTextSize(_tdRegister[32], 1.333353, 8.296292);
+	TextDrawAlignment(_tdRegister[32], 1);
+	TextDrawColor(_tdRegister[32], -1523963137);
+	TextDrawSetShadow(_tdRegister[32], 0);
+	TextDrawSetOutline(_tdRegister[32], 0);
+	TextDrawFont(_tdRegister[32], 4);		
+
 	return 1;		
 }
 
@@ -142,7 +505,7 @@ stock _playerTextDraw(playerid)
 	PlayerTextDrawFont(playerid, logo[playerid], 2);
 	PlayerTextDrawSetProportional(playerid, logo[playerid], 1);
 
-	// ����������� ���������
+	// ??????????? ?????????
 
 	_tdSatiety[0][playerid] = CreatePlayerTextDraw(playerid, 607.999816, 111.011131, "usebox");
 	PlayerTextDrawLetterSize(playerid, _tdSatiety[0][playerid], 0.000000, 0.835596);
@@ -202,7 +565,7 @@ stock _playerTextDraw(playerid)
 	PlayerTextDrawSetOutline(playerid, _tdSatiety[5][playerid], 0);
 	PlayerTextDrawFont(playerid, _tdSatiety[5][playerid], 4);
 
-	// ���������
+	// ?????????
     SPEEDOPTD[0][playerid] = CreatePlayerTextDraw(playerid, 469.333312, 262.992492, "interface:engine_on");
     PlayerTextDrawLetterSize(playerid, SPEEDOPTD[0][playerid], 0.000000, 0.000000);
     PlayerTextDrawTextSize(playerid, SPEEDOPTD[0][playerid], 206.666595, 232.296356);
@@ -319,7 +682,7 @@ stock _updateTDSatietyWater(playerid)
 	{
 		PlayerTextDrawDestroy(playerid, _tdSatiety[3][playerid]);
 
-		// ����
+		// ????
 		_tdSatiety[3][playerid] = CreatePlayerTextDraw(playerid, 537.333312, 126.103706, "LD_SPAC:white");
 		PlayerTextDrawLetterSize(playerid, _tdSatiety[3][playerid], 0.000000, 0.000000);
 		PlayerTextDrawTextSize(playerid, _tdSatiety[3][playerid], 0.000000 + (0.69 * player_info[playerid][thirst]), 9.540740);
@@ -355,7 +718,7 @@ stock _updateTDSatietyEat(playerid)
 	{
 		PlayerTextDrawDestroy(playerid, _tdSatiety[1][playerid]);
 
-		// ���
+		// ???
 		_tdSatiety[1][playerid] = CreatePlayerTextDraw(playerid, 537.333435, 109.925926, "LD_SPAC:white");
 		PlayerTextDrawLetterSize(playerid, _tdSatiety[1][playerid], 0.000000, 0.000000);
 		PlayerTextDrawTextSize(playerid, _tdSatiety[1][playerid], 0.000000 + (0.69 * player_info[playerid][eat]), 9.955562);
@@ -392,7 +755,7 @@ stock _needPlayer(playerid)
 			player_info[playerid][health] -= 3.1;
 			SetPlayerHealth(playerid, player_info[playerid][health]);
 		}
-		case 50: SCM(playerid, COLOR_WHITEOR, "[�����������]: {FFFFFF}��� �������� ������������, �������� ��������� ���������!");
+		case 50: SCM(playerid, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????????????, ???????? ????????? ?????????!");
 	}
 	switch(player_info[playerid][thirst])
 	{
@@ -401,7 +764,7 @@ stock _needPlayer(playerid)
 			player_info[playerid][health] -= 3.1;
 			SetPlayerHealth(playerid, player_info[playerid][health]);
 		}
-		case 50: SCM(playerid, COLOR_WHITEOR, "[�����������]: {FFFFFF}��� �������� ����� ����, �������� ��������� ���������!");
+		case 50: SCM(playerid, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????? ????, ???????? ????????? ?????????!");
 	}
 	return 1;
 }
@@ -409,17 +772,17 @@ stock _needPlayer(playerid)
 stock ConvertSeconds(time)  
 {  
 	new string[128];  
-	if(time < 60) format(string, sizeof(string), "%d ���.", time);  
-	else if(time == 60) string = "1 ������";  
+	if(time < 60) format(string, sizeof(string), "%d ???.", time);  
+	else if(time == 60) string = "1 ??????";  
 	else if(time > 60 && time < 3600)  
 	{  
 		new Float: minutes;  
 		new seconds;  
 		minutes = time / 60;  
 		seconds = time % 60;  
-		format(string, sizeof(string), "%.0f ���. � %d ���.", minutes, seconds);  
+		format(string, sizeof(string), "%.0f ???. ? %d ???.", minutes, seconds);  
 	}  
-	else if(time == 3600) string = "1 ���";  
+	else if(time == 3600) string = "1 ???";  
 	else if(time > 3600)  
 	{  
 		new Float: hours;  
@@ -497,14 +860,14 @@ stock PayDay()
 				targetid = GetPlayerID(house_info[h][h_owner]);
 				if(targetid != INVALID_PLAYER_ID)
 				{
-					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[�����������]: {FFFFFF}�� ���� �������� �� ���� �� ��������!");
+					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[???????????]: {FFFFFF}?? ???? ???????? ?? ???? ?? ????????!");
 					new i = player_info[targetid][keyh];
-					strmid(house_info[i][h_owner], "�����������", 0, strlen("�����������"), 255);
+					strmid(house_info[i][h_owner], "???????????", 0, strlen("???????????"), 255);
 					house_info[i][h_owned] = 0;
 					player_info[targetid][keyh] = -1;
 					player_info[targetid][bank_money] += house_info[i][h_money];
 
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '%d', `h_owner` = '�����������', `h_rent` = '%d' WHERE `hid` = '%d'", house_info[i][h_owned], house_info[i][h_rent], house_info[i][hid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '%d', `h_owner` = '???????????', `h_rent` = '%d' WHERE `hid` = '%d'", house_info[i][h_owned], house_info[i][h_rent], house_info[i][hid]);
 					mysql_query(ConnectMysql, query);
 
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keyh` = '-1', `bank_money` = `bank_money` + '%d' WHERE `id` = '%d'", player_info[targetid][bank_money], player_info[targetid][id]);
@@ -517,10 +880,10 @@ stock PayDay()
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keyh` = '-1', `bank_money` = `bank_money` + '%d' WHERE `name` = '%s'", house_info[h][h_money], house_info[h][h_owner]);
 					mysql_query(ConnectMysql, query);
 
-					strmid(house_info[h][h_owner], "�����������", 0, strlen("�����������"), 255);
+					strmid(house_info[h][h_owner], "???????????", 0, strlen("???????????"), 255);
 
 					query[0] = EOS;
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '0', `h_owner` = '�����������', `h_rent` = '0' WHERE `hid` = '%d'", house_info[h][hid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '0', `h_owner` = '???????????', `h_rent` = '0' WHERE `hid` = '%d'", house_info[h][hid]);
 					mysql_query(ConnectMysql, query);
 				}
 				_updatehouse(h);									
@@ -535,14 +898,14 @@ stock PayDay()
 				targetid = GetPlayerID(apart_info[a][a_owner]);
 				if(targetid != INVALID_PLAYER_ID)
 				{
-					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[�����������]: {FFFFFF}�� ���� �������� �� �������� �� ��������!");
+					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[???????????]: {FFFFFF}?? ???? ???????? ?? ???????? ?? ????????!");
 					new i = player_info[targetid][keya];
-					strmid(apart_info[i][a_owner], "�����������", 0, strlen("�����������"), 255);
+					strmid(apart_info[i][a_owner], "???????????", 0, strlen("???????????"), 255);
 					apart_info[i][a_owned] = 0;
 					player_info[targetid][keya] = -1;
 					player_info[targetid][bank_money] += apart_info[i][a_money];
 
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '%d', `a_owner` = '�����������', `a_rent` = '%d' WHERE `aid` = '%d'", apart_info[i][a_owned], apart_info[i][a_rent], apart_info[i][aid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '%d', `a_owner` = '???????????', `a_rent` = '%d' WHERE `aid` = '%d'", apart_info[i][a_owned], apart_info[i][a_rent], apart_info[i][aid]);
 					mysql_query(ConnectMysql, query);
 
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keya` = '-1', `bank_money` = `bank_money` + '%d' WHERE `id` = '%d'", player_info[targetid][bank_money], player_info[targetid][id]);
@@ -556,22 +919,22 @@ stock PayDay()
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keya` = '-1', `bank_money` = `bank_money` + '%d' WHERE `name` = '%s'", apart_info[a][a_money], apart_info[a][a_owner]);
 					mysql_query(ConnectMysql, query);
 
-					strmid(apart_info[a][a_owner], "�����������", 0, strlen("�����������"), 255);
+					strmid(apart_info[a][a_owner], "???????????", 0, strlen("???????????"), 255);
 
 					query[0] = EOS;
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '0', `a_owner` = '�����������', `a_rent` = '0' WHERE `aid` = '%d'", apart_info[a][aid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '0', `a_owner` = '???????????', `a_rent` = '0' WHERE `aid` = '%d'", apart_info[a][aid]);
 					mysql_query(ConnectMysql, query);
 				}
 				Delete3DTextLabel(apart_info[a][a_text]);
-				apart_info[a][a_text] = Create3DTextLabel("{FFFFFF}�������� ��������.\n ��� �������������� ������� - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2], 20.0, apart_info[a][a_world], 1);									
+				apart_info[a][a_text] = Create3DTextLabel("{FFFFFF}???????? ????????.\n ??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2], 20.0, apart_info[a][a_world], 1);									
 			}
 		}		
 	}
 	foreach(new i:Player)
 	{
 		if(!IsPlayerConnected(i)) continue;
-		if(temp_info[i][pLoginStatus] != true) return SCM(i, COLOR_WHITEOR, "[�����������]: �� ���������� PayDay!");
-		if(temp_info[i][PlayerAFK] > 3) return SCM(i, COLOR_WHITEOR, "[�����������]: �� ���������� PayDay!");
+		if(temp_info[i][pLoginStatus] != true) return SCM(i, COLOR_WHITEOR, "[???????????]: ?? ?????????? PayDay!");
+		if(temp_info[i][PlayerAFK] > 3) return SCM(i, COLOR_WHITEOR, "[???????????]: ?? ?????????? PayDay!");
 		player_info[i][exp]++;
 		if(player_info[i][exp] >= _getMaxPlayerExpLevel(player_info[i][lvl]))
 		{
@@ -579,12 +942,12 @@ stock PayDay()
 			player_info[i][lvl]++;
 			player_info[i][age]++;
 			SetPlayerScore(i, player_info[i][lvl]);
-			SCM(i, COLOR_WHITEOR, "[�����������]: {FFFFFF}��� ������� ������� ���������!");	
+			SCM(i, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ??????? ??????? ?????????!");	
 		}
 		SCM(i, COLOR_WHITEOR, "GIVE PAYDAY");
 
-		if(player_info[i][eat] <= 30) SCM(i, COLOR_WHITEOR, "[�����������]: {FFFFFF}��� �������� ����� ������ ������������, �������� ��������� ���������!");
-		if(player_info[i][thirst] <= 30) SCM(i, COLOR_WHITEOR, "[�����������]: {FFFFFF}��� �������� ����� ������ ����� ����, �������� ��������� ���������!");
+		if(player_info[i][eat] <= 30) SCM(i, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????? ?????? ????????????, ???????? ????????? ?????????!");
+		if(player_info[i][thirst] <= 30) SCM(i, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????? ?????? ????? ????, ???????? ????????? ?????????!");
 	}
 	return 1;
 }
@@ -592,52 +955,6 @@ stock PayDay()
 stock _getMaxPlayerExpLevel(level)
 {
 	return 3 + (level *3);
-}
-
-stock SetPlayerParam(playerid, param, value)
-{
-	if(!IsPlayerConnected(playerid) || player_info[playerid][id] <= 0) return 0;
-
-	new field[16];
-	switch(param)
-	{
-		case PLAYER_PARAM_MONEY: { player_info[playerid][money] = value; field = "money"; }
-		case PLAYER_PARAM_LEVEL: { player_info[playerid][lvl] = value; field = "lvl"; }
-		case PLAYER_PARAM_EXP: { player_info[playerid][exp] = value; field = "exp"; }
-		case PLAYER_PARAM_AGE: { player_info[playerid][age] = value; field = "age"; }
-		case PLAYER_PARAM_EAT: { player_info[playerid][eat] = value; field = "eat"; }
-		case PLAYER_PARAM_THIRST: { player_info[playerid][thirst] = value; field = "thirst"; }
-		case PLAYER_PARAM_MEMBER: { player_info[playerid][member] = value; field = "member"; }
-		case PLAYER_PARAM_RANG: { player_info[playerid][rang] = value; field = "rang"; }
-		case PLAYER_PARAM_FSKIN: { player_info[playerid][fskin] = value; field = "fskin"; }
-		case PLAYER_PARAM_MUTETIME: { player_info[playerid][mutetime] = value; field = "mutetime"; }
-		default: return 0;
-	}
-
-	mysql_format(ConnectMysql, query, sizeof(query),
-		"UPDATE `accounts` SET `%s` = '%d' WHERE `id` = '%d'",
-		field, value, player_info[playerid][id]);
-	mysql_tquery(ConnectMysql, query);
-	return 1;
-}
-
-stock SetPlayerParamFloat(playerid, param, Float:value)
-{
-	if(!IsPlayerConnected(playerid) || player_info[playerid][id] <= 0) return 0;
-
-	new field[8];
-	switch(param)
-	{
-		case 0: { player_info[playerid][health] = value; field = "health"; }
-		case 1: { player_info[playerid][armor] = value; field = "armor"; }
-		default: return 0;
-	}
-
-	mysql_format(ConnectMysql, query, sizeof(query),
-		"UPDATE `accounts` SET `%s` = '%f' WHERE `id` = '%d'",
-		field, value, player_info[playerid][id]);
-	mysql_tquery(ConnectMysql, query);
-	return 1;
 }
 
 stock _savePlayerAccount(playerid)
@@ -704,20 +1021,17 @@ stock SAM(color,const string[],level)
 
 stock _loadPickup()
 {
-	bank[0] = CreatePickup(1318, 23, 2376.7192, -2139.2600, 22.0776, 0); // - ���� � ����
-	bank[1] = CreatePickup(1318, 23, 2375.6055, -1910.1226, 1126.9100, 1); // - ����� � �����
+	bank[0] = CreatePickup(1318, 23, 2376.7192, -2139.2600, 22.0776, 0); // - ???? ? ????
+	bank[1] = CreatePickup(1318, 23, 2375.6055, -1910.1226, 1126.9100, 1); // - ????? ? ?????
 	bank[2] = CreateDynamicPickup(1514, 2, 2370.7439, -1904.0571, 1126.9100, 1, 0);
 
-	hospital[0] = CreatePickup(1318, 23, 2112.7124, -2392.8530, 23.0883, 0); // - ���� � �������� �.�����
-	hospital[1] = CreatePickup(1318, 23, 366.9555, 124.9833, 1003.8500, 2); // - ����� � �������� �.�����
+	hospital[0] = CreatePickup(1318, 23, 2112.7124, -2392.8530, 23.0883, 0); // - ???? ? ???????? ?.?????
+	hospital[1] = CreatePickup(1318, 23, 366.9555, 124.9833, 1003.8500, 2); // - ????? ? ???????? ?.?????
 
-	_pickupm[0] = CreatePickup(1318, 23, 1818.2975, 2095.8008, 16.1631, 0); // - ���� � ������������� ���.��������
-	_pickupm[1] = CreatePickup(1318, 23, 1583.7637, -774.3833, 1114.7073, 1); // - ����� �� ������������� ���.��������
+	_pickupm[0] = CreatePickup(1318, 23, 1481.0710, -1772.3121, 18.7958, 0); // - ???? ? ????????????? ???-??????
+	_pickupm[1] = CreatePickup(1318, 23, 390.7689, 173.7262, 1008.3828, 1); // - ????? ? ????????????? ???-??????
 
-	_pickupp[0] = CreatePickup(1318, 23, 1919.2798, 2183.4026, 15.6982, 0); // - ���� � ���
-	_pickupp[1] = CreatePickup(1318, 23, 588.1068, 0.9593, 1022.9027, 2); // - ����� �� ���
-	_pickupp[2] = CreatePickup(1318, 23, 1937.3793, 2160.8184, 15.6621, 0); // - ���� � ��� (����)
-	_pickupp[3] = CreatePickup(1318, 23, 593.2096, -22.2770, 1022.9027, 2); // - ����� �� ��� (�� ����)
+	_arendBike[0] = CreatePickup(19134, 23, 1775.4690, -1904.4019, 13.3860, 0);
 
 	eda[0] = CreatePickup(1582, 2, 2520.0564, -2116.4204, 22.0360, 0);
 	CreatePickup(1582, 2, 2551.5525, -2207.5952, 22.5228, 0);
@@ -738,17 +1052,17 @@ stock _infoHome(playerid)
 	new i = player_info[playerid][keyh];
 	switch(house_info[i][h_class])
 	{
-		case 1: text = "������ �����";
-		case 2: text = "������� �����";
-		case 3: text = "������� �����";
+		case 1: text = "?????? ?????";
+		case 2: text = "??????? ?????";
+		case 3: text = "??????? ?????";
 	}
 	format(string, sizeof(string),
-	"{FFFFFF}����� ����:\t %d\n\
-	{FFFFFF}����� ����:\t %s\n\
-	{FFFFFF}���.����:\t %d\n\
-	{FFFFFF}�������� ����:\t %d",
+	"{FFFFFF}????? ????:\t %d\n\
+	{FFFFFF}????? ????:\t %s\n\
+	{FFFFFF}???.????:\t %d\n\
+	{FFFFFF}???????? ????:\t %d",
 	i, text, house_info[i][h_money], house_info[i][h_rent]);
-	SPD(playerid, DLG_INFOHOME, DSM, "{EDD682}���������� � ����", string, "�����", "");
+	SPD(playerid, DLG_INFOHOME, DSM, "{EDD682}?????????? ? ????", string, "?????", "");
 	return 1;
 }
 
@@ -758,17 +1072,17 @@ stock _infoApart(playerid)
 	new i = player_info[playerid][keya];
 	switch(apart_info[i][a_class])
 	{
-		case 1: text = "������ �����";
-		case 2: text = "������� �����";
-		case 3: text = "������� �����";
+		case 1: text = "?????? ?????";
+		case 2: text = "??????? ?????";
+		case 3: text = "??????? ?????";
 	}
 	format(string, sizeof(string),
-	"{FFFFFF}����� ��������:\t %d\n\
-	{FFFFFF}����� ��������:\t %s\n\
-	{FFFFFF}���.����:\t %d\n\
-	{FFFFFF}�������� ����:\t %d",
+	"{FFFFFF}????? ????????:\t %d\n\
+	{FFFFFF}????? ????????:\t %s\n\
+	{FFFFFF}???.????:\t %d\n\
+	{FFFFFF}???????? ????:\t %d",
 	i, text, apart_info[i][a_money], apart_info[i][a_rent]);
-	SPD(playerid, DLG_INFOAPART, DSM, "{EDD682}���������� � ��������", string, "�����", "");
+	SPD(playerid, DLG_INFOAPART, DSM, "{EDD682}?????????? ? ????????", string, "?????", "");
 	return 1;
 }
 
@@ -777,18 +1091,18 @@ stock _statsPlayer(playerid)
 	new string[256];
 	new l = player_info[playerid][lvl];
 	format(string, sizeof(string),
-	"{FFFFFF}��� ���������:\t %s\n\
-	������� ���������:\t %d\n\
-	������� ���������:\t %d\n\
-	���� ���������:\t %d/%d\n\
-	��� ���������:\t %s\n\
-	���� �����������:\t %s\n\
-	�����������:\t\t %s\n\
-	����:\t\t\t %s [%d]",
+	"{FFFFFF}??? ?????????:\t %s\n\
+	??????? ?????????:\t %d\n\
+	??????? ?????????:\t %d\n\
+	???? ?????????:\t %d/%d\n\
+	??? ?????????:\t %s\n\
+	???? ???????????:\t %s\n\
+	???????????:\t\t %s\n\
+	????:\t\t\t %s [%d]",
 	player_info[playerid][name], player_info[playerid][age], l, player_info[playerid][exp], _getMaxPlayerExpLevel(l), 
-	(player_info[playerid][sex] == 1) ? ("�������") : ("�������"), player_info[playerid][regdata], _fracName(playerid), 
+	(player_info[playerid][sex] == 1) ? ("???????") : ("???????"), player_info[playerid][regdata], _fracName(playerid), 
 	FractionName[player_info[playerid][member]][player_info[playerid][rang]], player_info[playerid][rang]);
-	SPD(playerid, DLG_STATS, DSL, "{EDD682}���������� ���������", string, "�����", "");
+	SPD(playerid, DLG_STATS, DSL, "{EDD682}?????????? ?????????", string, "?????", "");
 	return 1;
 }
 
@@ -796,24 +1110,24 @@ stock _questPlayer(playerid)
 {
 	new string[256];
 	format(string, sizeof(string),
-	"1. ����� ����������.\t\t\t %s", (player_info[playerid][quest][0] == 1) ? ("{EDD682}��������") : ("{EDD682}�� ��������"));
-	SPD(playerid, DLG_QUEST, DSL, "{EDD682}��������� �������", string, "�������", "�������");
+	"1. ????? ??????????.\t\t\t %s", (player_info[playerid][quest][0] == 1) ? ("{EDD682}????????") : ("{EDD682}?? ????????"));
+	SPD(playerid, DLG_QUEST, DSL, "{EDD682}????????? ???????", string, "???????", "???????");
 	return 1;
 }
 
 stock _fracName(playerid)
 {
 	new fname[72];
-	if(player_info[playerid][member] == 0) fname =  "�����������";
- 	if(player_info[playerid][member] == 1) fname =  "������������� �������";
- 	if(player_info[playerid][member] == 2) fname =  "���";
- 	if(player_info[playerid][member] == 3) fname =  "�����";
- 	if(player_info[playerid][member] == 4) fname =  "������������ �������";
- 	if(player_info[playerid][member] == 5) fname =  "����������� ������ ������������";
- 	if(player_info[playerid][member] == 6) fname =  "������������ ���������������";
- 	if(player_info[playerid][member] == 7) fname =  "�������� �������� ����������";
- 	if(player_info[playerid][member] == 8) fname =  "����������� ������";
- 	if(player_info[playerid][member] == 9) fname =  "����� ������";
+	if(player_info[playerid][member] == 0) fname =  "???????????";
+ 	if(player_info[playerid][member] == 1) fname =  "The Government of Los Santos";
+ 	if(player_info[playerid][member] == 2) fname =  "???";
+ 	if(player_info[playerid][member] == 3) fname =  "?????";
+ 	if(player_info[playerid][member] == 4) fname =  "???????????? ???????";
+ 	if(player_info[playerid][member] == 5) fname =  "??????????? ?????? ????????????";
+ 	if(player_info[playerid][member] == 6) fname =  "???????????? ???????????????";
+ 	if(player_info[playerid][member] == 7) fname =  "???????? ???????? ??????????";
+ 	if(player_info[playerid][member] == 8) fname =  "??????????? ??????";
+ 	if(player_info[playerid][member] == 9) fname =  "????? ??????";
  	return fname;
 }
 
@@ -846,22 +1160,22 @@ stock _fracSkin(playerid)
 
 stock IsSpecificConditionMet(playerid, param) 
 {
-    // ���������, ������������� �� ����� ����������� ������� � �����
+    // ?????????, ????????????? ?? ????? ??????????? ??????? ? ?????
     if(player_info[playerid][member] == 1 && player_info[playerid][rang] == 12 && param > 11) {
-        return true; // ������� ���������
+        return true; // ??????? ?????????
     }
-    return false; // ������� �� ���������
+    return false; // ??????? ?? ?????????
 }
 
 stock _infoPlayer(playerid)
 {
-	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}���� � ��� ��������� �������, ����������� � ����� �������������: {EDD682}(������� 'H' -> ����� � ��������������)");
-	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}������ ��� ��������� ������� �������, ������ ������������ � ����: {EDD682}(������� 'H' -> ������� �������)");
-	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}������� �� ������������ ������������ ������ ���������: {EDD682}(������� 'H' -> ����������� ���������)");
+	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}???? ? ??? ????????? ???????, ??????????? ? ????? ?????????????: {EDD682}(??????? 'H' -> ????? ? ??????????????)");
+	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}?????? ??? ????????? ??????? ???????, ?????? ???????????? ? ????: {EDD682}(??????? 'H' -> ??????? ???????)");
+	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}??????? ?? ???????????? ???????????? ?????? ?????????: {EDD682}(??????? 'H' -> ??????????? ?????????)");
 	return 1;
 }
 
-// ��������� 
+// ????????? 
 stock SetVehicleEngine(vehicleid, status)
 {
 	if(status)
@@ -1022,15 +1336,15 @@ stock _updatehouse(houseid)
 	{
 		house_info[houseid][h_icon] = CreateDynamicMapIcon(house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 31, -1, 0, -1, -1, 90.0);
 		house_info[houseid][h_pickup] = CreateDynamicPickup(1273, 23, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2],0, 0, -1);
-		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}��� ��������.\n ��� �������������� ������� - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0, 0, 1);
+		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}??? ????????.\n ??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0, 0, 1);
 	}
 	if(house_info[houseid][h_owned] == 1)
 	{
 		house_info[houseid][h_icon] = CreateDynamicMapIcon(house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 32, -1, 0, -1, -1, 90.0);
 		house_info[houseid][h_pickup] = CreateDynamicPickup(19522, 23, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2],0, 0, -1);
-		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}��� �� ��������.\n ��� �������������� ������� - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0,0,1);
+		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}??? ?? ????????.\n ??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0,0,1);
 	}
-	house_info[houseid][h_texit] = Create3DTextLabel("{FFFFFF}����� �����, ������� - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_exit][0], house_info[houseid][h_exit][1], house_info[houseid][h_exit][2], 20.0, houseid+50, 1);	
+	house_info[houseid][h_texit] = Create3DTextLabel("{FFFFFF}????? ?????, ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_exit][0], house_info[houseid][h_exit][1], house_info[houseid][h_exit][2], 20.0, houseid+50, 1);	
 	return 1;
 }
 
@@ -1048,12 +1362,12 @@ stock IsPlayerMuted(playerid)
 		new time = player_info[playerid][mutetime];
 		if(time <= 60)
 		{
-			SCM(playerid, COLOR_WHITE, "��� ������������! �� ������������� �������� �������� ������.");
+			SCM(playerid, COLOR_WHITE, "??? ????????????! ?? ????????????? ???????? ???????? ??????.");
 		}
 		else
 		{
 			new string[80];
-			format(string, sizeof(string), "��� ������������! �� ������������� �������� {EDD682}%d {FFFFFF}���.", floatround(time / 60));
+			format(string, sizeof(string), "??? ????????????! ?? ????????????? ???????? {EDD682}%d {FFFFFF}???.", floatround(time / 60));
 			SCM(playerid, COLOR_WHITE, string);
 		}
 		return 1;
@@ -1063,12 +1377,12 @@ stock IsPlayerMuted(playerid)
 
 stock _aCommands(playerid)
 {
-	SPD(playerid, DLG_ACOMMAND, DSL, "{EDD682}AP - ������� ��������������", 
-	"{FFFFFF}1. ������������� 1-�� ������\n\
-	2. ������������� 2-�� ������\n\
-	3. ������������� 3-�� ������\n\
-	4. ������������� 4-�� ������\n\
-	5. ������������� 5-�� ������", "�������", "�����");
+	SPD(playerid, DLG_ACOMMAND, DSL, "{EDD682}AP - ??????? ??????????????", 
+	"{FFFFFF}1. ????????????? 1-?? ??????\n\
+	2. ????????????? 2-?? ??????\n\
+	3. ????????????? 3-?? ??????\n\
+	4. ????????????? 4-?? ??????\n\
+	5. ????????????? 5-?? ??????", "???????", "?????");
 	return 1;
 }
 
@@ -1081,52 +1395,38 @@ stock _loadCars()
 	CreateVehicle(551, 288.1519, 1758.9640, 11.7005, 354.5923, color, color, -1);
 	_carsBuyEconomy[1] = CreateVehicle(542, 284.9243, 1759.1064, 11.6934, 354.7780, color, color, -1);*/
 
-	// -- ������ ����������� (��������)
-	_carArenda[0] = CreateVehicle(402, 1863.1904, 2275.8230, 14.9138, 181.4986, random(120), random(120), -1); // ���� 1
-	CreateVehicle(405, 1866.7483, 2275.7024, 14.9128, 180.8363, random(120), random(120), -1); // ���� 2
-	CreateVehicle(410, 1872.3132, 2270.4944, 14.9069, 89.3294, random(120), random(120), -1); // ���� 3
-	CreateVehicle(529, 1872.4268, 2266.2603, 14.9055, 88.5174, random(120), random(120), -1); // ���� 4
-	_carArenda[1] = CreateVehicle(529, 1872.4697, 2261.6064, 14.9057, 89.2770, random(120), 1, -1); // ���� 5
+	// -- ?????????????
+	lead_one[0] = CreateVehicle(579, 1407.9590, -1807.8898, 13.4003, 359.5926, 0, 0, -1, 1);
+	lead_one[1] = CreateVehicle(579, 1404.4962, -1808.0062, 13.4002, 0.6788, 0, 0, -1, 1); 
+	lead_one[2] = CreateVehicle(579, 1403.6949, -1771.5060, 13.3999, 179.6300, 0, 0, -1, 1);
+	lead_one[3] = CreateVehicle(579, 1407.0909, -1771.4348, 13.3781, 179.5764, 0, 0, -1, 1); 
+	lead_one[4] = CreateVehicle(409, 1407.2323, -1789.4474, 13.2924, 359.3717, 0, 0, -1, 1);
+	for(new i; i < 5; i++) SetVehicleNumberPlate(lead_one[i], "Government");
 
-	// -- �������������
-	lead_one[0] = CreateVehicle(579, 1796.6405, 2103.8577, 15.8021, 47.3617, 0, 0, -1, 1);
-	CreateVehicle(579, 1796.5394, 2098.5908, 15.7924, 47.2896, 0, 0, -1, 1); 
-	CreateVehicle(579, 1796.5885, 2092.9919, 15.8009, 46.6637, 0, 0, -1, 1);
-	CreateVehicle(579, 1796.5522, 2087.4802, 15.7924, 47.2119, 0, 0, -1, 1); 
-	lead_one[1] = CreateVehicle(409, 1786.7676, 2096.4993, 15.8472, 1.8860, 0, 0, -1, 1);
-
-	// ���
-	_ppsCar[0] = CreateVehicle(599, 1948.2906, 2167.8162, 15.9144, 90.8144, 1, 1, -1, 1);
-	CreateVehicle(599, 1948.3303, 2164.2256, 15.9145, 90.5238, 1, 1, -1, 1);
-	CreateVehicle(599, 1948.3079, 2160.3047, 15.9155, 89.6124, 1, 1, -1, 1);
-	CreateVehicle(599, 1948.3525, 2156.8008, 15.9137, 89.8553, 1, 1, -1, 1);
-	CreateVehicle(597, 1931.8295, 2170.7087, 15.3484, 270.3431, 1, 1, -1, 1);
-	CreateVehicle(597, 1931.8551, 2174.0293, 15.3483, 269.0104, 1, 1, -1, 1);
-	_ppsCar[1] = CreateVehicle(427, 1952.8138, 2172.8870, 16.1855, 91.2898, 1, 1, -1, 1);
 	return 1;
 }
 
 stock _rulesPlayer(playerid)
 {
 	SPD(playerid, DLG_PRULES_ONE, DSM, 
-	"{EDD682}������� ������", 
-	"{FFFFFF}������ �� ������� ������, �� ���������� ������ �������\n\
-	�������� ������ �� ����������� �� ���������������\n\
-	������������ ������� ������� �� RolePlay ��������\n\
-	Role Play (RP) � ���� ����������� �� �����, ����������� � �������� �����\n\
-	Non RolePlay (NonRP) � �������� ���������, ������� �� �� �� ������ � �������� �����\n\
-	Spawn Kill (SK) � ���������� ������ �������� �������� ��������� ��� ������� ������� ������� �� ���������� ���� �����������, ��� �� ���������� ��� ����� � ����\n\
-	Team Kill (TK) � ���������� ������ �������� ����� ����� ������� ��� ������� �� �� ������� �������\n\
-	Bunny Hop (BH) � ��� � ���������� �������������� ������� ��� �������\n\
-	Drive By (DB) � ���������� ������ �������� � ������ ���������\n\
-	Power Gaming (PG) � ������������� ������������ ������ ���������\n\
-	Revenge Kill (RVK) � ���������� ������ �������� �������� ��������� � ��������, ������� ����� ��� ����\n\
-	Repeat Kill (RPK) � ���������� ��������� �������� ������ � ���� �� ������, �������� �� ��� ����� �����\n\
-	Out Of Character (OOC) � ���������� ����������, �� ���� ������ �� ������ ��������� ����\n\
-	In Character (IC) � ������� ����������, �� ���� ������ �� �������� ����\n\
-	Meta Gaming (MG) � ���������� ������� � ���������� ����������\n\
-	Death Match (DM) � ���������� ������ �������� �������� ��������� ��� ������� �� �� ������� �������, ���� ������������ ��������/�����/������",
-	"�����", "�����");
+	"{EDD682}??????? ??????", 
+	"{FFFFFF}?????? ?? ??????? ??????, ?? ?????????? ?????? ???????\n\
+	???????? ?????? ?? ??????????? ?? ???????????????\n\
+	???????????? ??????? ??????? ?? RolePlay ????????\n\
+	Role Play (RP) ? ???? ??????????? ?? ?????, ??????????? ? ???????? ?????\n\
+	Non RolePlay (NonRP) ? ???????? ?????????, ??????? ?? ?? ?? ?????? ? ???????? ?????\n\
+	Spawn Kill (SK) ? ?????????? ?????? ???????? ???????? ????????? ??? ??????? ??????? ??????? ?? ?????????? ???? ???????????, ??? ?? ?????????? ??? ????? ? ????\n\
+	Team Kill (TK) ? ?????????? ?????? ???????? ????? ????? ??????? ??? ??????? ?? ?? ??????? ???????\n\
+	Bunny Hop (BH) ? ??? ? ?????????? ?????????????? ??????? ??? ???????\n\
+	Drive By (DB) ? ?????????? ?????? ???????? ? ?????? ?????????\n\
+	Power Gaming (PG) ? ????????????? ???????????? ?????? ?????????\n\
+	Revenge Kill (RVK) ? ?????????? ?????? ???????? ???????? ????????? ? ????????, ??????? ????? ??? ????\n\
+	Repeat Kill (RPK) ? ?????????? ????????? ???????? ?????? ? ???? ?? ??????, ???????? ?? ??? ????? ?????\n\
+	Out Of Character (OOC) ? ?????????? ??????????, ?? ???? ?????? ?? ?????? ????????? ????\n\
+	In Character (IC) ? ??????? ??????????, ?? ???? ?????? ?? ???????? ????\n\
+	Meta Gaming (MG) ? ?????????? ??????? ? ?????????? ??????????\n\
+	Death Match (DM) ? ?????????? ?????? ???????? ???????? ????????? ??? ??????? ?? ?? ??????? ???????, ???? ???????????? ????????/?????/??????",
+	"?????", "?????");
 	return 1;
 }
 
@@ -1153,18 +1453,9 @@ stock _priceCar(vehicleid)
 
 stock _load3Dtext()
 {
-	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}����. \n {FFFFFF}��� �������������� ������� - {EDD682}'L.ALT'.", COLOR_WHITE, 1797.1179, 2509.8589, 16.2770, 20.0, 0, 1);
-	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}����. \n {FFFFFF}������������ � ��������� - {EDD682}'L.ALT'.", COLOR_WHITE, 1808.1010, 2506.8914, 15.8725, 20.0, 0, 1);
-	Create3DTextLabel(!"{FFFFFF}������ ���������� \n ������ ��� ��������!", COLOR_WHITE, 1775.4690, -1904.4019, 13.3860, 20.0, 0, 1);
-	return 1;
-}
-
-stock _vorotafrac()
-{
-	_admopen = CreateDynamicObject(968, 1818.65, 2125.52, 15.63, 0.00, 90.00, 90.00);
-	CreateDynamicObject(966, 1818.64, 2125.73, 14.80,   0.00, 0.00, -90.00);
-
-	
+	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}????. \n {FFFFFF}??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, 1797.1179, 2509.8589, 16.2770, 20.0, 0, 1);
+	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}????. \n {FFFFFF}???????????? ? ????????? - {EDD682}'L.ALT'.", COLOR_WHITE, 1808.1010, 2506.8914, 15.8725, 20.0, 0, 1);
+	Create3DTextLabel(!"{FFFFFF}?????? ?????????? \n ?????? ??? ????????!", COLOR_WHITE, 1775.4690, -1904.4019, 13.3860, 20.0, 0, 1);
 	return 1;
 }
 
@@ -1196,10 +1487,4 @@ stock _shipCar(carid)
 		default: return false;
 	}
 	return false;
-}
-
-stock _loadCefPlayer(playerid)
-{
-	cef_create_browser(playerid, 0x12346, "wh17754.web1.maze-host.ru", false, false);
-	return 1;
 }
