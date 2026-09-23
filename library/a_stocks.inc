@@ -957,6 +957,93 @@ stock _getMaxPlayerExpLevel(level)
 	return 3 + (level *3);
 }
 
+stock SetPlayerParam(playerid, param, value)
+{
+	if(!IsPlayerConnected(playerid) || player_info[playerid][id] <= 0) return 0;
+
+	switch(param)
+	{
+		case PLAYER_PARAM_MONEY:
+		{
+			player_info[playerid][money] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `money` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_LEVEL:
+		{
+			player_info[playerid][lvl] = value;
+			SetPlayerScore(playerid, value);
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `lvl` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_EXP:
+		{
+			player_info[playerid][exp] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `exp` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_AGE:
+		{
+			player_info[playerid][age] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `age` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_EAT:
+		{
+			player_info[playerid][eat] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `eat` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_THIRST:
+		{
+			player_info[playerid][thirst] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `thirst` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_MEMBER:
+		{
+			player_info[playerid][member] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `member` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_RANG:
+		{
+			player_info[playerid][rang] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `rang` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_FSKIN:
+		{
+			player_info[playerid][fskin] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `fskin` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_MUTETIME:
+		{
+			player_info[playerid][mutetime] = value;
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `mutetime` = '%d' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		default: return 0;
+	}
+	mysql_tquery(ConnectMysql, query);
+	return 1;
+}
+
+stock SetPlayerParamFloat(playerid, param, Float:value)
+{
+	if(!IsPlayerConnected(playerid) || player_info[playerid][id] <= 0) return 0;
+
+	switch(param)
+	{
+		case PLAYER_PARAM_HEALTH:
+		{
+			player_info[playerid][health] = value;
+			SetPlayerHealth(playerid, value);
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `health` = '%f' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		case PLAYER_PARAM_ARMOR:
+		{
+			player_info[playerid][armor] = value;
+			SetPlayerArmour(playerid, value);
+			mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `armor` = '%f' WHERE `id` = '%d'", value, player_info[playerid][id]);
+		}
+		default: return 0;
+	}
+	mysql_tquery(ConnectMysql, query);
+	return 1;
+}
+
 stock _savePlayerAccount(playerid)
 {
 	mysql_format(ConnectMysql, query, sizeof(query), "\
@@ -989,7 +1076,7 @@ stock _savePlayerAccount(playerid)
 	player_info[playerid][lic][3], 
 	player_info[playerid][lic][4], 
 	player_info[playerid][lic][5], player_info[playerid][id]);
-	mysql_query(ConnectMysql, query);	
+	mysql_tquery(ConnectMysql, query);
 	return 1;
 }
 

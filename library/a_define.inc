@@ -40,6 +40,8 @@ forward MDialog_OnDialogResponse(playerid, dialogid, response, listitem, inputte
 #define        PLAYER_PARAM_RANG       7
 #define        PLAYER_PARAM_FSKIN      8
 #define        PLAYER_PARAM_MUTETIME   9
+#define        PLAYER_PARAM_HEALTH      0
+#define        PLAYER_PARAM_ARMOR       1
 
 #define 	     MAX_HOUSES 		300
 #define 	     MAX_PORCH 		500
