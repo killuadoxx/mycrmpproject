@@ -65,11 +65,6 @@ enum banned
 new banned_info[MAX_PLAYERS][banned];
 
 new mute_timer[MAX_PLAYERS];
-new timeLeft[MAX_PLAYERS];
-new _arendaTimer[MAX_PLAYERS];
-new _rentedCarID[MAX_PLAYERS];
-new bool:_carRented[MAX_PLAYERS];
-new _admopen;
 
 enum admin
 {

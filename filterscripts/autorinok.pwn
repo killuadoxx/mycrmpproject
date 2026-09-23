@@ -1,29 +1,29 @@
 /*==============================================================================
 SAMP ELITE
-���� �����, �������, �������� � ����� ��� ����� � SAMP (PAWN)
-������ �� ������: https://vk.com/samp_elitka
-����: https://www.youtube.com/c/INCEGAME
+???? ?????, ???????, ???????? ? ????? ??? ????? ? SAMP (PAWN)
+?????? ?? ??????: https://vk.com/samp_elitka
+????: https://www.youtube.com/c/INCEGAME
 
-��������:
-	- ������� � ������� ����������
-	- ����������� ���������� ���� ����� ����������� ������������ �����
-	- ���������� �������
-	- ����� ������ ����������
-	- �������/������� ����������
-	- �������� ���. �����
-	- ������������ ����������
-	- ������� ���� ������.
+????????:
+	- ??????? ? ??????? ??????????
+	- ??????????? ?????????? ???? ????? ??????????? ???????????? ?????
+	- ?????????? ???????
+	- ????? ?????? ??????????
+	- ???????/??????? ??????????
+	- ???????? ???. ?????
+	- ???????????? ??????????
+	- ??????? ???? ??????.
 
-�������:
-	/carhelp   - ������ ��������� ������
-	/park      - ���������� ������� ���� � �������
-	/clock     - �������/������� �����
-	/findcar   - ����� ������ ����
-	/nomer     - ���������� ����� �� ���� �� 8 ��������
-	/sellcar   - ������� ���� �� ������� �� ���������
-	/mysellcar - ������� ���� ������
-	/asave - ��������� ���� �� �������
-	/fpa - ��� ������� ���� ��� ��� ����� �� �������(���� ���� ����� ������)
+???????:
+	/carhelp   - ?????? ????????? ??????
+	/park      - ?????????? ??????? ???? ? ???????
+	/clock     - ???????/??????? ?????
+	/findcar   - ????? ?????? ????
+	/nomer     - ?????????? ????? ?? ???? ?? 8 ????????
+	/sellcar   - ??????? ???? ?? ??????? ?? ?????????
+	/mysellcar - ??????? ???? ??????
+	/asave - ????????? ???? ?? ???????
+	/fpa - ??? ??????? ???? ??? ??? ????? ?? ???????(???? ???? ????? ??????)
 ==============================================================================*/
 #include <a_samp>
 #include "../library/mdialog_legacy.inc"
@@ -87,7 +87,7 @@ new engine,lights,alarm,doors,bonnet,boot,objective;
 new PlayerBuyCar[MAX_PLAYERS][2];
 forward DateProp(playerid);
 forward Checkprop();
-#define MAX_AUTO 3//������ ���������� ����������� ����
+#define MAX_AUTO 3//?????? ?????????? ??????????? ????
 enum vInfo
 {
 	vOwned,
@@ -125,7 +125,7 @@ new VehicleInfo[MAX_AUTO][vInfo];
 new CarOffered[MAX_PLAYERS];
 new Text3D:info3d[sizeof(VehicleInfo)];
 //==============================================================================
-new Float:VehicleShopSpawn[sizeof(VehicleInfo)][4] = { // ����� ���� ����� ������� "/sellcar"
+new Float:VehicleShopSpawn[sizeof(VehicleInfo)][4] = { // ????? ???? ????? ??????? "/sellcar"
 	{1630.187744,-1098.269653,23.577175,269.739959}, // 518(3000)
 	{1630.537719,-1093.708862,23.571521,268.639099}, // 589(1000)
 	{1630.737426,-1089.568725,24.026412,270.418823} // 482(100)
@@ -134,9 +134,9 @@ new Float:VehicleShopSpawn[sizeof(VehicleInfo)][4] = { // ����� ��
 public OnFilterScriptInit()
 {
 	print("\n--------------------------------------");
-	print(" Loading A�������� by SAMP ELITE (v0.3");
+	print(" Loading A???????? by SAMP ELITE (v0.3");
 	print("--------------------------------------\n");
-	LoadParkingSystem();//�������� ����
+	LoadParkingSystem();//???????? ????
     for(new v = 0; v < sizeof(VehicleInfo); v++)
 	{
 		VehicleInfo[v][vRealID]=AddStaticVehicleEx(VehicleInfo[v][VehId], VehicleInfo[v][vx], VehicleInfo[v][vy], VehicleInfo[v][vz], VehicleInfo[v][vang], VehicleInfo[v][vColor1], VehicleInfo[v][vColor2],600000);
@@ -152,7 +152,7 @@ public OnFilterScriptInit()
  		new string_mlen = sizeof(string);
 	 	if(VehicleInfo[v][vOwned]==0)
 		{
-			format(string,string_mlen,"{ffa500}[���� ���������� ��������]\n[�����: {FFFFFF}%s{ffa500}]\n[���������: {FFFFFF}%s{ffa500}]\n[�����������: {FFFFFF}%s{ffa500}]\n[���������: {FFFFFF}%d ${ffa500}]",CarName[GetVehicleModel(VehicleInfo[v][vRealID])-400],GetVehicleCategoryName(GetVehicleModel(VehicleInfo[v][vRealID])),GetVehicleModificationsName(GetVehicleModel(VehicleInfo[v][vRealID])),VehicleInfo[v][vCoast]);
+			format(string,string_mlen,"{ffa500}[???? ?????????? ????????]\n[?????: {FFFFFF}%s{ffa500}]\n[?????????: {FFFFFF}%s{ffa500}]\n[???????????: {FFFFFF}%s{ffa500}]\n[?????????: {FFFFFF}%d ${ffa500}]",CarName[GetVehicleModel(VehicleInfo[v][vRealID])-400],GetVehicleCategoryName(GetVehicleModel(VehicleInfo[v][vRealID])),GetVehicleModificationsName(GetVehicleModel(VehicleInfo[v][vRealID])),VehicleInfo[v][vCoast]);
 			Update3DTextLabelText(info3d[v], COLOR_3DTEXT, string);
 		}
 		if(VehicleInfo[v][vOwned]==1)
@@ -190,7 +190,7 @@ stock SyncTime()
 	tmphour = shifthour;
 	if ((tmphour > ghour) || (tmphour == 0 && ghour == 23))
 	{
-		format(string, sizeof(string), "[RP]Auto[RUS] ������ %d:00 ����(��)",tmphour);
+		format(string, sizeof(string), "[RP]Auto[RUS] ?????? %d:00 ????(??)",tmphour);
 		BroadCast(COLOR_WHITE,string);
 		ghour = tmphour;
 		sPayDays();
@@ -248,12 +248,12 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	{
 	    if(IsPlayerConnected(playerid))
 	    {
-		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /sellcar ] {F0DC82}- ������� ����������");
-		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /mysellcar ] {F0DC82}- ������� ���������� ������");
-		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /park ] {F0DC82}- �������� ����������");
-		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /nomer ] {F0DC82}- �������� �����");
-		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /findcar ] {F0DC82}- ����� ������ ����");
-		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /clock ] {F0DC82}- �������/������� ����������");
+		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /sellcar ] {F0DC82}- ??????? ??????????");
+		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /mysellcar ] {F0DC82}- ??????? ?????????? ??????");
+		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /park ] {F0DC82}- ???????? ??????????");
+		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /nomer ] {F0DC82}- ???????? ?????");
+		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /findcar ] {F0DC82}- ????? ?????? ????");
+		    SendClientMessage(playerid, COLOR_LIGHTBLUE,"{FFFFFF}[ /clock ] {F0DC82}- ???????/??????? ??????????");
 		}
 		return true;
 	}
@@ -303,13 +303,13 @@ public OnPlayerCommandText(playerid, cmdtext[])
 						VehicleInfo[v][vRealID]=CreateVehicle(VehicleInfo[v][VehId], VehicleInfo[v][vx], VehicleInfo[v][vy], VehicleInfo[v][vz], VehicleInfo[v][vang], VehicleInfo[v][vColor1], VehicleInfo[v][vColor2],600000);
 						SetVehicleToRespawn(vehid);
 						PutPlayerInVehicle(playerid,vehid,0);
-						SendClientMessage(playerid, COLOR_GREY, "�� ������������ ���� ����������");
+						SendClientMessage(playerid, COLOR_GREY, "?? ???????????? ???? ??????????");
 			            SetVehicleHealth(GetPlayerVehicleID(playerid),vheal);
             			UpdateVehicleDamageStatus(GetPlayerVehicleID(playerid), panels, doorss, lightss, tires);
 					}
 					else
 					{
-						SendClientMessage(playerid,COLOR_WHITE,"��� �� ��� ����������");
+						SendClientMessage(playerid,COLOR_WHITE,"??? ?? ??? ??????????");
 					}
 				}
 			}
@@ -343,22 +343,22 @@ public OnPlayerCommandText(playerid, cmdtext[])
  	if(strcmp("/mysellcar", cmdtext, true, 6) == 0)
     {
         new giveplayerid;
-        if(!IsCarOwner(playerid)) return SendClientMessage(playerid,COLOR_GREY,"� ��� ��� ������!");
+        if(!IsCarOwner(playerid)) return SendClientMessage(playerid,COLOR_GREY,"? ??? ??? ??????!");
         tmp = strtok(cmdtext, idx);
-        if(!strlen(tmp)) return SendClientMessage(playerid,COLOR_GREY,"/mysellcar [ ID ������ ] [ ���� ]");
+        if(!strlen(tmp)) return SendClientMessage(playerid,COLOR_GREY,"/mysellcar [ ID ?????? ] [ ???? ]");
         giveplayerid = strval(tmp);
-        if(!IsPlayerConnected(giveplayerid)) return SendClientMessage(playerid, COLOR_GREY, "��� ������ ������.");
-        if(!IsPlayerConnected(giveplayerid) || giveplayerid == playerid) return SendClientMessage(playerid,COLOR_GREY,"�� �� ������ ������� ������ ������ ����");
+        if(!IsPlayerConnected(giveplayerid)) return SendClientMessage(playerid, COLOR_GREY, "??? ?????? ??????.");
+        if(!IsPlayerConnected(giveplayerid) || giveplayerid == playerid) return SendClientMessage(playerid,COLOR_GREY,"?? ?? ?????? ??????? ?????? ?????? ????");
         tmp = strtok(cmdtext, idx);
-        if(!strlen(tmp)) return SendClientMessage(playerid,COLOR_GREY,"/mysellcar [ ID ������ ] [ ���� ]");
+        if(!strlen(tmp)) return SendClientMessage(playerid,COLOR_GREY,"/mysellcar [ ID ?????? ] [ ???? ]");
         new sellcarprice = strval(tmp);
-        if(IsCarOwner(giveplayerid)) return SendClientMessage(playerid, COLOR_GREY, "� ������ ��� ���� ������.");
-        if(GetPlayerMoney(giveplayerid) < sellcarprice) return SendClientMessage(playerid,COLOR_GREY,"�� �� ������ ������� ������ ������ ����");
+        if(IsCarOwner(giveplayerid)) return SendClientMessage(playerid, COLOR_GREY, "? ?????? ??? ???? ??????.");
+        if(GetPlayerMoney(giveplayerid) < sellcarprice) return SendClientMessage(playerid,COLOR_GREY,"?? ?? ?????? ??????? ?????? ?????? ????");
         PlayerBuyCar[giveplayerid][0] = playerid;
         PlayerBuyCar[giveplayerid][1] = sellcarprice;
-		format(CommandMas,80,"�� ���������� %s'� ������ ������ �� $%d", PlayerName(playerid),PlayerBuyCar[giveplayerid][1]), SendClientMessage(playerid,0x6495EDFF, CommandMas);
-        format(CommandMas, 80, "����� %s ���������� ��� ������ ������ �� $%d", PlayerName(playerid), PlayerBuyCar[giveplayerid][1]);
-		ShowPlayerDialog(giveplayerid, DIALOG_SELLVEH, 0, "{FF6F00}������� ����", CommandMas, "��", "���");
+		format(CommandMas,80,"?? ?????????? %s'? ?????? ?????? ?? $%d", PlayerName(playerid),PlayerBuyCar[giveplayerid][1]), SendClientMessage(playerid,0x6495EDFF, CommandMas);
+        format(CommandMas, 80, "????? %s ?????????? ??? ?????? ?????? ?? $%d", PlayerName(playerid), PlayerBuyCar[giveplayerid][1]);
+		ShowPlayerDialog(giveplayerid, DIALOG_SELLVEH, 0, "{FF6F00}??????? ????", CommandMas, "??", "???");
         return true;
     }
   	if(strcmp("/sellcar", cmdtext, true, 6) == 0)
@@ -417,7 +417,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			new coast = strval(tmp);
 			if(!strlen(tmp))
 			{
-				SendClientMessage(playerid, COLOR_GRAD2, "�����������: /asave [���������]");
+				SendClientMessage(playerid, COLOR_GRAD2, "???????????: /asave [?????????]");
 				return true;
 			}
 			new File:VehicleFile, Line[128];
@@ -433,11 +433,11 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			VehicleFile = fopen("auto/parking.txt", io_append);
 			fwrite(VehicleFile, Line);
 			fclose(VehicleFile);
-			SendClientMessage(playerid, COLOR_LIGHTBLUE, "������: ����� ���� �� ������� ���������");
+			SendClientMessage(playerid, COLOR_LIGHTBLUE, "??????: ????? ???? ?? ??????? ?????????");
 		}
 		else
 		{
-			SendClientMessage(playerid, COLOR_YELLOW, "�� ������ ���� � ���� !");
+			SendClientMessage(playerid, COLOR_YELLOW, "?? ?????? ???? ? ???? !");
 		}
 		return true;
 	}
@@ -448,11 +448,11 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			if(strcmp(VehicleInfo[v][OwnerName],PlayerName(playerid), true) == 0 && strlen(VehicleInfo[v][OwnerName]) == strlen(PlayerName(playerid)) )
 			if(IsPlayerInAnyVehicle(playerid))
 			{
-			    ShowPlayerDialog(playerid,DIALOG_PLATE,DIALOG_STYLE_INPUT,"��������� ������:","������� ��� ����� ����� � ���� ����.","�������","������");
+			    ShowPlayerDialog(playerid,DIALOG_PLATE,DIALOG_STYLE_INPUT,"????????? ??????:","??????? ??? ????? ????? ? ???? ????.","???????","??????");
 			}
 			else
 			{
-			    SendClientMessage(playerid, COLOR_GREY, "�� ������ ���� � ���� ����������!");
+			    SendClientMessage(playerid, COLOR_GREY, "?? ?????? ???? ? ???? ??????????!");
 			}
 		}
 	    return true;
@@ -472,8 +472,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			    {
 					CarOffered[playerid]=1;
 					new str[512];
-					format(str,sizeof(str),"{ffffff}���� ���������� ��������\n�����: %s\n���������: %s\n�����������: %s\n���������: %d$\n��� ������� ������� '������'\n���� �� �� ������ �������� ���� ������� '�����'",CarName[GetVehicleModel(VehicleInfo[v][vRealID])-400],GetVehicleCategoryName(GetVehicleModel(VehicleInfo[v][vRealID])),GetVehicleModificationsName(GetVehicleModel(VehicleInfo[v][vRealID])),VehicleInfo[v][vCoast]);
-					ShowPlayerDialog(playerid,DIALOG_BUYVEH,DIALOG_STYLE_MSGBOX,"������� ����:",str,"������","�����");
+					format(str,sizeof(str),"{ffffff}???? ?????????? ????????\n?????: %s\n?????????: %s\n???????????: %s\n?????????: %d$\n??? ??????? ??????? '??????'\n???? ?? ?? ?????? ???????? ???? ??????? '?????'",CarName[GetVehicleModel(VehicleInfo[v][vRealID])-400],GetVehicleCategoryName(GetVehicleModel(VehicleInfo[v][vRealID])),GetVehicleModificationsName(GetVehicleModel(VehicleInfo[v][vRealID])),VehicleInfo[v][vCoast]);
+					ShowPlayerDialog(playerid,DIALOG_BUYVEH,DIALOG_STYLE_MSGBOX,"??????? ????:",str,"??????","?????");
 					break;
 				}
 			}
@@ -635,7 +635,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 		    if(IsCarOwner(playerid))
 		    {
-				SendClientMessage(playerid,COLOR_GREY,"�������� ����������: � ��� ��� ���� ������");
+				SendClientMessage(playerid,COLOR_GREY,"???????? ??????????: ? ??? ??? ???? ??????");
 				TogglePlayerControllable(playerid,1);
 				RemovePlayerFromVehicle(playerid);
 				return 1;
@@ -648,7 +648,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					{
 						if(VehicleInfo[v][vOwned]==1)
 						{
-						    SendClientMessage(playerid, COLOR_GREY, "���� ���������� �� ��������");
+						    SendClientMessage(playerid, COLOR_GREY, "???? ?????????? ?? ????????");
 							CarOffered[playerid]=0;
 	        				RemovePlayerFromVehicle(playerid);
 	        				TogglePlayerControllable(playerid, 1);
@@ -660,8 +660,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							CarOffered[playerid]=0;
 							strmid(VehicleInfo[v][OwnerName], PlayerName(playerid), 0, strlen(PlayerName(playerid)), MAX_PLAYER_NAME);
 							GivePlayerMoney(playerid,-VehicleInfo[v][vCoast]);
-							SendClientMessage(playerid, COLOR_GRAD2, "�� ������ ���� ���������� � ��� � ��� � ����������!");
-							SendClientMessage(playerid, COLOR_GRAD2, "��� ������ ������� /carhelp!");
+							SendClientMessage(playerid, COLOR_GRAD2, "?? ?????? ???? ?????????? ? ??? ? ??? ? ??????????!");
+							SendClientMessage(playerid, COLOR_GRAD2, "??? ?????? ??????? /carhelp!");
 							TogglePlayerControllable(playerid, 1);
 							SaveParkingSystem();
 							DateProp(playerid);
@@ -670,7 +670,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 						else
 						{
-							SendClientMessage(playerid, COLOR_GREY, "� ��� ���� ����� ��� ������� ����� ����������!");
+							SendClientMessage(playerid, COLOR_GREY, "? ??? ???? ????? ??? ??????? ????? ??????????!");
 							CarOffered[playerid]=0;
 	        				RemovePlayerFromVehicle(playerid);
 	        				TogglePlayerControllable(playerid, 1);
@@ -691,7 +691,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
   			if(strlen(inputtext)>8)
 		    {
-		        SendClientMessage(playerid,COLOR_WHITE,"� ������ ����� ������������ �������� 8 ��������");
+		        SendClientMessage(playerid,COLOR_WHITE,"? ?????? ????? ???????????? ???????? 8 ????????");
 		        return true;
 		    }
 	  		for(new v = 0; v < sizeof(VehicleInfo); v++)
@@ -714,7 +714,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						SetVehiclePos(vehid,x,y,z);
 						PutPlayerInVehicle(playerid,vehid,0);
 						SetVehicleZAngle(vehid,ang);
-						SendClientMessage(playerid, COLOR_GREY, "�� �������� ����� ������ ����������!");
+						SendClientMessage(playerid, COLOR_GREY, "?? ???????? ????? ?????? ??????????!");
 						SaveParkingSystem();
 						SetVehicleHealth(GetPlayerVehicleID(playerid),vheal);
             			UpdateVehicleDamageStatus(GetPlayerVehicleID(playerid), panels, doorss, lightss, tires);
@@ -729,7 +729,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(!IsPlayerConnected(PlayerBuyCar[playerid][0]))
 	        {
-	            SendClientMessage(playerid,COLOR_GREY,"��� ����� �� ��������� ������ ������.");
+	            SendClientMessage(playerid,COLOR_GREY,"??? ????? ?? ????????? ?????? ??????.");
 	            PlayerBuyCar[playerid][0] = INVALID_PLAYER_ID;
 	            PlayerBuyCar[playerid][1] = 0;
 	            return 1;
@@ -737,12 +737,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        GivePlayerMoney(playerid,-PlayerBuyCar[playerid][1]);
 	        GivePlayerMoney(PlayerBuyCar[playerid][0], PlayerBuyCar[playerid][1]);
 	        ReNameOwner(PlayerBuyCar[playerid][0], PlayerName(playerid));
-	        SendClientMessage(playerid,COLOR_GREY,"����������� � ����� ��������!");
-	        SendClientMessage(PlayerBuyCar[playerid][0], COLOR_YELLOW, "������ ������� �������!");
+	        SendClientMessage(playerid,COLOR_GREY,"??????????? ? ????? ????????!");
+	        SendClientMessage(PlayerBuyCar[playerid][0], COLOR_YELLOW, "?????? ??????? ???????!");
 	        PlayerBuyCar[playerid][0] = INVALID_PLAYER_ID;
 	        PlayerBuyCar[playerid][1] = 0;
 		}
-		else SendClientMessage(PlayerBuyCar[playerid][0],0x6495EDFF,"���������� ��������� �� ������� ����� ������!");
+		else SendClientMessage(PlayerBuyCar[playerid][0],0x6495EDFF,"?????????? ????????? ?? ??????? ????? ??????!");
 		return true;
 	}
 	return 1;
@@ -756,7 +756,7 @@ stock updateVehicleInfo()
  	{
 		if(VehicleInfo[v][vOwned]==0)
 		{
-			format(string,string_mlen,"{ffa500}[���� ���������� ��������]\n[�����: {FFFFFF}%s{ffa500}]\n[���������: {FFFFFF}%s{ffa500}]\n[�����������: {FFFFFF}%s{ffa500}]\n[���������: {FFFFFF}%d ${ffa500}]",CarName[GetVehicleModel(VehicleInfo[v][vRealID])-400],GetVehicleCategoryName(GetVehicleModel(VehicleInfo[v][vRealID])),GetVehicleModificationsName(GetVehicleModel(VehicleInfo[v][vRealID])),VehicleInfo[v][vCoast]);
+			format(string,string_mlen,"{ffa500}[???? ?????????? ????????]\n[?????: {FFFFFF}%s{ffa500}]\n[?????????: {FFFFFF}%s{ffa500}]\n[???????????: {FFFFFF}%s{ffa500}]\n[?????????: {FFFFFF}%d ${ffa500}]",CarName[GetVehicleModel(VehicleInfo[v][vRealID])-400],GetVehicleCategoryName(GetVehicleModel(VehicleInfo[v][vRealID])),GetVehicleModificationsName(GetVehicleModel(VehicleInfo[v][vRealID])),VehicleInfo[v][vCoast]);
 			Update3DTextLabelText(info3d[v], COLOR_3DTEXT, string);
 		}
 		else
@@ -831,7 +831,7 @@ public Checkprop()
 					{
 						gCarLock[VehicleInfo[v][vRealID]] = 0;
 					}
-					format(string, sizeof(string), "������� ����-�������: ���������� %s'� (%d ��) ��� ��������� �� ������� �� %d $", VehicleInfo[v][OwnerName], v, VehicleInfo[v][vCoast]);
+					format(string, sizeof(string), "??????? ????-???????: ?????????? %s'? (%d ??) ??? ????????? ?? ??????? ?? %d $", VehicleInfo[v][OwnerName], v, VehicleInfo[v][vCoast]);
 					SendClientMessageToAll(TEAM_ORANGE_COLOR, string);
 				}
 			}
