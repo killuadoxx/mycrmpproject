@@ -1,0 +1,187 @@
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R3, (C)2005-2019 SA-MP Team
+
+[21:49:44] 
+[21:49:44] Server Plugins
+[21:49:44] --------------
+[21:49:44]  Loading plugin: crashdetect
+[21:49:44]   CrashDetect plugin 4.21
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: streamer
+[21:49:44] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: sscanf
+[21:49:44] 
+[21:49:44]  ===============================
+[21:49:44] 
+[21:49:44]       sscanf plugin loaded.     
+[21:49:44] 
+[21:49:44]          Version: 2.13.8
+[21:49:44] 
+[21:49:44]    (c) 2022 Alex "Y_Less" Cole  
+[21:49:44] 
+[21:49:44]  ===============================
+[21:49:44] 
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: mysql
+[21:49:44]  >> plugin.mysql: R41-4 successfully loaded.
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: TOTP
+[21:49:44] TOTP plugin v1.0.1 by Games loaded.
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: pawncmd
+[21:49:44] [Pawn.CMD] plugin v3.3.6 loading...
+[21:49:44] [Pawn.CMD] 
+
+    | Pawn.CMD 3.3.6 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 11:55:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.CMD
+
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: pawnregex
+[21:49:44] Pawn.Regex plugin v1.1 by urShadow loaded
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: pawnraknet
+[21:49:44] [Pawn.RakNet] plugin v1.5.1 loading...
+[21:49:44] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[21:49:44]   Loaded.
+[21:49:44]  Loading plugin: cef
+[21:49:44]   Loaded.
+[21:49:44]  Loaded 9 plugins.
+
+[21:49:44] 
+[21:49:44] Filterscripts
+[21:49:44] ---------------
+[21:49:44]   Loading filterscript 'flymode.amx'...
+[21:49:44]   Loaded 1 filterscripts.
+
+[21:49:44] ** Error connecting to MySQL! Check the data in the database! **
+[21:49:44] ** Successful launch of the Russian Role Play server! **
+
+[21:49:44] ** >>> Загрузка содержимого:
+
+[21:49:44] Number of vehicle models: 9
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R3, (C)2005-2019 SA-MP Team
+
+[21:50:14] 
+[21:50:14] Server Plugins
+[21:50:14] --------------
+[21:50:14]  Loading plugin: crashdetect
+[21:50:14]   CrashDetect plugin 4.21
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: streamer
+[21:50:14] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: sscanf
+[21:50:14] 
+[21:50:14]  ===============================
+[21:50:14] 
+[21:50:14]       sscanf plugin loaded.     
+[21:50:14] 
+[21:50:14]          Version: 2.13.8
+[21:50:14] 
+[21:50:14]    (c) 2022 Alex "Y_Less" Cole  
+[21:50:14] 
+[21:50:14]  ===============================
+[21:50:14] 
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: mysql
+[21:50:14]  >> plugin.mysql: R41-4 successfully loaded.
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: TOTP
+[21:50:14] TOTP plugin v1.0.1 by Games loaded.
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: pawncmd
+[21:50:14] [Pawn.CMD] plugin v3.3.6 loading...
+[21:50:14] [Pawn.CMD] 
+
+    | Pawn.CMD 3.3.6 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 11:55:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.CMD
+
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: pawnregex
+[21:50:14] Pawn.Regex plugin v1.1 by urShadow loaded
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: pawnraknet
+[21:50:14] [Pawn.RakNet] plugin v1.5.1 loading...
+[21:50:14] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[21:50:14]   Loaded.
+[21:50:14]  Loading plugin: cef
+[21:50:14]   Loaded.
+[21:50:14]  Loaded 9 plugins.
+
+[21:50:14] 
+[21:50:14] Filterscripts
+[21:50:14] ---------------
+[21:50:14]   Loading filterscript 'flymode.amx'...
+[21:50:14]   Loaded 1 filterscripts.
+
+[21:50:14] ** Successful connection to the database! **
+[21:50:14] ** Successful launch of the Russian Role Play server! **
+
+[21:50:14] ** >>> Загрузка содержимого:
+
+[21:50:14] Number of vehicle models: 9
+[21:50:14] пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: 0 пїЅпїЅ 0 пїЅпїЅ
+[21:50:14] пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: 0 пїЅпїЅ 0 пїЅпїЅ
+[21:50:14] пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: 0 пїЅпїЅ 0 пїЅпїЅ
+[21:51:33] [connection] incoming connection: 127.0.0.1:61560 id: 0
+[21:51:33] [join] enjery has joined the server (0:127.0.0.1)
+[21:52:33] [part] enjery has left the server (0:1)
+[21:54:32] [connection] incoming connection: 127.0.0.1:57471 id: 0
+[21:54:32] [join] enjery has joined the server (0:127.0.0.1)
+[21:57:09] [part] enjery has left the server (0:1)

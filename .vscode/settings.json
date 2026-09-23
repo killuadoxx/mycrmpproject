@@ -1,0 +1,9 @@
+{
+    "files.encoding": "windows1251",
+    "chat.tools.terminal.autoApprove": {
+        "/^& \\$env:ComSpec /c '\"C:\\\\files\\\\Russian Hitstory CR\\\\pawno\\\\pawncc\\.exe\" \"C:\\\\files\\\\Russian Hitstory CR\\\\gamemodes\\\\russian-rp\\.pwn\" -Dgamemodes -;\\+'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

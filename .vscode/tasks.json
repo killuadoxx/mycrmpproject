@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-normal",
+            "type": "shell",
+            "command": "${workspaceFolder}/pawno/pawncc.exe",
+            "args": [
+                "${file}",
+                "-Dgamemodes",
+                "-;+",
+                "-(+",
+                "-d3"
+            ],
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": ["/d", "/c"]
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
