@@ -14,6 +14,7 @@ DialogResponse:Legacy(playerid, response, listitem, inputtext[])
 	return MDialog_OnDialogResponse(playerid, gLegacyDialog[playerid], response, listitem, inputtext);
 }
 
+
 stock _connectMySQL()
 {
 	ConnectMysql = mysql_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_BASE);
@@ -34,11 +35,11 @@ stock _showLogin(playerid)
 
 	new string[190+(-2+MAX_PLAYER_NAME)];
 	format(string, sizeof(string),
-	"{FFFFFF}?? ???? ????? ?????????????? ???? ?? ??????? {EDD682}Russian History | CR Multiplayer{FFFFFF}!\n\
-	??????? ? ?????? {EDD682}%s{FFFFFF} ???????????????.\n\
+	"{FFFFFF}Мы рады снова приветствовать тебя на проекте {EDD682}Russian History | CR Multiplayer{FFFFFF}!\n\
+	Аккаунт с именем {EDD682}%s{FFFFFF} зарегистрирован.\n\
 	\n\
-	??????? ?????? ?? ???????? ? ???? ????:", player_info[playerid][name]);
-	SPD(playerid, DLG_LOG, DSP, "{EDD682}??????????? {FFFFFF}| ???? ??????", string, "?????", "?????");
+	Введите пароль от аккаунта в поле ниже:", player_info[playerid][name]);
+	SPD(playerid, DLG_LOG, DSP, "{EDD682}Авторизация {FFFFFF}| Ввод пароля", string, "Далее", "Выход");
 	return 1;
 }
 
@@ -46,17 +47,17 @@ stock _showRegistration(playerid)
 {
 	new string[594+(-2+MAX_PLAYER_NAME)];
 	format(string, sizeof(string),
-	"{FFFFFF}?????? {EDD682}Russian History | CR Multiplayer {FFFFFF}- ??????????? ??? ??????, ? ??????? ?? ?? ???????????!\n\
-	????????????? ??????? ?????? ?? ?????, ????????????? ? ??? ? ?????? ? ????? ??????!\n\
-	??? ?????????? ????, ??????????, ??????????????? ???????.\n\
+	"{FFFFFF}Проект {EDD682}Russian History | CR Multiplayer {FFFFFF}- атмосферный мир России, в котором вы не соскучитесь!\n\
+	Администрация проекта всегда на связи, присоединяйся к нам и хватай с собой друзей!\n\
+	Для дальнейшей игры, пожалуйста, зарегистрируйте аккаунт.\n\
 	\n\
-	??????? ? ?????? {EDD682}%s {FFFFFF}?? ???????????????\n\
-	?????????? ?????? ? ???????? ??? ? ???? ????\n\
+	Аккаунт с именем {EDD682}%s {FFFFFF}не зарегистрирован\n\
+	Придумайте пароль и запишите его в поле ниже\n\
 	\n\
-	{EDD682}??????????:\n\
-	1. ?????? ?????? ????????? ?? 8-?? ?? 32-?? ????????\n\
-	2. ?????? ?????? ???????? ?????? ?? ???? ? ????????? ????????", player_info[playerid][name]);
-	SPD(playerid, DLG_REG, DSI, "{EDD682}??????????? {FFFFFF}| ???? ??????", string, "?????", "?????");	
+	{EDD682}Примечание:\n\
+	1. Пароль должен содержать от 8-ми до 32-ух символов\n\
+	2. Пароль должен состоять только из цифр и латинских символов", player_info[playerid][name]);
+	SPD(playerid, DLG_REG, DSI, "{EDD682}Регистрация {FFFFFF}| Ввод пароля", string, "Далее", "Выход");	
 	return 1;
 }
 
@@ -132,7 +133,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(skinTextDraw[5], 0);
 	TextDrawFont(skinTextDraw[5], 4);
 
-	// ?????????
+	// Спидометр
 	SPEEDTD = TextDrawCreate(491.000061, 276.681518, "interface:speedometr");
 	TextDrawLetterSize(SPEEDTD, 0.000000, 0.000000);
 	TextDrawTextSize(SPEEDTD, 159.666671, 209.896377);
@@ -161,7 +162,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[1], 0);
 	TextDrawFont(_tdRegister[1], 4);
 
-	_tdRegister[2] = TextDrawCreate(272.333648, 120.711059, "PE??C?PA???");
+	_tdRegister[2] = TextDrawCreate(272.333648, 120.711059, "PE‚…CЏPA‰…•");
 	TextDrawLetterSize(_tdRegister[2], 0.304333, 1.637333);
 	TextDrawAlignment(_tdRegister[2], 1);
 	TextDrawColor(_tdRegister[2], -1);
@@ -191,7 +192,7 @@ stock _globalTextDraws()
 	TextDrawFont(_tdRegister[4], 2);
 	TextDrawSetProportional(_tdRegister[4], 1);
 
-	_tdRegister[5] = TextDrawCreate(252.333404, 163.363082, "??E???E ?A? ?APO??:");
+	_tdRegister[5] = TextDrawCreate(252.333404, 163.363082, "‹‹Eѓ…ЏE ‹AЋ ЊAPO‡’:");
 	TextDrawLetterSize(_tdRegister[5], 0.130332, 1.114668);
 	TextDrawAlignment(_tdRegister[5], 1);
 	TextDrawColor(_tdRegister[5], -1);
@@ -210,7 +211,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[6], 0);
 	TextDrawFont(_tdRegister[6], 4);
 
-	_tdRegister[7] = TextDrawCreate(255.000442, 175.563049, "HA?A??");
+	_tdRegister[7] = TextDrawCreate(255.000442, 175.563049, "HA„AЏ’");
 	TextDrawLetterSize(_tdRegister[7], 0.153332, 1.106373);
 	TextDrawTextSize(_tdRegister[7], 279.666656, 13.688890);
 	TextDrawAlignment(_tdRegister[7], 1);
@@ -224,7 +225,7 @@ stock _globalTextDraws()
 	TextDrawSetProportional(_tdRegister[7], 1);
 	TextDrawSetSelectable(_tdRegister[7], true);
 
-	_tdRegister[8] = TextDrawCreate(252.666717, 191.740859, "??E???E ?A? EMAIL:");
+	_tdRegister[8] = TextDrawCreate(252.666717, 191.740859, "‹‹Eѓ…ЏE ‹AЋ EMAIL:");
 	TextDrawLetterSize(_tdRegister[8], 0.130332, 1.114668);
 	TextDrawAlignment(_tdRegister[8], 1);
 	TextDrawColor(_tdRegister[8], -1);
@@ -243,7 +244,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[9], 0);
 	TextDrawFont(_tdRegister[9], 4);
 
-	_tdRegister[10] = TextDrawCreate(255.333755, 203.526000, "HA?A??");
+	_tdRegister[10] = TextDrawCreate(255.333755, 203.526000, "HA„AЏ’");
 	TextDrawLetterSize(_tdRegister[10], 0.153332, 1.106373);
 	TextDrawTextSize(_tdRegister[10], 280.999969, 14.933336);
 	TextDrawAlignment(_tdRegister[10], 1);
@@ -257,7 +258,7 @@ stock _globalTextDraws()
 	TextDrawSetProportional(_tdRegister[10], 1);
 	TextDrawSetSelectable(_tdRegister[10], true);
 
-	_tdRegister[11] = TextDrawCreate(252.666732, 219.289001, "??E???E ?P???AC???E?O:");
+	_tdRegister[11] = TextDrawCreate(252.666732, 219.289001, "‹‹Eѓ…ЏE ЊP…‚‡AC…‹ЋE‚O:");
 	TextDrawLetterSize(_tdRegister[11], 0.130332, 1.114668);
 	TextDrawAlignment(_tdRegister[11], 1);
 	TextDrawColor(_tdRegister[11], -1);
@@ -276,7 +277,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[12], 0);
 	TextDrawFont(_tdRegister[12], 4);
 
-	_tdRegister[13] = TextDrawCreate(255.333770, 231.903823, "HA?A??");
+	_tdRegister[13] = TextDrawCreate(255.333770, 231.903823, "HA„AЏ’");
 	TextDrawLetterSize(_tdRegister[13], 0.153332, 1.106373);
 	TextDrawTextSize(_tdRegister[13], 280.999969, 12.859261);
 	TextDrawAlignment(_tdRegister[13], 1);
@@ -290,7 +291,7 @@ stock _globalTextDraws()
 	TextDrawSetProportional(_tdRegister[13], 1);
 	TextDrawSetSelectable(_tdRegister[13], true);
 
-	_tdRegister[14] = TextDrawCreate(252.666748, 247.251983, "???EP??E ?O? ?EPCOHA?A:");
+	_tdRegister[14] = TextDrawCreate(252.666748, 247.251983, "‹‘ЂEP…ЏE ЊO‡ ЊEPCOHA„A:");
 	TextDrawLetterSize(_tdRegister[14], 0.130332, 1.114668);
 	TextDrawAlignment(_tdRegister[14], 1);
 	TextDrawColor(_tdRegister[14], -1);
@@ -309,7 +310,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[15], 0);
 	TextDrawFont(_tdRegister[15], 4);
 
-	_tdRegister[16] = TextDrawCreate(255.333770, 259.866760, "HA?A??");
+	_tdRegister[16] = TextDrawCreate(255.333770, 259.866760, "HA„AЏ’");
 	TextDrawLetterSize(_tdRegister[16], 0.153332, 1.106373);
 	TextDrawTextSize(_tdRegister[16], 281.000152, 13.274075);
 	TextDrawAlignment(_tdRegister[16], 1);
@@ -323,7 +324,7 @@ stock _globalTextDraws()
 	TextDrawSetProportional(_tdRegister[16], 1);
 	TextDrawSetSelectable(_tdRegister[16], true);
 
-	_tdRegister[17] = TextDrawCreate(252.666748, 274.385253, "??E???E ?O3PAC? ?EPCOHA?A:");
+	_tdRegister[17] = TextDrawCreate(252.666748, 274.385253, "‹‹Eѓ…ЏE ‹O3PACЏ ЊEPCOHA„A:");
 	TextDrawLetterSize(_tdRegister[17], 0.130332, 1.114668);
 	TextDrawAlignment(_tdRegister[17], 1);
 	TextDrawColor(_tdRegister[17], -1);
@@ -342,7 +343,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[18], 0);
 	TextDrawFont(_tdRegister[18], 4);
 
-	_tdRegister[19] = TextDrawCreate(256.333770, 287.414855, "HA?A??");
+	_tdRegister[19] = TextDrawCreate(256.333770, 287.414855, "HA„AЏ’");
 	TextDrawLetterSize(_tdRegister[19], 0.153332, 1.106373);
 	TextDrawTextSize(_tdRegister[19], 282.333251, 12.859260);
 	TextDrawAlignment(_tdRegister[19], 1);
@@ -356,7 +357,7 @@ stock _globalTextDraws()
 	TextDrawSetProportional(_tdRegister[19], 1);
 	TextDrawSetSelectable(_tdRegister[19], true);
 
-	_tdRegister[20] = TextDrawCreate(252.666763, 301.518707, "???EP??E ?HE?HOC?? ?EPCOHA?A:");
+	_tdRegister[20] = TextDrawCreate(252.666763, 301.518707, "‹‘ЂEP…ЏE ‹HEЋHOCЏ’ ЊEPCOHA„A:");
 	TextDrawLetterSize(_tdRegister[20], 0.130332, 1.114668);
 	TextDrawAlignment(_tdRegister[20], 1);
 	TextDrawColor(_tdRegister[20], -1);
@@ -375,7 +376,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[21], 0);
 	TextDrawFont(_tdRegister[21], 4);
 
-	_tdRegister[22] = TextDrawCreate(256.333801, 314.133331, "HA?A??");
+	_tdRegister[22] = TextDrawCreate(256.333801, 314.133331, "HA„AЏ’");
 	TextDrawLetterSize(_tdRegister[22], 0.153332, 1.106373);
 	TextDrawTextSize(_tdRegister[22], 281.666748, 13.274076);
 	TextDrawAlignment(_tdRegister[22], 1);
@@ -398,7 +399,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[23], 0);
 	TextDrawFont(_tdRegister[23], 4);
 
-	_tdRegister[24] = TextDrawCreate(282.333587, 335.289154, "?O???");
+	_tdRegister[24] = TextDrawCreate(282.333587, 335.289154, "‹O†Џ…");
 	TextDrawLetterSize(_tdRegister[24], 0.158332, 1.517038);
 	TextDrawTextSize(_tdRegister[24], 303.666687, 16.177780);
 	TextDrawAlignment(_tdRegister[24], 1);
@@ -421,7 +422,7 @@ stock _globalTextDraws()
 	TextDrawSetOutline(_tdRegister[25], 0);
 	TextDrawFont(_tdRegister[25], 4);
 
-	_tdRegister[26] = TextDrawCreate(333.333465, 335.044677, "?????");
+	_tdRegister[26] = TextDrawCreate(333.333465, 335.044677, "‹‘†Џ…");
 	TextDrawLetterSize(_tdRegister[26], 0.158332, 1.517038);
 	TextDrawTextSize(_tdRegister[26], 355.000091, 16.177782);
 	TextDrawAlignment(_tdRegister[26], 1);
@@ -505,7 +506,7 @@ stock _playerTextDraw(playerid)
 	PlayerTextDrawFont(playerid, logo[playerid], 2);
 	PlayerTextDrawSetProportional(playerid, logo[playerid], 1);
 
-	// ??????????? ?????????
+	// Потребности персонажа
 
 	_tdSatiety[0][playerid] = CreatePlayerTextDraw(playerid, 607.999816, 111.011131, "usebox");
 	PlayerTextDrawLetterSize(playerid, _tdSatiety[0][playerid], 0.000000, 0.835596);
@@ -565,7 +566,7 @@ stock _playerTextDraw(playerid)
 	PlayerTextDrawSetOutline(playerid, _tdSatiety[5][playerid], 0);
 	PlayerTextDrawFont(playerid, _tdSatiety[5][playerid], 4);
 
-	// ?????????
+	// Спидометр
     SPEEDOPTD[0][playerid] = CreatePlayerTextDraw(playerid, 469.333312, 262.992492, "interface:engine_on");
     PlayerTextDrawLetterSize(playerid, SPEEDOPTD[0][playerid], 0.000000, 0.000000);
     PlayerTextDrawTextSize(playerid, SPEEDOPTD[0][playerid], 206.666595, 232.296356);
@@ -682,7 +683,7 @@ stock _updateTDSatietyWater(playerid)
 	{
 		PlayerTextDrawDestroy(playerid, _tdSatiety[3][playerid]);
 
-		// ????
+		// Вода
 		_tdSatiety[3][playerid] = CreatePlayerTextDraw(playerid, 537.333312, 126.103706, "LD_SPAC:white");
 		PlayerTextDrawLetterSize(playerid, _tdSatiety[3][playerid], 0.000000, 0.000000);
 		PlayerTextDrawTextSize(playerid, _tdSatiety[3][playerid], 0.000000 + (0.69 * player_info[playerid][thirst]), 9.540740);
@@ -718,7 +719,7 @@ stock _updateTDSatietyEat(playerid)
 	{
 		PlayerTextDrawDestroy(playerid, _tdSatiety[1][playerid]);
 
-		// ???
+		// Еда
 		_tdSatiety[1][playerid] = CreatePlayerTextDraw(playerid, 537.333435, 109.925926, "LD_SPAC:white");
 		PlayerTextDrawLetterSize(playerid, _tdSatiety[1][playerid], 0.000000, 0.000000);
 		PlayerTextDrawTextSize(playerid, _tdSatiety[1][playerid], 0.000000 + (0.69 * player_info[playerid][eat]), 9.955562);
@@ -755,7 +756,7 @@ stock _needPlayer(playerid)
 			player_info[playerid][health] -= 3.1;
 			SetPlayerHealth(playerid, player_info[playerid][health]);
 		}
-		case 50: SCM(playerid, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????????????, ???????? ????????? ?????????!");
+		case 50: SCM(playerid, COLOR_WHITEOR, "[Уведомление]: {FFFFFF}Ваш персонаж проголодался, посетите ближайшее заведение!");
 	}
 	switch(player_info[playerid][thirst])
 	{
@@ -764,7 +765,7 @@ stock _needPlayer(playerid)
 			player_info[playerid][health] -= 3.1;
 			SetPlayerHealth(playerid, player_info[playerid][health]);
 		}
-		case 50: SCM(playerid, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????? ????, ???????? ????????? ?????????!");
+		case 50: SCM(playerid, COLOR_WHITEOR, "[Уведомление]: {FFFFFF}Ваш персонаж хочет пить, посетите ближайшее заведение!");
 	}
 	return 1;
 }
@@ -772,17 +773,17 @@ stock _needPlayer(playerid)
 stock ConvertSeconds(time)  
 {  
 	new string[128];  
-	if(time < 60) format(string, sizeof(string), "%d ???.", time);  
-	else if(time == 60) string = "1 ??????";  
+	if(time < 60) format(string, sizeof(string), "%d сек.", time);  
+	else if(time == 60) string = "1 минуту";  
 	else if(time > 60 && time < 3600)  
 	{  
 		new Float: minutes;  
 		new seconds;  
 		minutes = time / 60;  
 		seconds = time % 60;  
-		format(string, sizeof(string), "%.0f ???. ? %d ???.", minutes, seconds);  
+		format(string, sizeof(string), "%.0f мин. и %d сек.", minutes, seconds);  
 	}  
-	else if(time == 3600) string = "1 ???";  
+	else if(time == 3600) string = "1 час";  
 	else if(time > 3600)  
 	{  
 		new Float: hours;  
@@ -860,14 +861,14 @@ stock PayDay()
 				targetid = GetPlayerID(house_info[h][h_owner]);
 				if(targetid != INVALID_PLAYER_ID)
 				{
-					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[???????????]: {FFFFFF}?? ???? ???????? ?? ???? ?? ????????!");
+					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы были выселены из дома за неуплату!");
 					new i = player_info[targetid][keyh];
-					strmid(house_info[i][h_owner], "???????????", 0, strlen("???????????"), 255);
+					strmid(house_info[i][h_owner], "Государство", 0, strlen("Государство"), 255);
 					house_info[i][h_owned] = 0;
 					player_info[targetid][keyh] = -1;
 					player_info[targetid][bank_money] += house_info[i][h_money];
 
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '%d', `h_owner` = '???????????', `h_rent` = '%d' WHERE `hid` = '%d'", house_info[i][h_owned], house_info[i][h_rent], house_info[i][hid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '%d', `h_owner` = 'Государство', `h_rent` = '%d' WHERE `hid` = '%d'", house_info[i][h_owned], house_info[i][h_rent], house_info[i][hid]);
 					mysql_query(ConnectMysql, query);
 
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keyh` = '-1', `bank_money` = `bank_money` + '%d' WHERE `id` = '%d'", player_info[targetid][bank_money], player_info[targetid][id]);
@@ -880,10 +881,10 @@ stock PayDay()
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keyh` = '-1', `bank_money` = `bank_money` + '%d' WHERE `name` = '%s'", house_info[h][h_money], house_info[h][h_owner]);
 					mysql_query(ConnectMysql, query);
 
-					strmid(house_info[h][h_owner], "???????????", 0, strlen("???????????"), 255);
+					strmid(house_info[h][h_owner], "Государство", 0, strlen("Государство"), 255);
 
 					query[0] = EOS;
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '0', `h_owner` = '???????????', `h_rent` = '0' WHERE `hid` = '%d'", house_info[h][hid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `house` SET `h_owned` = '0', `h_owner` = 'Государство', `h_rent` = '0' WHERE `hid` = '%d'", house_info[h][hid]);
 					mysql_query(ConnectMysql, query);
 				}
 				_updatehouse(h);									
@@ -898,14 +899,14 @@ stock PayDay()
 				targetid = GetPlayerID(apart_info[a][a_owner]);
 				if(targetid != INVALID_PLAYER_ID)
 				{
-					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[???????????]: {FFFFFF}?? ???? ???????? ?? ???????? ?? ????????!");
+					SendClientMessage(targetid, COLOR_WHITE, "{EDD682}[Уведомление]: {FFFFFF}Вы были выселены из квартиры за неуплату!");
 					new i = player_info[targetid][keya];
-					strmid(apart_info[i][a_owner], "???????????", 0, strlen("???????????"), 255);
+					strmid(apart_info[i][a_owner], "Государство", 0, strlen("Государство"), 255);
 					apart_info[i][a_owned] = 0;
 					player_info[targetid][keya] = -1;
 					player_info[targetid][bank_money] += apart_info[i][a_money];
 
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '%d', `a_owner` = '???????????', `a_rent` = '%d' WHERE `aid` = '%d'", apart_info[i][a_owned], apart_info[i][a_rent], apart_info[i][aid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '%d', `a_owner` = 'Государство', `a_rent` = '%d' WHERE `aid` = '%d'", apart_info[i][a_owned], apart_info[i][a_rent], apart_info[i][aid]);
 					mysql_query(ConnectMysql, query);
 
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keya` = '-1', `bank_money` = `bank_money` + '%d' WHERE `id` = '%d'", player_info[targetid][bank_money], player_info[targetid][id]);
@@ -919,22 +920,22 @@ stock PayDay()
 					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `accounts` SET `keya` = '-1', `bank_money` = `bank_money` + '%d' WHERE `name` = '%s'", apart_info[a][a_money], apart_info[a][a_owner]);
 					mysql_query(ConnectMysql, query);
 
-					strmid(apart_info[a][a_owner], "???????????", 0, strlen("???????????"), 255);
+					strmid(apart_info[a][a_owner], "Государство", 0, strlen("Государство"), 255);
 
 					query[0] = EOS;
-					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '0', `a_owner` = '???????????', `a_rent` = '0' WHERE `aid` = '%d'", apart_info[a][aid]);
+					mysql_format(ConnectMysql, query, sizeof(query), "UPDATE `apartament` SET `a_owned` = '0', `a_owner` = 'Государство', `a_rent` = '0' WHERE `aid` = '%d'", apart_info[a][aid]);
 					mysql_query(ConnectMysql, query);
 				}
 				Delete3DTextLabel(apart_info[a][a_text]);
-				apart_info[a][a_text] = Create3DTextLabel("{FFFFFF}???????? ????????.\n ??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2], 20.0, apart_info[a][a_world], 1);									
+				apart_info[a][a_text] = Create3DTextLabel("{FFFFFF}Квартира продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, apart_info[a][a_enter][0], apart_info[a][a_enter][1], apart_info[a][a_enter][2], 20.0, apart_info[a][a_world], 1);									
 			}
 		}		
 	}
 	foreach(new i:Player)
 	{
 		if(!IsPlayerConnected(i)) continue;
-		if(temp_info[i][pLoginStatus] != true) return SCM(i, COLOR_WHITEOR, "[???????????]: ?? ?????????? PayDay!");
-		if(temp_info[i][PlayerAFK] > 3) return SCM(i, COLOR_WHITEOR, "[???????????]: ?? ?????????? PayDay!");
+		if(temp_info[i][pLoginStatus] != true) return SCM(i, COLOR_WHITEOR, "[Уведомление]: Вы пропустили PayDay!");
+		if(temp_info[i][PlayerAFK] > 3) return SCM(i, COLOR_WHITEOR, "[Уведомление]: Вы пропустили PayDay!");
 		player_info[i][exp]++;
 		if(player_info[i][exp] >= _getMaxPlayerExpLevel(player_info[i][lvl]))
 		{
@@ -942,12 +943,12 @@ stock PayDay()
 			player_info[i][lvl]++;
 			player_info[i][age]++;
 			SetPlayerScore(i, player_info[i][lvl]);
-			SCM(i, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ??????? ??????? ?????????!");	
+			SCM(i, COLOR_WHITEOR, "[Уведомление]: {FFFFFF}Ваш игровой уровень повысился!");	
 		}
 		SCM(i, COLOR_WHITEOR, "GIVE PAYDAY");
 
-		if(player_info[i][eat] <= 30) SCM(i, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????? ?????? ????????????, ???????? ????????? ?????????!");
-		if(player_info[i][thirst] <= 30) SCM(i, COLOR_WHITEOR, "[???????????]: {FFFFFF}??? ???????? ????? ?????? ????? ????, ???????? ????????? ?????????!");
+		if(player_info[i][eat] <= 30) SCM(i, COLOR_WHITEOR, "[Уведомление]: {FFFFFF}Ваш персонаж очень сильно проголодался, посетите ближайшее заведение!");
+		if(player_info[i][thirst] <= 30) SCM(i, COLOR_WHITEOR, "[Уведомление]: {FFFFFF}Ваш персонаж очень сильно хочет пить, посетите ближайшее заведение!");
 	}
 	return 1;
 }
@@ -1044,7 +1045,8 @@ stock SetPlayerParamFloat(playerid, param, Float:value)
 	return 1;
 }
 
-stock _savePlayerAccount(playerid)
+
+stock SavePlayerAccount(playerid)
 {
 	mysql_format(ConnectMysql, query, sizeof(query), "\
 	UPDATE `accounts` SET `health` = '%f', `armor` = '%f', `lvl` = '%d', `exp` = '%d', `age` = '%d', `eat` = '%d', `thirst` = '%d', `money` = '%d', `leader` = '%d',\n\
@@ -1076,7 +1078,7 @@ stock _savePlayerAccount(playerid)
 	player_info[playerid][lic][3], 
 	player_info[playerid][lic][4], 
 	player_info[playerid][lic][5], player_info[playerid][id]);
-	mysql_tquery(ConnectMysql, query);
+	mysql_query(ConnectMysql, query);	
 	return 1;
 }
 
@@ -1108,15 +1110,15 @@ stock SAM(color,const string[],level)
 
 stock _loadPickup()
 {
-	bank[0] = CreatePickup(1318, 23, 2376.7192, -2139.2600, 22.0776, 0); // - ???? ? ????
-	bank[1] = CreatePickup(1318, 23, 2375.6055, -1910.1226, 1126.9100, 1); // - ????? ? ?????
+	bank[0] = CreatePickup(1318, 23, 2376.7192, -2139.2600, 22.0776, 0); // - Вход в банк
+	bank[1] = CreatePickup(1318, 23, 2375.6055, -1910.1226, 1126.9100, 1); // - Выход с банка
 	bank[2] = CreateDynamicPickup(1514, 2, 2370.7439, -1904.0571, 1126.9100, 1, 0);
 
-	hospital[0] = CreatePickup(1318, 23, 2112.7124, -2392.8530, 23.0883, 0); // - ???? ? ???????? ?.?????
-	hospital[1] = CreatePickup(1318, 23, 366.9555, 124.9833, 1003.8500, 2); // - ????? ? ???????? ?.?????
+	hospital[0] = CreatePickup(1318, 23, 2112.7124, -2392.8530, 23.0883, 0); // - Вход в больницу г.Южный
+	hospital[1] = CreatePickup(1318, 23, 366.9555, 124.9833, 1003.8500, 2); // - Выход с больницы г.Южный
 
-	_pickupm[0] = CreatePickup(1318, 23, 1481.0710, -1772.3121, 18.7958, 0); // - ???? ? ????????????? ???-??????
-	_pickupm[1] = CreatePickup(1318, 23, 390.7689, 173.7262, 1008.3828, 1); // - ????? ? ????????????? ???-??????
+	_pickupm[0] = CreatePickup(1318, 23, 1481.0710, -1772.3121, 18.7958, 0); // - Вход в правительство Лос-Сантос
+	_pickupm[1] = CreatePickup(1318, 23, 390.7689, 173.7262, 1008.3828, 1); // - Выход с правительства Лос-Сантос
 
 	_arendBike[0] = CreatePickup(19134, 23, 1775.4690, -1904.4019, 13.3860, 0);
 
@@ -1139,17 +1141,17 @@ stock _infoHome(playerid)
 	new i = player_info[playerid][keyh];
 	switch(house_info[i][h_class])
 	{
-		case 1: text = "?????? ?????";
-		case 2: text = "??????? ?????";
-		case 3: text = "??????? ?????";
+		case 1: text = "Эконом класс";
+		case 2: text = "Средний класс";
+		case 3: text = "Высокий класс";
 	}
 	format(string, sizeof(string),
-	"{FFFFFF}????? ????:\t %d\n\
-	{FFFFFF}????? ????:\t %s\n\
-	{FFFFFF}???.????:\t %d\n\
-	{FFFFFF}???????? ????:\t %d",
+	"{FFFFFF}Номер дома:\t %d\n\
+	{FFFFFF}Класс дома:\t %s\n\
+	{FFFFFF}Гос.цена:\t %d\n\
+	{FFFFFF}Оплачено дней:\t %d",
 	i, text, house_info[i][h_money], house_info[i][h_rent]);
-	SPD(playerid, DLG_INFOHOME, DSM, "{EDD682}?????????? ? ????", string, "?????", "");
+	SPD(playerid, DLG_INFOHOME, DSM, "{EDD682}Информация о доме", string, "Назад", "");
 	return 1;
 }
 
@@ -1159,17 +1161,17 @@ stock _infoApart(playerid)
 	new i = player_info[playerid][keya];
 	switch(apart_info[i][a_class])
 	{
-		case 1: text = "?????? ?????";
-		case 2: text = "??????? ?????";
-		case 3: text = "??????? ?????";
+		case 1: text = "Эконом класс";
+		case 2: text = "Средний класс";
+		case 3: text = "Высокий класс";
 	}
 	format(string, sizeof(string),
-	"{FFFFFF}????? ????????:\t %d\n\
-	{FFFFFF}????? ????????:\t %s\n\
-	{FFFFFF}???.????:\t %d\n\
-	{FFFFFF}???????? ????:\t %d",
+	"{FFFFFF}Номер квартиры:\t %d\n\
+	{FFFFFF}Класс квартиры:\t %s\n\
+	{FFFFFF}Гос.цена:\t %d\n\
+	{FFFFFF}Оплачено дней:\t %d",
 	i, text, apart_info[i][a_money], apart_info[i][a_rent]);
-	SPD(playerid, DLG_INFOAPART, DSM, "{EDD682}?????????? ? ????????", string, "?????", "");
+	SPD(playerid, DLG_INFOAPART, DSM, "{EDD682}Информация о квартире", string, "Назад", "");
 	return 1;
 }
 
@@ -1178,18 +1180,18 @@ stock _statsPlayer(playerid)
 	new string[256];
 	new l = player_info[playerid][lvl];
 	format(string, sizeof(string),
-	"{FFFFFF}??? ?????????:\t %s\n\
-	??????? ?????????:\t %d\n\
-	??????? ?????????:\t %d\n\
-	???? ?????????:\t %d/%d\n\
-	??? ?????????:\t %s\n\
-	???? ???????????:\t %s\n\
-	???????????:\t\t %s\n\
-	????:\t\t\t %s [%d]",
+	"{FFFFFF}Имя персонажа:\t %s\n\
+	Возраст персонажа:\t %d\n\
+	Уровень персонажа:\t %d\n\
+	Опыт персонажа:\t %d/%d\n\
+	Пол персонажа:\t %s\n\
+	Дата регистрации:\t %s\n\
+	Организация:\t\t %s\n\
+	Ранг:\t\t\t %s [%d]",
 	player_info[playerid][name], player_info[playerid][age], l, player_info[playerid][exp], _getMaxPlayerExpLevel(l), 
-	(player_info[playerid][sex] == 1) ? ("???????") : ("???????"), player_info[playerid][regdata], _fracName(playerid), 
+	(player_info[playerid][sex] == 1) ? ("Мужской") : ("Женский"), player_info[playerid][regdata], _fracName(playerid), 
 	FractionName[player_info[playerid][member]][player_info[playerid][rang]], player_info[playerid][rang]);
-	SPD(playerid, DLG_STATS, DSL, "{EDD682}?????????? ?????????", string, "?????", "");
+	SPD(playerid, DLG_STATS, DSL, "{EDD682}Статистика персонажа", string, "Назад", "");
 	return 1;
 }
 
@@ -1197,24 +1199,24 @@ stock _questPlayer(playerid)
 {
 	new string[256];
 	format(string, sizeof(string),
-	"1. ????? ??????????.\t\t\t %s", (player_info[playerid][quest][0] == 1) ? ("{EDD682}????????") : ("{EDD682}?? ????????"));
-	SPD(playerid, DLG_QUEST, DSL, "{EDD682}????????? ???????", string, "???????", "???????");
+	"1. Новое знакомство.\t\t\t %s", (player_info[playerid][quest][0] == 1) ? ("{EDD682}Выполнен") : ("{EDD682}Не выполнен"));
+	SPD(playerid, DLG_QUEST, DSL, "{EDD682}Квестовые задания", string, "Выбрать", "Закрыть");
 	return 1;
 }
 
 stock _fracName(playerid)
 {
 	new fname[72];
-	if(player_info[playerid][member] == 0) fname =  "???????????";
+	if(player_info[playerid][member] == 0) fname =  "Гражданский";
  	if(player_info[playerid][member] == 1) fname =  "The Government of Los Santos";
- 	if(player_info[playerid][member] == 2) fname =  "???";
- 	if(player_info[playerid][member] == 3) fname =  "?????";
- 	if(player_info[playerid][member] == 4) fname =  "???????????? ???????";
- 	if(player_info[playerid][member] == 5) fname =  "??????????? ?????? ????????????";
- 	if(player_info[playerid][member] == 6) fname =  "???????????? ???????????????";
- 	if(player_info[playerid][member] == 7) fname =  "???????? ???????? ??????????";
- 	if(player_info[playerid][member] == 8) fname =  "??????????? ??????";
- 	if(player_info[playerid][member] == 9) fname =  "????? ??????";
+ 	if(player_info[playerid][member] == 2) fname =  "ППС";
+ 	if(player_info[playerid][member] == 3) fname =  "ГИБДД";
+ 	if(player_info[playerid][member] == 4) fname =  "Министерство обороны";
+ 	if(player_info[playerid][member] == 5) fname =  "Федеральная служба безопасности";
+ 	if(player_info[playerid][member] == 6) fname =  "Министерство здравоохранения";
+ 	if(player_info[playerid][member] == 7) fname =  "Средства массовой информации";
+ 	if(player_info[playerid][member] == 8) fname =  "Батыревская братва";
+ 	if(player_info[playerid][member] == 9) fname =  "Южная братва";
  	return fname;
 }
 
@@ -1247,22 +1249,22 @@ stock _fracSkin(playerid)
 
 stock IsSpecificConditionMet(playerid, param) 
 {
-    // ?????????, ????????????? ?? ????? ??????????? ??????? ? ?????
+    // Проверяем, соответствует ли игрок определённой фракции и рангу
     if(player_info[playerid][member] == 1 && player_info[playerid][rang] == 12 && param > 11) {
-        return true; // ??????? ?????????
+        return true; // Условие выполнено
     }
-    return false; // ??????? ?? ?????????
+    return false; // Условие не выполнено
 }
 
 stock _infoPlayer(playerid)
 {
-	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}???? ? ??? ????????? ???????, ??????????? ? ????? ?????????????: {EDD682}(??????? 'H' -> ????? ? ??????????????)");
-	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}?????? ??? ????????? ??????? ???????, ?????? ???????????? ? ????: {EDD682}(??????? 'H' -> ??????? ???????)");
-	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}??????? ?? ???????????? ???????????? ?????? ?????????: {EDD682}(??????? 'H' -> ??????????? ?????????)");
+	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}Если у Вас возникнут вопросы, обращайтесь к нашей администрации: {EDD682}(Клавиша 'H' -> Связь с администрацией)");
+	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}Просим Вас соблюдать правила проекта, можете ознакомиться с ними: {EDD682}(Клавиша 'H' -> Правила проекта)");
+	SCM(playerid, COLOR_WHITE, !"{EDD682}>>> {FFFFFF}Следите за показателями потребностей Вашего персонажа: {EDD682}(Клавиша 'H' -> Потребности персонажа)");
 	return 1;
 }
 
-// ????????? 
+// Транспорт 
 stock SetVehicleEngine(vehicleid, status)
 {
 	if(status)
@@ -1423,15 +1425,15 @@ stock _updatehouse(houseid)
 	{
 		house_info[houseid][h_icon] = CreateDynamicMapIcon(house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 31, -1, 0, -1, -1, 90.0);
 		house_info[houseid][h_pickup] = CreateDynamicPickup(1273, 23, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2],0, 0, -1);
-		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}??? ????????.\n ??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0, 0, 1);
+		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}Дом продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0, 0, 1);
 	}
 	if(house_info[houseid][h_owned] == 1)
 	{
 		house_info[houseid][h_icon] = CreateDynamicMapIcon(house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 32, -1, 0, -1, -1, 90.0);
 		house_info[houseid][h_pickup] = CreateDynamicPickup(19522, 23, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2],0, 0, -1);
-		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}??? ?? ????????.\n ??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0,0,1);
+		house_info[houseid][h_text] = Create3DTextLabel("{FFFFFF}Дом не продаётся.\n Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_enter][0], house_info[houseid][h_enter][1], house_info[houseid][h_enter][2], 20.0,0,1);
 	}
-	house_info[houseid][h_texit] = Create3DTextLabel("{FFFFFF}????? ?????, ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_exit][0], house_info[houseid][h_exit][1], house_info[houseid][h_exit][2], 20.0, houseid+50, 1);	
+	house_info[houseid][h_texit] = Create3DTextLabel("{FFFFFF}Чтобы выйти, нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, house_info[houseid][h_exit][0], house_info[houseid][h_exit][1], house_info[houseid][h_exit][2], 20.0, houseid+50, 1);	
 	return 1;
 }
 
@@ -1449,12 +1451,12 @@ stock IsPlayerMuted(playerid)
 		new time = player_info[playerid][mutetime];
 		if(time <= 60)
 		{
-			SCM(playerid, COLOR_WHITE, "??? ????????????! ?? ????????????? ???????? ???????? ??????.");
+			SCM(playerid, COLOR_WHITE, "Чат заблокирован! До разблокировки осталось примерно минута.");
 		}
 		else
 		{
 			new string[80];
-			format(string, sizeof(string), "??? ????????????! ?? ????????????? ???????? {EDD682}%d {FFFFFF}???.", floatround(time / 60));
+			format(string, sizeof(string), "Чат заблокирован! До разблокировки осталось {EDD682}%d {FFFFFF}мин.", floatround(time / 60));
 			SCM(playerid, COLOR_WHITE, string);
 		}
 		return 1;
@@ -1464,12 +1466,12 @@ stock IsPlayerMuted(playerid)
 
 stock _aCommands(playerid)
 {
-	SPD(playerid, DLG_ACOMMAND, DSL, "{EDD682}AP - ??????? ??????????????", 
-	"{FFFFFF}1. ????????????? 1-?? ??????\n\
-	2. ????????????? 2-?? ??????\n\
-	3. ????????????? 3-?? ??????\n\
-	4. ????????????? 4-?? ??????\n\
-	5. ????????????? 5-?? ??????", "???????", "?????");
+	SPD(playerid, DLG_ACOMMAND, DSL, "{EDD682}AP - Команды администратора", 
+	"{FFFFFF}1. Администратор 1-го уровня\n\
+	2. Администратор 2-го уровня\n\
+	3. Администратор 3-го уровня\n\
+	4. Администратор 4-го уровня\n\
+	5. Администратор 5-го уровня", "Выбрать", "Назад");
 	return 1;
 }
 
@@ -1482,7 +1484,7 @@ stock _loadCars()
 	CreateVehicle(551, 288.1519, 1758.9640, 11.7005, 354.5923, color, color, -1);
 	_carsBuyEconomy[1] = CreateVehicle(542, 284.9243, 1759.1064, 11.6934, 354.7780, color, color, -1);*/
 
-	// -- ?????????????
+	// -- Правительство
 	lead_one[0] = CreateVehicle(579, 1407.9590, -1807.8898, 13.4003, 359.5926, 0, 0, -1, 1);
 	lead_one[1] = CreateVehicle(579, 1404.4962, -1808.0062, 13.4002, 0.6788, 0, 0, -1, 1); 
 	lead_one[2] = CreateVehicle(579, 1403.6949, -1771.5060, 13.3999, 179.6300, 0, 0, -1, 1);
@@ -1496,24 +1498,24 @@ stock _loadCars()
 stock _rulesPlayer(playerid)
 {
 	SPD(playerid, DLG_PRULES_ONE, DSM, 
-	"{EDD682}??????? ??????", 
-	"{FFFFFF}?????? ?? ??????? ??????, ?? ?????????? ?????? ???????\n\
-	???????? ?????? ?? ??????????? ?? ???????????????\n\
-	???????????? ??????? ??????? ?? RolePlay ????????\n\
-	Role Play (RP) ? ???? ??????????? ?? ?????, ??????????? ? ???????? ?????\n\
-	Non RolePlay (NonRP) ? ???????? ?????????, ??????? ?? ?? ?? ?????? ? ???????? ?????\n\
-	Spawn Kill (SK) ? ?????????? ?????? ???????? ???????? ????????? ??? ??????? ??????? ??????? ?? ?????????? ???? ???????????, ??? ?? ?????????? ??? ????? ? ????\n\
-	Team Kill (TK) ? ?????????? ?????? ???????? ????? ????? ??????? ??? ??????? ?? ?? ??????? ???????\n\
-	Bunny Hop (BH) ? ??? ? ?????????? ?????????????? ??????? ??? ???????\n\
-	Drive By (DB) ? ?????????? ?????? ???????? ? ?????? ?????????\n\
-	Power Gaming (PG) ? ????????????? ???????????? ?????? ?????????\n\
-	Revenge Kill (RVK) ? ?????????? ?????? ???????? ???????? ????????? ? ????????, ??????? ????? ??? ????\n\
-	Repeat Kill (RPK) ? ?????????? ????????? ???????? ?????? ? ???? ?? ??????, ???????? ?? ??? ????? ?????\n\
-	Out Of Character (OOC) ? ?????????? ??????????, ?? ???? ?????? ?? ?????? ????????? ????\n\
-	In Character (IC) ? ??????? ??????????, ?? ???? ?????? ?? ???????? ????\n\
-	Meta Gaming (MG) ? ?????????? ??????? ? ?????????? ??????????\n\
-	Death Match (DM) ? ?????????? ?????? ???????? ???????? ????????? ??? ??????? ?? ?? ??????? ???????, ???? ???????????? ????????/?????/??????",
-	"?????", "?????");
+	"{EDD682}Правила игрока", 
+	"{FFFFFF}Заходя на игровой сервер, Вы принимаете данные правила\n\
+	Незнание правил не освобождает от ответственности\n\
+	Общепринятые игровые термины на RolePlay серверах\n\
+	Role Play (RP) — игра персонажами по ролям, приближённая к реальной жизни\n\
+	Non RolePlay (NonRP) — действия персонажа, которые бы он не сделал в реальной жизни\n\
+	Spawn Kill (SK) — причинение ущерба здоровью игрового персонажа без весомой игровой причины на территории базы организации, где он появляется при входе в игру\n\
+	Team Kill (TK) — причинение ущерба здоровью члена своей фракции без весомой на то игровой причины\n\
+	Bunny Hop (BH) — бег с постоянным использованием прыжков при игроках\n\
+	Drive By (DB) — причинение ущерба здоровью с машины персонажу\n\
+	Power Gaming (PG) — преувеличение возможностей своего персонажа\n\
+	Revenge Kill (RVK) — причинение ущерба здоровью игровому персонажу в отместку, который ранее Вас убил\n\
+	Repeat Kill (RPK) — намеренное повторное убийство одного и того же игрока, которого Вы уже убили ранее\n\
+	Out Of Character (OOC) — внеигровая информация, то есть взятая из нашего реального мира\n\
+	In Character (IC) — игровая информация, то есть взятая из игрового мира\n\
+	Meta Gaming (MG) — смешивание игровой и внеигровой информации\n\
+	Death Match (DM) — причинение ущерба здоровью игрового персонажа без весомой на то игровой причины, либо беспричинная стрельба/удары/аварии",
+	"Далее", "Назад");
 	return 1;
 }
 
@@ -1540,9 +1542,9 @@ stock _priceCar(vehicleid)
 
 stock _load3Dtext()
 {
-	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}????. \n {FFFFFF}??? ?????????????? ??????? - {EDD682}'L.ALT'.", COLOR_WHITE, 1797.1179, 2509.8589, 16.2770, 20.0, 0, 1);
-	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}????. \n {FFFFFF}???????????? ? ????????? - {EDD682}'L.ALT'.", COLOR_WHITE, 1808.1010, 2506.8914, 15.8725, 20.0, 0, 1);
-	Create3DTextLabel(!"{FFFFFF}?????? ?????????? \n ?????? ??? ????????!", COLOR_WHITE, 1775.4690, -1904.4019, 13.3860, 20.0, 0, 1);
+	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}Репа. \n {FFFFFF}Для взаимодействия нажмите - {EDD682}'L.ALT'.", COLOR_WHITE, 1797.1179, 2509.8589, 16.2770, 20.0, 0, 1);
+	Create3DTextLabel(!"{FFFFFF}NPC: {EDD682}Иван. \n {FFFFFF}Ознакомиться с правилами - {EDD682}'L.ALT'.", COLOR_WHITE, 1808.1010, 2506.8914, 15.8725, 20.0, 0, 1);
+	Create3DTextLabel(!"{FFFFFF}Аренда велосипеда \n Доступ для новечков!", COLOR_WHITE, 1775.4690, -1904.4019, 13.3860, 20.0, 0, 1);
 	return 1;
 }
 
