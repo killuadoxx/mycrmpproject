@@ -239,6 +239,19 @@ CMD:veh(playerid, params[])
 	return 1;
 }
 
+cmd:delveh(playerid, params[]){
+	if(temp_info[playerid][pLoginStatus] != true) return true;
+	if(admin_info[playerid][alevel] < 2) return true;
+	if(temp_info[playerid][pAdminStatus] == false) return SCM(playerid, COLOR_WHITE, "{EDD682}[Ошибка]: {FFFFFF}Используйте '/alogin', чтобы авторизироваться!");
+	new targetid;
+	if(sscanf(params, "d", targetid)) return SCM(playerid, COLOR_ERROR, "[Ошибка] {FFFFFF} Используйте /delveh [id]");
+	DestroyVehicle(targetid);
+	new output[128];
+	format(output, sizeof(output), "Администратор %s удалил транспорт ID:%d", player_info[playerid][name], targetid);
+	SAM(COLOR_SRED, output, 1);
+	
+}
+
 CMD:hpcar(playerid, params[])
 {
 	if(temp_info[playerid][pLoginStatus] != true) return true;

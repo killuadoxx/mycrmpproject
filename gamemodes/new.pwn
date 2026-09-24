@@ -19,7 +19,7 @@
 #include "../library/a_array.inc"			// --------- [Глобальные переменные]
 #include "../library/a_publics.inc"			// --------- [Загрузка пабликов]
 #include "../library/a_stocks.inc"			// --------- [Загрузка стоков]
-#include "../library/a_admincmd.inc"		// --------- [Команды администратора]
+#include "../library/admin_systems/a_admincmd.inc"		// --------- [Подрузка систем связанных с администрацией]
 #include "../library/a_playercmd.inc"		// --------- [Команды игрока]
 
 
